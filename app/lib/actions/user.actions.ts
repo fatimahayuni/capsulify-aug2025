@@ -22,13 +22,11 @@ export const createUser = async (params: CreateUserParams) => {
       email,
       clerkId,
     ]);
-
-    sessionStorage.setItem("userId", result.rows[0].id);
-
-    client.release();
   } catch (error) {
     console.error("Error creating user:", error);
     throw new Error("Failed to create user");
+  } finally {
+    client.release();
   }
 };
 
@@ -48,11 +46,12 @@ export const getUserByClerkId = async (clerkId: string) => {
 
     console.log("User retrieved successfully:", user.rows[0]);
 
-    client.release();
     return user.rows[0];
   } catch (error) {
     console.error("Error getting user by clerkId:", error);
     throw new Error("Failed to get user");
+  } finally {
+    client.release();
   }
 };
 
@@ -77,11 +76,12 @@ export const updateUserBodyType = async (bodyType: string, clerkId: string) => {
 
     const result = await client.query(updateUserQuery, [bodyTypeId, clerkId]);
 
-    console.log("User updated successfully:", result);
-    client.release();
+    console.log("User updated successfully:", result.rows[0]);
   } catch (error) {
     console.error("Error updating user body type:", error);
     throw new Error("Failed to update user body type");
+  } finally {
+    client.release();
   }
 };
 
