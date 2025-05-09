@@ -11,9 +11,12 @@ export const createUser = async (params: CreateUserParams) => {
 
     const { name, username, email, clerkId } = params;
 
+    console.log("Creating user with params:", name, username, email, clerkId);
+
     const createUserQuery = `
       INSERT INTO users (name, username, email, clerk_id)
       VALUES ($1, $2, $3, $4)
+      RETURNING id
     `;
 
     const result = await client.query(createUserQuery, [
@@ -22,6 +25,9 @@ export const createUser = async (params: CreateUserParams) => {
       email,
       clerkId,
     ]);
+
+    console.log("New user created with ID:", result.rows[0].id);
+
   } catch (error) {
     console.error("Error creating user:", error);
     throw new Error("Failed to create user");
