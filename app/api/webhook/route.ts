@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 			console.log("Calling DB...");
 			const { first_name, last_name, username, email_addresses } =
 				evt.data
-			const user = createUser({
+			const user = await createUser({
 				name: `${first_name} ${last_name ? last_name : ''}`,
 				username: username!,
 				email: email_addresses[0].email_address,
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 			// Handle user update
 			const { first_name, last_name, username, email_addresses } =
 				evt.data
-			const user = updateUser({
+			const user = await updateUser({
 				name: `${first_name} ${last_name ? last_name : ''}`,
 				username: username!,
 				email: email_addresses[0].email_address,
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
 
 		if (eventType === 'user.deleted') {
 			// Handle user deletion
-			deleteUser(id!)
+			await deleteUser(id!)
 		}
 
 		return new Response('Webhook received', { status: 200 })
