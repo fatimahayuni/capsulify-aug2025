@@ -21,7 +21,8 @@ export async function POST(req: NextRequest) {
 
 		if (eventType === 'user.created') {
 			console.log('New user created:', id)
-			// Handle user creation
+			
+			console.log("Calling DB...");
 			const { first_name, last_name, username, email_addresses } =
 				evt.data
 			const user = createUser({
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest) {
 				email: email_addresses[0].email_address,
 				clerkId: id!,
 			})
+			console.log("DB call complete");
 		}
 		if (eventType === 'user.updated') {
 			console.log('User updated:', id)
