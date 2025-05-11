@@ -2,6 +2,8 @@
 import { FaEdit } from "react-icons/fa";
 import { CLOTHING_ITEMS } from "../../constants";
 import { useState, useEffect, useRef } from "react";
+import { getUserWardrobe } from "@/app/lib/actions/clothingItems.actions";
+import { CATEGORIES } from "@/app/constants/utils";
 
 function getVisibilityPercentage(rect: DOMRect): number {
   return (
@@ -13,21 +15,17 @@ function getVisibilityPercentage(rect: DOMRect): number {
 export default function InventoryPage() {
   const [bodyType, setBodyType] = useState<string | null>(null);
   const [inventory, setInventory] = useState<any>({});
+  const [wardrobe, setWardrobe] = useState<any>({});
   const [selectedCategory, setSelectedCategory] = useState<string>("tops");
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   useEffect(() => {
-    const storedBodyType = sessionStorage.getItem("bodyType");
-    if (storedBodyType) {
-      setBodyType(storedBodyType);
-    }
-    const storedInventory =
-      CLOTHING_ITEMS[
-        storedBodyType
-          ?.toUpperCase()
-          .split(" ")
-          .join("_") as keyof typeof CLOTHING_ITEMS
-      ];
-    setInventory(storedInventory);
+    const userId = sessionStorage.getItem("userId");
+    const fetchWardrobe = async () => {
+      const currentUsersWardrobe = await getUserWardrobe(Number(userId));
+      setWardrobe(currentUsersWardrobe);
+      console.log("Wardrobe fetched successfully:");
+    };
+    fetchWardrobe();
   }, []);
 
   useEffect(() => {
@@ -62,76 +60,93 @@ export default function InventoryPage() {
   };
 
   return (
-    <div className="category-container ">
-      <div className="category-tabs-container">
-        <div className="flex gap-2 overflow-x-auto w-fit mx-auto hide-scrollbar">
-          {inventory !== undefined &&
-            Object.keys(inventory).map((category) => (
-              <button
-                key={category}
-                className={`category-tab ${
-                  selectedCategory === category ? "active" : ""
-                }`}
-                onClick={() => handleCategoryClick(category)}
-              >
-                {category}
-              </button>
+    <div>
+      {Object.keys(wardrobe).map((category) => (
+        <div key={category}>
+          {CATEGORIES[
+            category as unknown as keyof typeof CATEGORIES
+          ].toUpperCase()}
+          <div>
+            {wardrobe[category as keyof typeof wardrobe]?.map((item: any) => (
+              <p key={item.id}>
+                {item.id} {item.image_file_name}
+              </p>
             ))}
+          </div>
         </div>
-      </div>
-      <div className="mx-auto w-[80%] max-sm:w-full">
-        {inventory !== undefined &&
-          Object.keys(inventory).map((category) => (
-            <div
-              key={category}
-              className="category-section"
-              ref={(el) => {
-                categoryRefs.current[category] = el;
-              }}
-            >
-              <h2 className="inventory-category-title">
-                {category.toUpperCase()}
-              </h2>
-              <div className="inventory-grid" id={category.toLowerCase()}>
-                {inventory[category as keyof typeof inventory]?.map(
-                  (item: any) => (
-                    <div key={item.name} className="inventory-item">
-                      <div className="inventory-item-icons top">
-                        {/* <FaTrash
-                          className="inventory-item-icon"
-                          onClick={() => {}}
-                        /> */}
-                      </div>
-
-                      <div className="inventory-item-icons top-right">
-                        {/* <FaInfoCircle
-                          className="inventory-item-icon"
-                          onClick={() => {}}
-                        /> */}
-                        <FaEdit
-                          className="inventory-item-icon"
-                          onClick={() => {}}
-                        />
-                      </div>
-
-                      <div className="inventory-image-wrapper">
-                        <img
-                          src={item.filename}
-                          alt={item.name}
-                          className="inventory-image"
-                        />
-                      </div>
-                      <p className="inventory-item-name">{item.name}</p>
-                    </div>
-                  )
-                )}
-                <div className="inventory-item add-item" onClick={() => {}}>
-                  <div className="plus-sign">+</div>
-                </div>
-              </div>
-            </div>
-          ))}
-      </div>
+      ))}
     </div>
+
+    // <div className="category-container ">
+    //   <div className="category-tabs-container">
+    //     <div className="flex gap-2 overflow-x-auto w-fit mx-auto hide-scrollbar">
+    //       {inventory !== undefined &&
+    //         Object.keys(inventory).map((category) => (
+    //           <button
+    //             key={category}
+    //             className={`category-tab ${
+    //               selectedCategory === category ? "active" : ""
+    //             }`}
+    //             onClick={() => handleCategoryClick(category)}
+    //           >
+    //             {category}
+    //           </button>
+    //         ))}
+    //     </div>
+    //   </div>
+    //   <div className="mx-auto w-[80%] max-sm:w-full">
+    //     {inventory !== undefined &&
+    //       Object.keys(inventory).map((category) => (
+    //         <div
+    //           key={category}
+    //           className="category-section"
+    //           ref={(el) => {
+    //             categoryRefs.current[category] = el;
+    //           }}
+    //         >
+    //           <h2 className="inventory-category-title">
+    //             {category.toUpperCase()}
+    //           </h2>
+    //           <div className="inventory-grid" id={category.toLowerCase()}>
+    //             {inventory[category as keyof typeof inventory]?.map(
+    //               (item: any) => (
+    //                 <div key={item.name} className="inventory-item">
+    //                   <div className="inventory-item-icons top">
+    //                     {/* <FaTrash
+    //                       className="inventory-item-icon"
+    //                       onClick={() => {}}
+    //                     /> */}
+    //                   </div>
+
+    //                   <div className="inventory-item-icons top-right">
+    //                     {/* <FaInfoCircle
+    //                       className="inventory-item-icon"
+    //                       onClick={() => {}}
+    //                     /> */}
+    //                     <FaEdit
+    //                       className="inventory-item-icon"
+    //                       onClick={() => {}}
+    //                     />
+    //                   </div>
+
+    //                   <div className="inventory-image-wrapper">
+    //                     <img
+    //                       src={item.filename}
+    //                       alt={item.name}
+    //                       className="inventory-image"
+    //                     />
+    //                   </div>
+    //                   <p className="inventory-item-name">{item.name}</p>
+    //                 </div>
+    //               )
+    //             )}
+    //             <div className="inventory-item add-item" onClick={() => {}}>
+    //               <div className="plus-sign">+</div>
+    //             </div>
+    //           </div>
+    //         </div>
+    //       ))}
+    //   </div>
+    // </div>
   );
 }

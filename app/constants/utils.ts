@@ -194,3 +194,19 @@ export const getOutfits = (bodyType: string) => {
       return [];
   }
 };
+
+export const DEFAULT_WARDROBE = {
+  INVERTED_TRIANGLE: [
+    4, 59, 74, 95, 119, 124, 149, 155, 158, 160, 161, 163, 165, 168, 172, 176,
+    180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191,
+  ],
+};
+
+export const CATEGORIES = {
+  1: "Tops",
+  2: "Bottoms",
+  3: "Dresses",
+  4: "Layers",
+  5: "Bags",
+  6: "Shoes",
+};

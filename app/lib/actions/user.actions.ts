@@ -2,6 +2,7 @@
 
 import { CreateUserParams } from "@/app/types";
 import pool from "../database/db";
+import { createUserWardrobe, getUserWardrobe } from "./clothingItems.actions";
 
 export const createUser = async (params: CreateUserParams) => {
   const client = await pool.connect();
@@ -22,7 +23,6 @@ export const createUser = async (params: CreateUserParams) => {
       email,
       clerkId,
     ]);
-
   } catch (error) {
     console.error("Error creating user:", error);
     throw new Error("Failed to create user");
@@ -62,9 +62,7 @@ export const updateUserBodyType = async (bodyType: string, clerkId: string) => {
     await client.query("SET search_path TO capsulify_live");
 
     const bodyTypeQuery = `SELECT id FROM body_shapes WHERE name = $1`;
-    const bodyTypeResult = await client.query(bodyTypeQuery, [
-      bodyType.toLowerCase(),
-    ]);
+    const bodyTypeResult = await client.query(bodyTypeQuery, [bodyType]);
 
     if (bodyTypeResult.rows.length === 0)
       throw new Error("body type not found");
@@ -72,12 +70,13 @@ export const updateUserBodyType = async (bodyType: string, clerkId: string) => {
     const bodyTypeId = bodyTypeResult.rows[0].id;
 
     const updateUserQuery = `
-      UPDATE users SET body_shape_id = $1, onboarded = true WHERE clerk_id = $2
+      UPDATE users SET body_shape_id = $1, onboarded = true WHERE clerk_id = $2 RETURNING id
     `;
 
     const result = await client.query(updateUserQuery, [bodyTypeId, clerkId]);
-
+    await createUserWardrobe(result.rows[0].id, bodyType);
     console.log("User updated successfully:", result.rows[0]);
+    return result.rows[0].id;
   } catch (error) {
     console.error("Error updating user body type:", error);
     throw new Error("Failed to update user body type");
