@@ -1,14 +1,16 @@
-import Menubar from "../components/Menubar";
+import Menubar from '../components/Menubar'
+import Navbar from '../components/Navbar'
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode
 }>) {
-  return (
-    <div>
-      {children}
-      <Menubar />
-    </div>
-  );
+	return (
+		<div>
+			<Navbar />
+			{children}
+			<Menubar />
+		</div>
+	)
 }
