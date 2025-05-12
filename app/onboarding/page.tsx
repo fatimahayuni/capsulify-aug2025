@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { BODY_TYPES } from '../constants'
 import { getBodyTypeDescription, getOutfits } from '../constants/utils'
-import { FaInfoCircle } from 'react-icons/fa'
 import { updateUserBodyType } from '../lib/actions/user.actions'
 import { useAuth } from '@clerk/nextjs'
 
@@ -27,11 +26,15 @@ export default function OnboardingPage() {
 			// Fetch outfits based on wardrobe (mock or real)
 			const generatedOutfits = getOutfits(bodyType as string)
 			setOutfits(generatedOutfits)
-			setStep(5) // Skip to showing outfits
+			setStep(3)
 			return
 		}
 
 		setStep((prev) => prev + 1)
+	}
+
+	const handleBack = () => {
+		if (step > 1) setStep((prev) => prev - 1)
 	}
 
 	const handleSubmit = async () => {
@@ -45,6 +48,26 @@ export default function OnboardingPage() {
 
 	return (
 		<div>
+			{/* Top Nav with Back Button and Progress Dots */}
+			<nav className='flex items-center justify-between px-6 pt-6 md:mx-12'>
+				<button
+					className='text-accent text-3xl focus:outline-none disabled:opacity-40 cursor-pointer'
+					onClick={handleBack}
+					disabled={step === 1}
+					aria-label='Go back'
+				>
+					&#x2039;
+				</button>
+				<div className='flex items-center space-x-2'>
+					{[1, 2, 3].map((s) => (
+						<span
+							key={s}
+							className={`w-2 h-2 rounded-full inline-block ${step === s ? 'bg-accent' : 'bg-[#cbb6a0]'}`}
+						></span>
+					))}
+				</div>
+			</nav>
+
 			{step === 1 && (
 				<Step1_SelectBodyType
 					bodyType={bodyType}
@@ -59,7 +82,7 @@ export default function OnboardingPage() {
 					handleNext={handleNext}
 				/>
 			)}
-			{step === 5 && (
+			{step === 3 && (
 				<Step3_ShowOutfits
 					outfits={outfits}
 					handleSubmit={handleSubmit}
@@ -72,10 +95,9 @@ export default function OnboardingPage() {
 
 function Step1_SelectBodyType({ bodyType, setBodyType, handleNext }: any) {
 	return (
-		<div className='min-h-screen bg-primary p-8 flex flex-col items-center justify-center'>
+		<div className='bg-primary p-8 flex flex-col items-center justify-center'>
 			<h1 className='text-center text-[1rem] px-8 md:text-[1.5rem] mb-5 text-accent tracking-wide w-full'>
-				Select Your{' '}
-				<span className='font-semibold uppercase'>Body Type</span> to
+				Pick Your <span className='font-semibold'>Body Type</span> to
 				Unlock the Curated Wardrobe!
 			</h1>
 
@@ -137,7 +159,7 @@ function Step2_ShowBodyTypeResults({ bodyType, handleNext }: any) {
 		getBodyTypeDescription(bodyType)
 
 	return (
-		<div className='min-h-screen w-full flex items-center justify-center bg-primary px-4 py-8 sm:px-6 sm:py-12 md:px-12 md:py-20'>
+		<div className='w-full flex items-center justify-center bg-primary px-4 py-8'>
 			<div className='rounded-2xl w-full max-w-[800px] mx-auto p-2'>
 				<p
 					className='text-accent text-[1.25rem] md:text-[1.25rem] font-medium tracking-wide text-left mb-8'
@@ -190,7 +212,7 @@ function Step2_ShowBodyTypeResults({ bodyType, handleNext }: any) {
 	)
 }
 
-function Step3_ShowOutfits({ outfits, handleSubmit, setStep }: any) {
+function Step3_ShowOutfits({ outfits, handleSubmit }: any) {
 	const [currentIndex, setCurrentIndex] = useState(0)
 	const total = outfits.length
 
@@ -208,7 +230,7 @@ function Step3_ShowOutfits({ outfits, handleSubmit, setStep }: any) {
 	}
 
 	return (
-		<div className='min-h-screen bg-primary flex flex-col items-center px-4 py-8'>
+		<div className='bg-primary flex flex-col items-center px-6 pt-2 md:py-0'>
 			{/* Description */}
 			<div className='w-full max-w-md md:max-w-xl text-left md:text-center mb-8'>
 				<span className='text-lg md:text-[1.25rem] font-bold text-accent'>
