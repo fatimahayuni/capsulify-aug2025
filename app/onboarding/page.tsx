@@ -62,7 +62,7 @@ export default function OnboardingPage() {
 					{[1, 2, 3].map((s) => (
 						<span
 							key={s}
-							className={`w-2 h-2 rounded-full inline-block ${step === s ? 'bg-accent' : 'bg-[#cbb6a0]'}`}
+							className={`w-2 h-2 rounded-full inline-block ${step >= s ? 'bg-accent' : 'bg-[#cbb6a0]'}`}
 						></span>
 					))}
 				</div>
@@ -97,8 +97,8 @@ function Step1_SelectBodyType({ bodyType, setBodyType, handleNext }: any) {
 	return (
 		<div className='bg-primary p-8 flex flex-col items-center justify-center'>
 			<h1 className='text-center text-[1rem] px-8 md:text-[1.5rem] mb-5 text-accent tracking-wide w-full'>
-				Pick Your <span className='font-semibold'>Body Type</span> to
-				Unlock the Curated Wardrobe!
+				Pick a <span className='font-semibold'>Body Type</span> to
+				Unlock your Curated Wardrobe!
 			</h1>
 
 			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 max-w-[1400px] w-full mx-auto px-2 justify-center'>
@@ -199,7 +199,7 @@ function Step2_ShowBodyTypeResults({ bodyType, handleNext }: any) {
 				</p>
 				<div className='flex justify-center mt-12 w-full'>
 					<button
-						className='bg-accent text-white border-none pl-4.5 pr-4 pt-1 pb-1.5 text-3xl font-semibold rounded-full cursor-pointer transition-all duration-300 shadow-md tracking-wide hover:-translate-y-0.5 hover:opacity-90'
+						className='bg-accent text-white border-none pl-4 pr-3.5 pt-0.5 pb-1 text-2xl rounded-full cursor-pointer transition-all duration-300 shadow-md tracking-wide hover:-translate-y-0.5 hover:opacity-90'
 						onClick={() => {
 							handleNext()
 						}}
@@ -230,7 +230,7 @@ function Step3_ShowOutfits({ outfits, handleSubmit }: any) {
 	}
 
 	return (
-		<div className='bg-primary flex flex-col items-center px-6 pt-2 md:py-0'>
+		<div className='bg-primary flex flex-col items-center px-6 pt-2 md:mt-0 mt-8 mx-2'>
 			{/* Description */}
 			<div className='w-full max-w-md md:max-w-xl text-left md:text-center mb-8'>
 				<span className='text-lg md:text-[1.25rem] font-bold text-accent'>
