@@ -23,8 +23,8 @@ export default function InventoryPage() {
   const { userId: clerkId } = useAuth();
   
   useEffect(() => {
-    const userId = sessionStorage.getItem("userId");
     const fetchWardrobe = async () => {
+      if (!clerkId) return;
       const currentUsersWardrobe = await getUserWardrobe(clerkId);
       setWardrobe(currentUsersWardrobe);
       console.log("Wardrobe fetched successfully:");
