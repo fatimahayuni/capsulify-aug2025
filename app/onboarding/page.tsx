@@ -39,11 +39,8 @@ export default function OnboardingPage() {
   };
 
   const handleSubmit = async () => {
-    sessionStorage.setItem("bodyType", bodyType!);
-    sessionStorage.setItem("clerkId", clerkId!);
     // update user bodyType in database
     const userId = await updateUserBodyType(bodyType!, clerkId as string);
-    sessionStorage.setItem("userId", userId);
     router.push("/inventory");
   };
 

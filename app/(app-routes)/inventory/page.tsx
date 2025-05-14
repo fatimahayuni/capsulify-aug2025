@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { getUserWardrobe } from "@/app/lib/actions/clothingItems.actions";
 import { CATEGORIES } from "@/app/constants/utils";
 import ClothingItemCard from "@/app/components/ClothingItemCard";
+import { useAuth } from "@clerk/nextjs";
 
 function getVisibilityPercentage(rect: DOMRect): number {
   return (
@@ -19,10 +20,12 @@ export default function InventoryPage() {
   const [wardrobe, setWardrobe] = useState<any>({});
   const [selectedCategory, setSelectedCategory] = useState<string>("tops");
   const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const { userId: clerkId } = useAuth();
+  
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
     const fetchWardrobe = async () => {
-      const currentUsersWardrobe = await getUserWardrobe(Number(userId));
+      const currentUsersWardrobe = await getUserWardrobe(clerkId);
       setWardrobe(currentUsersWardrobe);
       console.log("Wardrobe fetched successfully:");
     };

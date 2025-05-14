@@ -24,7 +24,9 @@ export const createUserWardrobe = async (userId: number, bodyType?: string) => {
 	}
 }
 
-export const getUserWardrobe = async (userId: number) => {
+export const getUserWardrobe = async (clerkId: string) => {
+	const userId = await getUserIdByClerkId(clerkId);
+	
 	const client = await pool.connect()
 
 	try {
@@ -62,6 +64,25 @@ export const getUserWardrobe = async (userId: number) => {
 	} catch (error) {
 		console.error('Error getting user wardrobe:', error)
 		throw new Error('Failed to get user wardrobe')
+	} finally {
+		client.release()
+	}
+}
+
+// TODO: Move this to middleware to make it available to every HTTP request.
+async function getUserIdByClerkId(clerkId: string) {
+	const client = await pool.connect()
+
+	try {
+		await client.query('SET search_path TO capsulify_live')
+		const getUserIdQuery = `
+			SELECT id FROM users WHERE clerk_id = $1
+		`
+		const userId = await client.query(getUserIdQuery, [clerkId])
+		return Number(userId.rows[0].id)
+	} catch (error) {
+		console.error('Error getting user ID by clerk ID:', error)
+		throw new Error('Failed to get user ID by clerk ID')
 	} finally {
 		client.release()
 	}
