@@ -1,41 +1,56 @@
 "use client";
-import { SignedOut, SignInButton, SignUpButton, useAuth } from "@clerk/nextjs";
+import { SignedOut, SignInButton, SignUpButton, useAuth, useUser } from "@clerk/nextjs";
 import { redirect, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { getUserByClerkId } from "./lib/actions/user.actions";
+import { getUserByClerkId, createUser } from "@/app/lib/actions/user.actions";
 import { BODY_TYPE_ID } from "./constants";
 
 export default function Home() {
   const router = useRouter();
-  const { isSignedIn, userId: clerkId } = useAuth();
+  const { isSignedIn: isClerkSignedIn, userId: clerkId } = useAuth();
+  const { user: clerkUser } = useUser();
 
   useEffect(() => {
-    if (isSignedIn) {
+    if (isClerkSignedIn) {
       const checkOnboarded = async () => {
-        const userExists = sessionStorage.getItem("userId");
-        if (userExists) {
-          router.push("/inventory");
-          return;
-        }
 
-        //@ts-ignore
-        const user = await getUserByClerkId(clerkId!);
-        // store body type in local storage
-        sessionStorage.setItem(
-          "bodyType",
-          BODY_TYPE_ID[user.body_shape_id as keyof typeof BODY_TYPE_ID]
-        );
-        sessionStorage.setItem("userId", user.id);
-        sessionStorage.setItem("clerkId", clerkId!);
+        try {
+          const user = await getUserByClerkId(clerkId!);
 
-        if (user.onboarded === 0) {
-          router.push("/onboarding");
+          if (!user) {
+            // User was not found in the database, create them with clerk data.
+            try {
+              if (!clerkUser) {
+                console.error("Clerk user data not available");
+                return;
+              }
+
+              await createUser({
+                name: `${clerkUser.firstName} ${clerkUser.lastName || ''}`,
+                username: clerkUser.username || '',
+                email: clerkUser.emailAddresses[0].emailAddress,
+                clerkId: clerkId!,
+              });
+
+              router.push("/onboarding");
+            } catch (error) {
+              console.error("Error creating user:", error);
+            }
+            return;
+          }
+
+          if (user.onboarded === false) {
+            router.push("/onboarding");
+          } else {
+            router.push("/inventory");
+          }
+        } catch (error) {
+          console.error("Error in user check:", error);
         }
-        router.push("/inventory");
       };
       checkOnboarded();
     }
-  }, [isSignedIn, router]);
+  }, [isClerkSignedIn, router, clerkId, clerkUser]);
 
   return (
     <div className="home-container">

@@ -32,8 +32,10 @@ export const createUser = async (params: CreateUserParams) => {
 };
 
 export const getUserByClerkId = async (clerkId: string) => {
-  const client = await pool.connect();
+  let client;
   try {
+    client = await pool.connect();
+
     await client.query("SET search_path TO capsulify_live");
 
     console.log("clerk id", clerkId);
@@ -52,7 +54,9 @@ export const getUserByClerkId = async (clerkId: string) => {
     console.error("Error getting user by clerkId:", error);
     throw new Error("Failed to get user");
   } finally {
-    client.release();
+    if (client) {
+      client.release();
+    }
   }
 };
 
