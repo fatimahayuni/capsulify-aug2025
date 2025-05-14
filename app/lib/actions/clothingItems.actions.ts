@@ -2,6 +2,7 @@
 
 import { DEFAULT_WARDROBE } from '@/app/constants/utils'
 import pool from '../database/db'
+import { getUserId } from '../database/getUserId'
 
 export const createUserWardrobe = async (userId: number, bodyType?: string) => {
 	const client = await pool.connect()
@@ -25,7 +26,10 @@ export const createUserWardrobe = async (userId: number, bodyType?: string) => {
 }
 
 export const getUserWardrobe = async (clerkId: string) => {
-	const userId = await getUserIdByClerkId(clerkId);
+	const userId = await getUserId()
+	if (!userId) {
+		throw new Error('User not found')
+	}
 	
 	const client = await pool.connect()
 
