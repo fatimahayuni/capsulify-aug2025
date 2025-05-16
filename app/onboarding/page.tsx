@@ -6,6 +6,7 @@ import { BODY_TYPES } from '../constants'
 import { getBodyTypeDescription, getOutfits } from '../constants/utils'
 import { updateUserBodyType } from '../lib/actions/user.actions'
 import { useAuth } from '@clerk/nextjs'
+import { BODY_TYPE_IMAGES } from '../constants'
 
 export default function OnboardingPage() {
 	const { userId: clerkId } = useAuth()
@@ -197,14 +198,23 @@ function Step2_ShowBodyTypeResults({ bodyType, handleNext }: any) {
 				>
 					{benefits}
 				</p>
+				<div className='flex justify-center mt-6 w-full rounded-lg'>
+					<img
+						src={`${BODY_TYPE_IMAGES.image}`}
+						alt={BODY_TYPE_IMAGES.image}
+						width={400}
+						height={400}
+						className='rounded-lg'
+					/>
+				</div>
 				<div className='flex justify-center mt-12 w-full'>
 					<button
-						className='bg-accent text-white border-none pl-4 pr-3.5 pt-0.5 pb-1 text-2xl rounded-full cursor-pointer transition-all duration-300 shadow-md tracking-wide hover:-translate-y-0.5 hover:opacity-90'
+						className='bg-accent text-white border-none py-2 px-4 text-[0.875rem] rounded-md cursor-pointer transition-all duration-300 shadow-md tracking-wide hover:-translate-y-0.5 hover:opacity-90'
 						onClick={() => {
 							handleNext()
 						}}
 					>
-						›
+						Continue
 					</button>
 				</div>
 			</div>
@@ -307,10 +317,10 @@ function Step3_ShowOutfits({ outfits, handleSubmit }: any) {
 			{/* Navigation Button */}
 			<div className='flex justify-center w-full max-w-md'>
 				<button
-					className='bg-accent text-[0.6rem] text-white rounded-full w-15 h-15 flex items-center justify-center tracking-wide hover:opacity-90 hover:-translate-y-0.5 cursor-pointer transition-all duration-300 shadow-md'
+					className='bg-accent text-[0.8rem] text-white p-3 rounded-md flex items-center justify-center tracking-wide hover:opacity-90 hover:-translate-y-0.5 cursor-pointer transition-all duration-300 shadow-md'
 					onClick={handleSubmit}
 				>
-					EXPLORE
+					Take me to my wardrobe!
 				</button>
 			</div>
 		</div>

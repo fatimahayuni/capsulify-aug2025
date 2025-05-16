@@ -749,3 +749,7 @@ export const BODY_TYPE_ID = {
 	4: 'Pear',
 	5: 'Hourglass',
 }
+
+export const BODY_TYPE_IMAGES = {
+	image: '/assets/inverted-triangle/wardrobe-preview.png',
+}
