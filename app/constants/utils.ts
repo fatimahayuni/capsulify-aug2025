@@ -195,6 +195,13 @@ export const getOutfits = (bodyType: string) => {
   }
 };
 
+export const toTitleCase = (text: string) => {
+  return (text.charAt(0).toUpperCase() + text.slice(1).toLowerCase())
+    .trim()
+    .split("_")
+    .join(" ");
+};
+
 export const DEFAULT_WARDROBE = {
   INVERTED_TRIANGLE: [
     4, 59, 74, 95, 119, 124, 149, 155, 158, 160, 161, 163, 165, 168, 172, 176,
@@ -212,24 +219,164 @@ export const CATEGORIES = {
 };
 
 export const SUBCATEGORIES = {
+  // Tops
   "1001": "Basics",
   "1002": "Blouse",
+  // Bottoms
   "2001": "Tailored Pants",
   "2002": "Casual Pants",
   "2003": "Denim Jeans",
   "2004": "Tailored Skirt",
   "2005": "Casual Skirt",
   "2006": "Casual Shorts",
+  // Dresses
   "3001": "Little Dress",
   "3002": "Casual Dress",
+  // Layers
   "4001": "Blazer",
   "4002": "Cardigan",
   "4003": "Casual Jacket",
+  // Shoes
   "6001": "Ballet Flats",
   "6002": "Pumps",
   "6003": "Strappy Heels",
   "6004": "Gold Strappy Sandals",
   "6005": "Wedges",
+  // Bags
   "5001": "Clutch",
   "5002": "Tote",
+};
+
+export const EDIT_OPTIONS = {
+  "1001": {
+    neckline: {
+      name: "neckline_id",
+      options: [
+        { id: 1, name: "V / Wrap / Surplice" },
+        { id: 2, name: "Deep V" },
+        { id: 3, name: "Scoop" },
+        { id: 4, name: "Sweetheart" },
+        { id: 5, name: "Cowl" },
+        { id: 6, name: "Asymmetrical / One-Shoulder" },
+      ],
+    },
+    sleeve_length: {
+      name: "top_sleeve_type_id",
+      options: [
+        { id: 1, name: "Sleeveless" },
+        { id: 2, name: "Normal" },
+        { id: 3, name: "Elbow" },
+        { id: 4, name: "Three-quarter" },
+        { id: 5, name: "Full" },
+      ],
+    },
+  },
+  "1002": {
+    neckline: {
+      name: "neckline_id",
+      options: [
+        { id: 1, name: "V / Wrap / Surplice" },
+        { id: 4, name: "Sweetheart" },
+        { id: 5, name: "Cowl" },
+        { id: 7, name: "Asymmetrical" },
+      ],
+    },
+    sleeve: {
+      name: "blouse_sleeve_type_id",
+      options: [
+        { id: 1, name: "Sleeveless" },
+        { id: 2, name: "Cap" },
+        { id: 3, name: "Half Sleeve" },
+        { id: 4, name: "Full" },
+      ],
+    },
+  },
+
+  "2001": {
+    bottom_cut: {
+      name: "bottom_cut_id",
+      options: [
+        { id: 1, name: "Wide Leg" },
+        { id: 2, name: "Boot cut / Flared" },
+      ],
+    },
+  },
+  "2002": {
+    bottom_cut: {
+      name: "bottom_cut_id",
+      options: [
+        { id: 1, name: "Wide Leg" },
+        { id: 2, name: "Boot cut / Flared" },
+      ],
+    },
+  },
+  "2003": {
+    bottom_cut: {
+      name: "bottom_cut_id",
+      options: [
+        { id: 1, name: "Wide Leg" },
+        { id: 2, name: "Boot cut / Flared" },
+      ],
+    },
+  },
+  "2004": {
+    skirt_cut: {
+      name: "skirt_cut_id",
+      options: [
+        { id: 1, name: "A-Line" },
+        { id: 2, name: "Mermaid" },
+      ],
+    },
+  },
+  "2005": {
+    skirt_cut: {
+      name: "skirt_cut_id",
+      options: [
+        { id: 1, name: "A-Line" },
+        { id: 2, name: "Mermaid" },
+        { id: 3, name: "Pleated" },
+      ],
+    },
+  },
+  "2006": {
+    short_cut: {
+      name: "short_cut_id",
+      options: [
+        { id: 1, name: "Short" },
+        { id: 2, name: "Bermuda" },
+      ],
+    },
+  },
+  "3001": {
+    dress_cut: {
+      name: "dress_cut_id",
+      options: [
+        { id: 1, name: "Fit-and-flare" },
+        { id: 2, name: "Mermaid" },
+      ],
+    },
+    neckline: {
+      name: "neckline_id",
+      options: [
+        { id: 1, name: "V" },
+        { id: 7, name: "Asymmetrical" },
+      ],
+    },
+  },
+  "3002": {
+    dress_cut: {
+      name: "dress_cut_id",
+      options: [
+        { id: 1, name: "Fit-and-flare" },
+        { id: 2, name: "Mermaid" },
+      ],
+    },
+    neckline: {
+      name: "neckline_id",
+      options: [
+        { id: 1, name: "V" },
+        { id: 7, name: "Asymmetrical" },
+      ],
+    },
+  },
 };
