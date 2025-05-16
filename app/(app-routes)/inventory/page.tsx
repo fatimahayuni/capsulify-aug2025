@@ -50,7 +50,7 @@ export default function InventoryPage() {
       </div>
 
       {/* Inventory Grid */}
-      <div className="flex flex-wrap justify-center gap-4 w-full text-sm max-h-[calc(100dvh-240px)] overflow-y-auto pb-4 scrollbar-hide">
+      <div className="flex flex-wrap justify-center gap-4 w-full text-sm max-sm:max-h-[calc(100dvh-300px)] overflow-y-auto scrollbar-hide">
         {(currentFilter === "All Items"
           ? allClothes
           : wardrobe[getKeyForFilter(currentFilter) as keyof typeof wardrobe]
@@ -63,7 +63,7 @@ export default function InventoryPage() {
         ))}
       </div>
 
-      <button className="absolute bottom-3 left-[50%] translate-x-[-50%] bg-accent text-white px-6 py-2 rounded-md shadow-md hover:scale-105 transition-transform duration-200">
+      <button className="bg-accent text-white text-[14px] px-4 py-2 mb-2 rounded-md">
         Generate Outfits
       </button>
     </div>

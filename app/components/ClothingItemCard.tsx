@@ -6,14 +6,9 @@ import {
 } from "../lib/actions/clothingItems.actions";
 import { getUserByClerkId } from "../lib/actions/user.actions";
 import { useAuth } from "@clerk/nextjs";
-import {
-  Edit,
-  Edit2,
-  Edit2Icon,
-  Edit3,
-  Edit3Icon,
-  EditIcon,
-} from "lucide-react";
+import { Edit3Icon, Info, InfoIcon } from "lucide-react";
+import { BsInfo } from "react-icons/bs";
+import { CgInfo } from "react-icons/cg";
 
 type Props = {
   item: {
@@ -56,7 +51,7 @@ const ClothingItemCard = (props: Props) => {
     <>
       <div
         key={item.id}
-        className="flex flex-col items-center justify-center hover:translate-y-[-4px] hover:shadow-lg w-[190px] max-sm:w-[170px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-2"
+        className="flex flex-col items-center justify-center hover:translate-y-[-4px] hover:shadow-lg w-[190px] max-sm:w-[175px] max-sm:h-[180px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-2"
         onMouseOver={() => setShowEditButton(true)}
         onMouseLeave={() => setShowEditButton(false)}
       >
@@ -65,20 +60,23 @@ const ClothingItemCard = (props: Props) => {
             showEditButton ? "" : "hidden"
           } max-sm:flex`}
         >
-          <Edit3Icon
-            className="inventory-item-icon text-[8px] rounded-full p-2"
-            onClick={handleEdit}
-          />
+          <div className="flex gap-2">
+            <BsInfo className="inventory-item-icon w-5 h-5 rounded-full bg-[#4a342727]" />
+            <Edit3Icon
+              className="inventory-item-icon w-5 h-5 rounded-full bg-[#4a342727]"
+              onClick={handleEdit}
+            />
+          </div>
         </div>
 
-        <div className="inventory-image-wrapper">
+        <div className="inventory-image-wrapper mt-4">
           <img
             src={`/assets/inverted-triangle/${currentImage}`}
             alt={currentImage}
-            className="inventory-image w-[150px] h-[150px] object-contain max-sm:w-[130px] max-sm:h-[130px]"
+            className="inventory-image w-[150px] h-[150px] object-contain max-sm:w-[120px] max-sm:h-[120px]"
           />
         </div>
-        <p className="inventory-item-name">{item.id}</p>
+        <p className="inventory-item-name mb-2">{item.id}</p>
       </div>
       {isEditing && (
         <ClothingItemModal

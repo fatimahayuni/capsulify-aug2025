@@ -1,6 +1,6 @@
 "use client";
 
-import { StoreIcon, User, MessageSquare } from "lucide-react";
+import { StoreIcon, MessageSquare, Menu, Heart } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { ReactNode, useState } from "react";
 import { TbHanger } from "react-icons/tb";
@@ -50,23 +50,26 @@ const Menubar = () => {
       onClick: () => setIsFeedbackOpen(true),
     },
     {
-      name: "Profile",
-      icon: <User className="h-4 w-4" />,
-      pathname: "/profile",
+      name: "Favourites",
+      icon: <Heart className="h-4 w-4" />,
+      pathname: "/favourites",
+    },
+    {
+      name: "Menu",
+      icon: <Menu className="h-4 w-4" />,
+      pathname: "/menu",
     },
   ];
 
   return (
     <>
-      <div className="hidden max-sm:flex max-sm:fixed w-full bottom-0 z-50 bg-primary">
-        <div className="flex justify-between items-center gap-2 w-full">
+      <div className="hidden max-sm:flex max-sm:fixed w-[90%] rounded-full left-[50%] translate-x-[-50%] bottom-6 shadow-sm z-50 bg-secondary overflow-hidden">
+        <div className="flex justify-between items-center w-full">
           {menubarItems.map((item) => (
             <div
               key={item.name}
-              className={`flex flex-col items-center justify-center cursor-pointer px-4 py-2 ${
-                pathname === item.pathname
-                  ? "text-primary border-t-2 border-amber-950"
-                  : ""
+              className={`flex flex-col items-center justify-center cursor-pointer px-3 py-1 ${
+                pathname === item.pathname ? "bg-primary" : ""
               }`}
               onClick={() => {
                 if (item.pathname) {

@@ -10,7 +10,7 @@ const LogoutButton = () => {
   };
   return (
     <button
-      className="bg-accent text-white px-3 py-2 rounded-md"
+      className="bg-accent text-white px-3 py-2 rounded-md max-sm:hidden"
       onClick={handleLogout}
     >
       Log out
