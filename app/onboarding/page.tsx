@@ -37,15 +37,11 @@ export default function OnboardingPage() {
 	const handleBack = () => {
 		if (step > 1) setStep((prev) => prev - 1)
 	}
-
-	const handleSubmit = async () => {
-		sessionStorage.setItem('bodyType', bodyType!)
-		sessionStorage.setItem('clerkId', clerkId!)
-		// update user bodyType in database
-		const userId = await updateUserBodyType(bodyType!, clerkId as string)
-		sessionStorage.setItem('userId', userId)
-		router.push('/inventory')
-	}
+  const handleSubmit = async () => {
+    // update user bodyType in database
+    const userId = await updateUserBodyType(bodyType!, clerkId as string);
+    router.push("/inventory");
+  };
 
 	return (
 		<div>
