@@ -52,35 +52,40 @@ export default function Home() {
     }
   }, [isClerkSignedIn, router, clerkId, clerkUser]);
 
-  return (
-    <div className="home-container">
-      <div className="home-content">
-        <div className="logo-content">
-          <img
-            src={"/assets/images/logo/logo.svg"}
-            alt="Capsulify Logo"
-            className="logo"
-          />
-          <h1 className="logo-text">CAPSULIFY</h1>
-        </div>
-        <h1 className="home-title">
-          Style that attracts what <span>you</span> desire.
-        </h1>
-        <p className="home-subtitle">
-          We'll help you curate a capsule wardrobe designed for your shape - and
-          the next era of your life!
-        </p>
-        <div className="flex justify-center gap-4">
-          <SignedOut>
-            <div className="next-button">
-              <SignInButton />
-            </div>
-            <div className="next-button">
-              <SignUpButton />
-            </div>
-          </SignedOut>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className='home-container'>
+			<div className='home-content'>
+				<div className='logo-content'>
+					<img
+						src={'/assets/images/logo/logo.svg'}
+						alt='Capsulify Logo'
+						className='logo'
+					/>
+					<h1 className='logo-text'>CAPSULIFY</h1>
+				</div>
+				<h1 className='home-title'>
+					Style that attracts what <span>you</span> desire.
+				</h1>
+				<p className='home-subtitle'>
+					We'll help you curate a capsule wardrobe designed for your
+					shape - and the next era of your life!
+				</p>
+				<div className='flex justify-center gap-4'>
+					<SignedOut>
+						<SignInButton>
+							<button className='cursor-pointer bg-accent text-white font-semibold py-3 px-8 rounded-lg shadow-md min-w-[120px] text-sm tracking-wide transition-all duration-300 hover:opacity-90 hover:-translate-y-0.5'>
+								Log In
+							</button>
+						</SignInButton>
+
+						<SignUpButton>
+							<button className='cursor-pointer bg-accent text-white font-semibold py-3 px-8 rounded-lg shadow-md min-w-[120px] text-sm tracking-wide transition-all duration-300 hover:opacity-90 hover:-translate-y-0.5'>
+								Register
+							</button>
+						</SignUpButton>
+					</SignedOut>
+				</div>
+			</div>
+		</div>
+	)
 }

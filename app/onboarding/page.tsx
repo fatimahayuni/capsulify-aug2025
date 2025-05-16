@@ -1,313 +1,324 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { BODY_TYPES } from "../constants";
-import { getBodyTypeDescription, getOutfits } from "../constants/utils";
-import { FaInfoCircle } from "react-icons/fa";
-import { updateUserBodyType } from "../lib/actions/user.actions";
-import { useAuth } from "@clerk/nextjs";
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { BODY_TYPES } from '../constants'
+import { getBodyTypeDescription, getOutfits } from '../constants/utils'
+import { updateUserBodyType } from '../lib/actions/user.actions'
+import { useAuth } from '@clerk/nextjs'
+import { BODY_TYPE_IMAGES } from '../constants'
 
 export default function OnboardingPage() {
-  const { userId: clerkId } = useAuth();
-  const [step, setStep] = useState(1);
-  const [bodyType, setBodyType] = useState<string | null>(null);
-  const [wardrobe, setWardrobe] = useState<any>({});
-  const [outfits, setOutfits] = useState<any>([]); // Assuming outfits are fetched or generated based on wardrobe
-  const router = useRouter();
+	const { userId: clerkId } = useAuth()
+	const [step, setStep] = useState(1)
+	const [bodyType, setBodyType] = useState<string | null>(null)
+	const [wardrobe, setWardrobe] = useState<any>({})
+	const [outfits, setOutfits] = useState<any>([]) // Assuming outfits are fetched or generated based on wardrobe
+	const router = useRouter()
 
-  const handleNext = () => {
-    if (step === 1 && bodyType) {
-      // Fetch wardrobe for selected body type
-      const generatedWardrobe = getBodyTypeDescription(bodyType);
-      setWardrobe(generatedWardrobe);
-    }
+	const handleNext = () => {
+		if (step === 1 && bodyType) {
+			// Fetch wardrobe for selected body type
+			const generatedWardrobe = getBodyTypeDescription(bodyType)
+			setWardrobe(generatedWardrobe)
+		}
 
-    if (step === 2 && bodyType) {
-      const generatedWardrobe = BODY_TYPES.find(
-        (type) => type.name === bodyType
-      )?.clothingItems;
-      setWardrobe(generatedWardrobe);
-    }
+		if (step === 2 && bodyType) {
+			// Fetch outfits based on wardrobe (mock or real)
+			const generatedOutfits = getOutfits(bodyType as string)
+			setOutfits(generatedOutfits)
+			setStep(3)
+			return
+		}
 
-    if (step === 4) {
-      // Fetch outfits based on wardrobe (mock or real)
-      const generatedOutfits = getOutfits(bodyType as string);
-      setOutfits(generatedOutfits);
-    }
-    setStep((prev) => prev + 1);
-  };
+		setStep((prev) => prev + 1)
+	}
 
+	const handleBack = () => {
+		if (step > 1) setStep((prev) => prev - 1)
+	}
   const handleSubmit = async () => {
     // update user bodyType in database
     const userId = await updateUserBodyType(bodyType!, clerkId as string);
     router.push("/inventory");
   };
 
-  return (
-    <div>
-      {step === 1 && (
-        <Step1_SelectBodyType
-          bodyType={bodyType}
-          setBodyType={setBodyType}
-          handleNext={handleNext}
-        />
-      )}
-      {step === 2 && (
-        <Step2_ShowBodyTypeResults
-          bodyType={bodyType}
-          setStep={setStep}
-          handleNext={handleNext}
-        />
-      )}
-      {step === 3 && (
-        <Step2_ShowWardrobe wardrobe={wardrobe} setStep={setStep} />
-      )}
+	return (
+		<div>
+			{/* Top Nav with Back Button and Progress Dots */}
+			<nav className='flex items-center justify-between px-6 pt-6 md:mx-12'>
+				<button
+					className='text-accent text-3xl focus:outline-none disabled:opacity-40 cursor-pointer'
+					onClick={handleBack}
+					disabled={step === 1}
+					aria-label='Go back'
+				>
+					&#x2039;
+				</button>
+				<div className='flex items-center space-x-2'>
+					{[1, 2, 3].map((s) => (
+						<span
+							key={s}
+							className={`w-2 h-2 rounded-full inline-block ${step >= s ? 'bg-accent' : 'bg-[#cbb6a0]'}`}
+						></span>
+					))}
+				</div>
+			</nav>
 
-      {step === 4 && <OutfitIntro setStep={setStep} handleNext={handleNext} />}
-      {step === 5 && (
-        <Step3_ShowOutfits
-          outfits={outfits}
-          handleSubmit={handleSubmit}
-          setStep={setStep}
-        />
-      )}
-    </div>
-  );
+			{step === 1 && (
+				<Step1_SelectBodyType
+					bodyType={bodyType}
+					setBodyType={setBodyType}
+					handleNext={handleNext}
+				/>
+			)}
+			{step === 2 && (
+				<Step2_ShowBodyTypeResults
+					bodyType={bodyType}
+					setStep={setStep}
+					handleNext={handleNext}
+				/>
+			)}
+			{step === 3 && (
+				<Step3_ShowOutfits
+					outfits={outfits}
+					handleSubmit={handleSubmit}
+					setStep={setStep}
+				/>
+			)}
+		</div>
+	)
 }
 
 function Step1_SelectBodyType({ bodyType, setBodyType, handleNext }: any) {
-  return (
-    <div className="body-type-container">
-      <h1 className="body-type-title">Pick Your Body Type!</h1>
-      <div className="body-type-grid">
-        {BODY_TYPES.map((type) => (
-          <div
-            key={type.name}
-            className={`body-type-item ${
-              bodyType === type.name ? "selected" : ""
-            }`}
-            onClick={() => {
-              setBodyType(type.name);
-              handleNext();
-            }}
-          >
-            <div className="body-type-image-wrapper">
-              <img
-                src={type.image}
-                alt={type.name}
-                className="body-type-image"
-              />
-            </div>
-            <div className="body-type-text-container">
-              <h3 className="body-type-name">{type.name}</h3>
-              <p className="body-type-description">{type.description}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+	return (
+		<div className='bg-primary p-8 flex flex-col items-center justify-center'>
+			<h1 className='text-center text-[1rem] px-8 md:text-[1.5rem] mb-5 text-accent tracking-wide w-full'>
+				Pick a <span className='font-semibold'>Body Type</span> to
+				Unlock your Curated Wardrobe!
+			</h1>
+
+			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 max-w-[1400px] w-full mx-auto px-2 justify-center'>
+				{BODY_TYPES.map((type) => {
+					const isDisabled = type.name !== 'Inverted Triangle'
+
+					return (
+						<div
+							key={type.name}
+							className={`
+              bg-secondary p-3 sm:p-4 transition-all duration-300 ease-in-out
+              flex flex-col items-center border-[1.5px] border-transparent rounded-lg
+              ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:-translate-y-1 hover:shadow-lg'}
+              ${bodyType === type.name ? 'border-accent shadow-lg' : ''}
+              ${isDisabled ? 'relative' : ''}
+            `}
+							onClick={() => {
+								if (!isDisabled) {
+									setBodyType(type.name)
+									handleNext()
+								}
+							}}
+						>
+							{isDisabled && (
+								<div className='absolute inset-0 flex items-center justify-center rounded-lg bg-secondary opacity-90'>
+									<p className='text-accent text-[0.65rem] text-center px-2 uppercase tracking-wider'>
+										Coming Soon
+									</p>
+								</div>
+							)}
+
+							<div className='w-full mb-4'>
+								<img
+									src={type.image}
+									alt={type.name}
+									className='h-[200px] object-contain sm:h-[180px] md:h-[160px] mx-auto'
+								/>
+							</div>
+
+							<div className='text-left w-full'>
+								<h3 className='text-[0.8rem] mt-2 mb-3 text-accent font-extrabold uppercase'>
+									{type.name}
+								</h3>
+								<p className='text-[0.8rem] text-accent leading-relaxed tracking-wider m-0 text-left w-full'>
+									{type.description}
+								</p>
+							</div>
+						</div>
+					)
+				})}
+			</div>
+		</div>
+	)
 }
 
-function Step2_ShowBodyTypeResults({ bodyType, setStep, handleNext }: any) {
-  const { description, recommendations, benefits } =
-    getBodyTypeDescription(bodyType);
+function Step2_ShowBodyTypeResults({ bodyType, handleNext }: any) {
+	const { description, recommendations, benefits } =
+		getBodyTypeDescription(bodyType)
 
-  return (
-    <div className="result-container">
-      <div className="result-card">
-        <p>
-          Because your body shape is{" "}
-          <span className="selected-body-type">{bodyType}</span>,
-        </p>
-        <p className="result-description">{description}</p>
-        <p>You'll receive tailored recommendations for:</p>
-        <p className="recommendations">{recommendations}</p>
-        <p className="benefits">{benefits}</p>
-      </div>
-
-      <div className="navigation-arrows-container">
-        <button
-          className="nav-arrow-button"
-          onClick={() => {
-            // Logic to go back to the previous step
-            setStep((prev: any) => prev - 1);
-          }}
-        >
-          ‹
-        </button>
-        <button
-          className="nav-arrow-button"
-          onClick={() => {
-            // Logic to go to the next step
-            handleNext();
-          }}
-        >
-          ›
-        </button>
-      </div>
-    </div>
-  );
+	return (
+		<div className='w-full flex items-center justify-center bg-primary px-4 py-8'>
+			<div className='rounded-2xl w-full max-w-[800px] mx-auto p-2'>
+				<p
+					className='text-accent text-[1.25rem] md:text-[1.25rem] font-medium tracking-wide text-left mb-8'
+					style={{ fontFamily: 'inherit' }}
+				>
+					Because your body shape is{' '}
+					<span className='font-bold italic text-accent'>
+						{bodyType}
+					</span>
+					,
+				</p>
+				<p
+					className='text-accent mb-8 text-[0.875rem] md:text-[1rem] leading-[1.6] tracking-wide text-left'
+					style={{ fontFamily: 'inherit' }}
+				>
+					{description}
+				</p>
+				<p
+					className='text-accent text-[0.875rem] md:text-[1rem] font-semibold tracking-wide text-left mb-4'
+					style={{ fontFamily: 'inherit' }}
+				>
+					You'll receive tailored recommendations for:
+				</p>
+				<div className='bg-secondary rounded-xl px-4 py-4 text-center mb-8'>
+					<span
+						className='text-accent text-[0.875rem] md:text-[0.95rem] font-medium tracking-wide'
+						style={{ fontFamily: 'inherit' }}
+					>
+						{recommendations}
+					</span>
+				</div>
+				<p
+					className='text-accent text-[0.875rem] md:text-[1rem] leading-[1.6] tracking-wide text-left mb-0'
+					style={{ fontFamily: 'inherit' }}
+				>
+					{benefits}
+				</p>
+				<div className='flex justify-center mt-6 w-full rounded-lg'>
+					<img
+						src={`${BODY_TYPE_IMAGES.image}`}
+						alt={BODY_TYPE_IMAGES.image}
+						width={400}
+						height={400}
+						className='rounded-lg'
+					/>
+				</div>
+				<div className='flex justify-center mt-12 w-full'>
+					<button
+						className='bg-accent text-white border-none py-2 px-4 text-[0.875rem] rounded-md cursor-pointer transition-all duration-300 shadow-md tracking-wide hover:-translate-y-0.5 hover:opacity-90'
+						onClick={() => {
+							handleNext()
+						}}
+					>
+						Continue
+					</button>
+				</div>
+			</div>
+		</div>
+	)
 }
 
-function Step2_ShowWardrobe({ wardrobe, setStep }: any) {
-  return (
-    <div className="category-container">
-      <div className="category-section">
-        <div className="category-content">
-          {Object.keys(wardrobe).map((key) => (
-            <div key={key} className="category-block">
-              {
-                <div className="styling-tip">
-                  <p className="styling-tip-text">
-                    <span className="category">{key.toUpperCase()}</span>
-                  </p>
-                </div>
-              }
+function Step3_ShowOutfits({ outfits, handleSubmit }: any) {
+	const [currentIndex, setCurrentIndex] = useState(0)
+	const total = outfits.length
 
-              <div className="category-grid">
-                {wardrobe[key].map((item: any) => (
-                  <div
-                    key={item.name}
-                    className="category-item"
-                    data-category={key}
-                  >
-                    <div className="info-icon-container">
-                      <FaInfoCircle className="info-icon" />
-                    </div>
-                    <div className="image-wrapper">
-                      <img
-                        src={item.filename}
-                        alt={item.name}
-                        className="category-image"
-                      />
-                    </div>
-                    <p className="category-name">{item.name}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+	// Helper to handle card click (circular)
+	const handleCardClick = (idx: number) => {
+		if (idx !== currentIndex) setCurrentIndex(idx)
+	}
 
-        <div className="navigation-arrows-container">
-          <button
-            className="nav-arrow-button"
-            onClick={() => {
-              // Logic to go back to the previous step
-              setStep((prev: any) => prev - 1);
-            }}
-          >
-            ‹
-          </button>
-          <button
-            className="nav-arrow-button"
-            onClick={() => {
-              // Logic to go to the next step
-              setStep((prev: any) => prev + 1);
-            }}
-          >
-            ›
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+	// Helper to get circular offset
+	const getOffset = (idx: number) => {
+		let offset = idx - currentIndex
+		if (offset > total / 2) offset -= total
+		if (offset < -total / 2) offset += total
+		return offset
+	}
 
-function OutfitIntro({ setStep, handleNext }: any) {
-  return (
-    <div className="outfit-intro-container">
-      <div className="outfit-intro-card">
-        <div className="outfit-intro-content">
-          <p className="outfit-intro-text">Let's bring your wardrobe to life</p>
-          <p className="outfit-intro-subtext">
-            Here's where the transformation begins: curated outfit ideas
-            designed to flatter your body and reflect the woman you're becoming.
-            You'll be able to customize everything with your own pieces later
-            on.
-          </p>
-          <div className="navigation-arrows-container">
-            <button
-              className="nav-arrow-button"
-              onClick={() => {
-                // Logic to go back to the previous step
-                setStep((prev: any) => prev - 1);
-              }}
-            >
-              ‹
-            </button>
-            <button
-              className="nav-arrow-button"
-              onClick={() => {
-                // Logic to go to the next step
-                handleNext();
-              }}
-            >
-              ›
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+	return (
+		<div className='bg-primary flex flex-col items-center px-6 pt-2 md:mt-0 mt-8 mx-2'>
+			{/* Description */}
+			<div className='w-full max-w-md md:max-w-xl text-left md:text-center mb-8'>
+				<span className='text-lg md:text-[1.25rem] font-bold text-accent'>
+					Here
+				</span>
+				<span className='text-base md:text-[0.9rem] text-accent'>
+					{' '}
+					is where the transformation begins: check out a few{' '}
+					<span className='font-bold md:text-[1rem]'>
+						curated outfits
+					</span>{' '}
+					designed to flatter your body and reflect the woman you're
+					becoming.
+				</span>
+			</div>
 
-function Step3_ShowOutfits({ outfits, handleSubmit, setStep }: any) {
-  const [currentOutfitIndex, setCurrentOutfitIndex] = useState(0);
-  return (
-    <div className="outfits-container">
-      <div className="outfits-content">
-        <div className="outfits-carousel">
-          <button
-            className="carousel-button"
-            onClick={() =>
-              setCurrentOutfitIndex((prev) => (prev > 0 ? prev - 1 : prev))
-            }
-            disabled={currentOutfitIndex === 0}
-          >
-            ‹
-          </button>
-          <div className="outfit-display">
-            <p className="outfit-event-name">
-              {outfits[currentOutfitIndex].event}
-            </p>
-            <div className="outfit-image-container">
-              <img
-                src={outfits[currentOutfitIndex].image}
-                alt={`${outfits[currentOutfitIndex].event} outfit`}
-                className="outfit-image"
-              />
-            </div>
-          </div>
-          <button
-            className="carousel-button"
-            onClick={() =>
-              setCurrentOutfitIndex((prev) =>
-                prev < outfits.length - 1 ? prev + 1 : prev
-              )
-            }
-            disabled={currentOutfitIndex === outfits.length - 1}
-          >
-            ›
-          </button>
-        </div>
-      </div>
+			{/* Coverflow Carousel */}
+			<div className='w-full flex flex-col items-center mt-4'>
+				<div className='relative w-full flex justify-center items-center h-96 select-none '>
+					{outfits.map((outfit: any, idx: number) => {
+						// Calculate circular offset
+						const offset = getOffset(idx)
+						let scale = 1
+						let zIndex = 10 - Math.abs(offset)
+						let translateX = offset * 80 // px
+						let opacity = 1
+						let pointer: 'auto' | 'none' = 'auto'
+						let blur = ''
+						if (offset === 0) {
+							scale = 1.1
+							zIndex = 20
+							translateX = 0
+							opacity = 1
+							blur = ''
+						} else if (Math.abs(offset) === 1) {
+							scale = 0.9
+							opacity = 0.7
+							blur = ''
+						} else {
+							scale = 0.8
+							opacity = 0.3
+							pointer = 'none'
+							blur = 'blur-sm'
+						}
+						return (
+							<div
+								key={idx}
+								className={`absolute top-0 left-1/2 -translate-x-1/2 transition-all duration-300 ease-in-out cursor-pointer ${blur}`}
+								style={{
+									zIndex,
+									transform: `translateX(${translateX}px) scale(${scale})`,
+									opacity,
+									pointerEvents: pointer,
+									width: '16rem',
+								}}
+								onClick={() => handleCardClick(idx)}
+							>
+								<div className='bg-secondary rounded-xl flex flex-col items-center py-6 px-4 w-64 mx-auto shadow-none'>
+									<p className='text-center text-accent font-bold text-sm mb-4'>
+										{outfit.event}
+									</p>
+									<img
+										src={outfit.image}
+										alt={`${outfit.event} outfit`}
+										className='h-56 object-contain mb-4'
+									/>
+								</div>
+							</div>
+						)
+					})}
+				</div>
+			</div>
 
-      <div className="navigation-arrows-container bottom-buttons">
-        <button
-          className="next-button"
-          onClick={() => {
-            setStep((prev: any) => prev - 1);
-          }}
-        >
-          Go back
-        </button>
-        <button className="next-button" onClick={() => handleSubmit()}>
-          Take me to the app
-        </button>
-      </div>
-    </div>
-  );
+			{/* Navigation Button */}
+			<div className='flex justify-center w-full max-w-md'>
+				<button
+					className='bg-accent text-[0.8rem] text-white p-3 rounded-md flex items-center justify-center tracking-wide hover:opacity-90 hover:-translate-y-0.5 cursor-pointer transition-all duration-300 shadow-md'
+					onClick={handleSubmit}
+				>
+					Take me to my wardrobe!
+				</button>
+			</div>
+		</div>
+	)
 }
