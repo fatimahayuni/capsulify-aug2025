@@ -4,6 +4,7 @@ import { getUserWardrobe } from "@/app/lib/actions/clothingItems.actions";
 import { CATEGORIES } from "@/app/constants/utils";
 import ClothingItemCard from "@/app/components/ClothingItemCard";
 import { useAuth } from "@clerk/nextjs";
+import { SearchIcon } from "lucide-react";
 
 export default function InventoryPage() {
   const [wardrobe, setWardrobe] = useState<any>({});
@@ -33,7 +34,16 @@ export default function InventoryPage() {
   return (
     <div className="flex flex-col gap-6 items-center w-full max-w-6xl mx-auto mt-6 px-4 max-sm:px-2">
       {/* Filter Bar */}
-      <div className="flex gap-2 justify-start sm:justify-center text-[12px] overflow-x-auto w-full scrollbar-hide">
+      <div className="flex bg-secondary  gap-2 justify-center items-center p-2 rounded-lg w-[450px] max-sm:w-[95%] mx-auto">
+        {/* Search bar */}
+        <SearchIcon className="w-4 h-4 mr-2" />
+        <input
+          type="text"
+          className="outline-0 border-0 text-sm rounded-lg w-full"
+          placeholder="Search for items..."
+        />
+      </div>
+      <div className="flex gap-2 justify-start sm:justify-center text-[12px] overflow-x-auto w-full scrollbar-hide px-2">
         {filtersArray.map((filter) => (
           <button
             key={filter}
@@ -50,7 +60,7 @@ export default function InventoryPage() {
       </div>
 
       {/* Inventory Grid */}
-      <div className="flex flex-wrap justify-center gap-4 w-full text-sm max-sm:max-h-[calc(100dvh-300px)] overflow-y-auto scrollbar-hide">
+      <div className="flex flex-wrap justify-center gap-4 w-full text-sm max-sm:max-h-[calc(100dvh-360px)] overflow-y-auto scrollbar-hide max-sm:gap-2">
         {(currentFilter === "All Items"
           ? allClothes
           : wardrobe[getKeyForFilter(currentFilter) as keyof typeof wardrobe]

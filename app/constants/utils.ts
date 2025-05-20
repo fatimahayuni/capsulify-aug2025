@@ -281,7 +281,7 @@ export const EDIT_OPTIONS = {
         { id: 7, name: "Asymmetrical" },
       ],
     },
-    sleeve: {
+    sleeve_length: {
       name: "blouse_sleeve_type_id",
       options: [
         { id: 1, name: "Sleeveless" },
@@ -379,4 +379,24 @@ export const EDIT_OPTIONS = {
       ],
     },
   },
+};
+
+export const clothingItemNameBuilder = (item: any) => {
+  const {
+    category_id,
+    subcategory_id,
+    top_sleeve_type_id,
+    blouse_sleeve_type_id,
+    neckline_id,
+    bottom_cut_id,
+    skirt_cut_id,
+    short_cut_id,
+    dress_cut_id,
+    colour_type_id,
+    clothing_variant_id,
+  } = item;
+
+  const category = CATEGORIES[category_id as keyof typeof CATEGORIES];
+  const subcategory =
+    SUBCATEGORIES[subcategory_id as keyof typeof SUBCATEGORIES];
 };

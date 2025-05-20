@@ -12,7 +12,6 @@ function Navbar() {
         <div className="cursor-pointer">
           <SignedIn>
             <div className="flex gap-4 text-xs items-center justify-center">
-              <LogoutButton />
               <ProfileIcon />
             </div>
           </SignedIn>

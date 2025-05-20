@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { EDIT_OPTIONS, toTitleCase } from "../constants/utils";
+import {
+  clothingItemNameBuilder,
+  EDIT_OPTIONS,
+  toTitleCase,
+} from "../constants/utils";
 import {
   getClothingVariantId,
   saveClothingVariantId,
 } from "../lib/actions/clothingItems.actions";
 import { getUserByClerkId } from "../lib/actions/user.actions";
 import { useAuth } from "@clerk/nextjs";
-import { Edit3Icon, Info, InfoIcon } from "lucide-react";
+import { Edit3Icon } from "lucide-react";
 import { BsInfo } from "react-icons/bs";
-import { CgInfo } from "react-icons/cg";
 
 type Props = {
   item: {
@@ -51,7 +54,7 @@ const ClothingItemCard = (props: Props) => {
     <>
       <div
         key={item.id}
-        className="flex flex-col items-center justify-center hover:translate-y-[-4px] hover:shadow-lg w-[190px] max-sm:w-[175px] max-sm:h-[180px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-2"
+        className="flex flex-col items-center justify-center hover:translate-y-[-4px] hover:shadow-lg w-[200px] h-[210px] max-sm:w-[175px] max-sm:h-[175px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-2"
         onMouseOver={() => setShowEditButton(true)}
         onMouseLeave={() => setShowEditButton(false)}
       >
@@ -69,14 +72,14 @@ const ClothingItemCard = (props: Props) => {
           </div>
         </div>
 
-        <div className="inventory-image-wrapper mt-4">
+        <div className="inventory-image-wrapper ">
           <img
             src={`/assets/inverted-triangle/${currentImage}`}
             alt={currentImage}
-            className="inventory-image w-[150px] h-[150px] object-contain max-sm:w-[120px] max-sm:h-[120px]"
+            className="inventory-image w-[135px] h-[135px] object-contain max-sm:w-[120px] max-sm:h-[120px]"
           />
         </div>
-        <p className="inventory-item-name mb-2">{item.id}</p>
+        <p className="inventory-item-name mb-1">{item.id}</p>
       </div>
       {isEditing && (
         <ClothingItemModal
