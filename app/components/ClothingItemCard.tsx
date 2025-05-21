@@ -27,6 +27,7 @@ type Props = {
     skirt_cut_id: number | null;
     clothing_variant_id: number;
     colour_type_id: number;
+    name: string;
   };
   category: string;
 };
@@ -79,7 +80,7 @@ const ClothingItemCard = (props: Props) => {
             className="inventory-image w-[135px] h-[135px] object-contain max-sm:w-[120px] max-sm:h-[120px]"
           />
         </div>
-        <p className="inventory-item-name mb-1">{item.id}</p>
+        <p className="inventory-item-name mb-1">{item.name}</p>
       </div>
       {isEditing && (
         <ClothingItemModal
@@ -160,8 +161,8 @@ function ClothingItemModal({
               className="w-[135px] h-[135px] object-contain"
             />
           </div>
-          <p className="text-accent text-sm font-semibold uppercase tracking-wider">
-            {item.id}
+          <p className="text-accent text-sm font-semibold uppercase tracking-wider text-center">
+            {item.name}
           </p>
         </div>
 
