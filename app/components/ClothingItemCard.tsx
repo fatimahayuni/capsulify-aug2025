@@ -36,6 +36,7 @@ type ClothingItemModalProps = {
   setIsEditing: (isEditing: boolean) => void;
   item: Props["item"];
   onSaveImage: (newImage: string) => void;
+  onSaveName: (newName: string) => void;
 };
 
 const ClothingItemCard = (props: Props) => {
@@ -43,11 +44,17 @@ const ClothingItemCard = (props: Props) => {
   const [isEditing, setIsEditing] = useState(false);
   const [showEditButton, setShowEditButton] = useState(false);
   const [currentImage, setCurrentImage] = useState(item.image_file_name);
+  const [currentName, setCurrentName] = useState(item.name);
 
   const handleEdit = () => setIsEditing(true);
 
   const handleSaveImage = (newImage: string) => {
     setCurrentImage(newImage);
+    setIsEditing(false);
+  };
+
+  const handleSaveName = (newName: string) => {
+    setCurrentName(newName);
     setIsEditing(false);
   };
 
@@ -80,13 +87,14 @@ const ClothingItemCard = (props: Props) => {
             className="inventory-image w-[135px] h-[135px] object-contain max-sm:w-[120px] max-sm:h-[120px]"
           />
         </div>
-        <p className="inventory-item-name mb-1">{item.name}</p>
+        <p className="inventory-item-name mb-1">{currentName}</p>
       </div>
       {isEditing && (
         <ClothingItemModal
           setIsEditing={setIsEditing}
           item={item}
           onSaveImage={handleSaveImage}
+          onSaveName={handleSaveName}
         />
       )}
     </>
@@ -97,6 +105,7 @@ function ClothingItemModal({
   setIsEditing,
   item,
   onSaveImage,
+  onSaveName,
 }: ClothingItemModalProps) {
   const { userId: clerkId } = useAuth();
 
@@ -111,6 +120,7 @@ function ClothingItemModal({
   });
 
   const [image, setImage] = useState(item.image_file_name);
+  const [name, setName] = useState(item.name);
   const [clothingVariantId, setClothingVariantId] = useState(
     item.clothing_variant_id
   );
@@ -123,6 +133,7 @@ function ClothingItemModal({
         colour_type_id: item.colour_type_id,
       });
       setImage(result.image_file_name);
+      setName(result.name);
       setClothingVariantId(result.id);
     };
 
@@ -137,6 +148,7 @@ function ClothingItemModal({
       prevClothingVariantId
     );
     onSaveImage(image); // Update the parent with new image
+    onSaveName(name);
   };
 
   //@ts-ignore
@@ -155,6 +167,7 @@ function ClothingItemModal({
 
         <div className="flex flex-col items-center justify-start p-4 ">
           <div className="w-full h-40 flex justify-center items-center mt-8 mb-2">
+            {/* Item Image */}
             <img
               src={`/assets/inverted-triangle/${image}`}
               alt={image}
@@ -162,7 +175,8 @@ function ClothingItemModal({
             />
           </div>
           <p className="text-accent text-sm font-semibold uppercase tracking-wider text-center">
-            {item.name}
+            {/* Item Name */}
+            {name}
           </p>
         </div>
 

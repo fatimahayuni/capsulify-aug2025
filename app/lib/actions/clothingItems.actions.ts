@@ -90,7 +90,7 @@ export const getClothingVariantId = async (options: any) => {
 
     // colour_type_id is in clothing_items table and rest are in clothing_variants table
     const getClothingVariantIdQuery = `
-  SELECT cv.id, cv.image_file_name
+  SELECT cv.id, cv.image_file_name, cv.name
   FROM clothing_variants cv
   JOIN clothing_items ci ON cv.clothing_item_id = ci.id
   WHERE ($1::int IS NULL OR cv.top_sleeve_type_id = $1::int)
