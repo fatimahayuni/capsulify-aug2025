@@ -61,6 +61,19 @@
 	color: var(--secondary-color);
 }
 
+.text-accent {
+	color: var(--accent-color);
+}
+
+.border-accent {
+	border-color: var(--accent-color);
+}
+
+.fill-accent {
+	filter: brightness(0) saturate(100%) invert(19%) sepia(22%) saturate(883%)
+		hue-rotate(339deg) brightness(95%) contrast(90%);
+}
+
 /* Base font size for rem calculations */
 html {
 	font-size: 16px; /* Base font size */

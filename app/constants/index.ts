@@ -708,39 +708,98 @@ export const BODY_TYPES = [
 	{
 		name: 'Inverted Triangle',
 		description:
-			'Inverted Triangle body type is characterized by a larger upper body and narrower hips.',
+			'Your shoulders or bust are broader than your hips, with a less defined waist. Your upper body makes a bold statement.',
 		image: '/assets/images/bodytypes/inverted-triangle.png',
 		clothingItems: CLOTHING_ITEMS.INVERTED_TRIANGLE,
 	},
 	{
 		name: 'Rectangle',
 		description:
-			'Rectangle body type is characterized by a straight silhouette with little definition at the waist.',
+			'Your shoulders, waist, and hips are evenly aligned, creating a straight silhouette. You carry an effortlessly sleek, athletic look.',
 		image: '/assets/images/bodytypes/rectangle.png',
 		clothingItems: CLOTHING_ITEMS.RECTANGLE,
 	},
 	{
 		name: 'Apple',
 		description:
-			'Apple body type is characterized by a larger upper body and narrower hips.',
+			'You carry volume around your midsection with slimmer arms and legs. Your shape shines with softness and strength.',
 		image: '/assets/images/bodytypes/apple.png',
 		clothingItems: CLOTHING_ITEMS.APPLE,
 	},
 	{
 		name: 'Pear',
 		description:
-			'Pear body type is characterized by a smaller upper body and larger hips.',
+			'Your hips are wider than your shoulders, with a beautifully defined waist. Your curves draw the eye downward in a graceful flow.',
 		image: '/assets/images/bodytypes/pear.png',
 		clothingItems: CLOTHING_ITEMS.PEAR,
 	},
 	{
 		name: 'Hourglass',
 		description:
-			'Hourglass body type is characterized by a balanced upper and lower body with a defined waist.',
+			'Balanced shoulders and hips with a well-defined waist. Your curves are evenly proportioned, and your waist naturally stands out.',
 		image: '/assets/images/bodytypes/hourglass.png',
 		clothingItems: CLOTHING_ITEMS.HOURGLASS,
 	},
 ]
+
+export const AGE_GROUPS = [
+	'18 – 24',
+	'25 – 34',
+	'35 – 44',
+	'45 – 54',
+	'55 – 64',
+]
+
+export const BODY_PARTS = [
+	'Neck/Collarbone',
+	'Shoulders',
+	'Arms (Upper Arms)',
+	'Bust/Chest',
+	'Back (Upper/Mid)',
+	'Waist',
+	'Tummy/Stomach',
+	'Hips',
+	'Butt/Rear',
+	'Thighs',
+	'Knees',
+	'Calves',
+	'Ankles',
+	'Feet',
+]
+
+export const PERSONAL_STYLE = [
+	{ label: 'Classic', desc: 'Timeless, Polished & Tailored.' },
+	{ label: 'Romantic', desc: 'Soft, Feminine & Flowy.' },
+	{ label: 'Dramatic', desc: 'Bold, Edgy & High-contrast.' },
+	{ label: 'Natural', desc: 'Relaxed, Effortless & Earthy.' },
+	{ label: 'Creative', desc: 'Eclectic, Artistic & Mix-and-match.' },
+	{
+		label: 'Elegant/Chic',
+		desc: 'Sophisticated, Minimal & Elevated basics.',
+	},
+	{
+		label: 'Sexy/Alluring',
+		desc: 'Form-fitting, Confident & Skin-conscious.',
+	},
+]
+
+export const HEIGHT = [
+	{ label: 'Petite', desc: "Under 5'2 / 157 cm", value: 'Petite' },
+	{ label: 'Regular', desc: "5'2 - 5'7 / 160-170 cm", value: 'Regular' },
+	{ label: 'Tall', desc: "Above 5'7 / 170 cm", value: 'Tall' },
+]
+
+export const MONTHLY_OCCASIONS = [
+	{ key: 'work', label: 'Work From Office' },
+	{ key: 'dates', label: 'Dates' },
+	{ key: 'social', label: 'Social Events' },
+	{ key: 'errands', label: 'Errands/Casual' },
+	{ key: 'family', label: 'Family/Kids' },
+	{ key: 'evening', label: 'Evening Events' },
+	{ key: 'travels', label: 'Travels' },
+]
+
+// ids for database
 
 export const BODY_TYPE_ID = {
 	1: 'Inverted Triangle',
@@ -752,4 +811,55 @@ export const BODY_TYPE_ID = {
 
 export const BODY_TYPE_IMAGES = {
 	image: '/assets/inverted-triangle/wardrobe-preview.png',
+}
+
+export const AGE_GROUP_ID = {
+	1: '18 - 24',
+	2: '25 - 34',
+	3: '35 - 44',
+	4: '45 - 54',
+	5: '55 - 64',
+}
+
+export const HEIGHT_GROUP_ID = {
+	1: 'Petite',
+	2: 'Regular',
+	3: 'Tall',
+}
+
+export const BODY_PARTS_ID = {
+	1: 'Neck/Collarbone',
+	2: 'Shoulders',
+	3: 'Arms (Upper Arms)',
+	4: 'Bust/Chest',
+	5: 'Back (Upper/Mid)',
+	6: 'Waist',
+	7: 'Tummy/Stomach',
+	8: 'Hips',
+	9: 'Butt/Rear',
+	10: 'Thighs',
+	11: 'Knees',
+	12: 'Calves',
+	13: 'Ankles',
+	14: 'Feet',
+}
+
+export const PERSONAL_STYLE_ID = {
+	1: 'Classic',
+	2: 'Romantic',
+	3: 'Dramatic',
+	4: 'Natural',
+	5: 'Creative',
+	6: 'Elegant/Chic',
+	7: 'Sexy/Alluring',
+}
+
+export const MONTHLY_OCCASIONS_ID = {
+	1: 'Work from office',
+	2: 'Dates',
+	3: 'Social Events',
+	4: 'Errands/Casual',
+	5: 'Family/Kids',
+	6: 'Evening Events',
+	7: 'Travel',
 }

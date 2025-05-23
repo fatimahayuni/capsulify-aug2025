@@ -2,85 +2,261 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { BODY_TYPES } from '../constants'
 import { getBodyTypeDescription, getOutfits } from '../constants/utils'
-import { updateUserBodyType } from '../lib/actions/user.actions'
+import {
+	updateUserBodyType,
+	updateUserDetails,
+} from '../lib/actions/user.actions'
 import { useAuth } from '@clerk/nextjs'
-import { BODY_TYPE_IMAGES } from '../constants'
+import SelectBodyType from './SelectBodyType'
+import SelectHeight from './SelectHeight'
+import FavoriteParts from './FavoriteParts'
+import LeastFavoriteParts from './LeastFavoriteParts'
+import PersonalStyle from './PersonalStyle'
+import ShowBodyTypeResults from './ShowBodyTypeResults'
+import ShowOutfits from './ShowOutfits'
+import UserInfo from './UserInfo'
+import MonthlyOccasions from './MonthlyOccasions'
+import GoalFrustration from './GoalFrustration'
+import { OnboardingData } from '../types'
 
 export default function OnboardingPage() {
 	const { userId: clerkId } = useAuth()
-	const [step, setStep] = useState(1)
-	const [bodyType, setBodyType] = useState<string | null>(null)
+	const [step, setStep] = useState(0)
+	const [onboardingData, setOnboardingData] = useState({
+		ageGroup: '',
+		location: '',
+		bodyType: '',
+		height: '',
+		favoriteParts: [],
+		leastFavoriteParts: [],
+		personalStyle: '',
+		occasions: {
+			work: 0,
+			dates: 0,
+			social: 0,
+			errands: 0,
+			family: 0,
+			evening: 0,
+			travels: 0,
+		},
+		goal: '',
+		frustration: '',
+	})
 	const [wardrobe, setWardrobe] = useState<any>({})
-	const [outfits, setOutfits] = useState<any>([]) // Assuming outfits are fetched or generated based on wardrobe
+	const [outfits, setOutfits] = useState<any>([])
 	const router = useRouter()
 
 	const handleNext = () => {
-		if (step === 1 && bodyType) {
-			// Fetch wardrobe for selected body type
-			const generatedWardrobe = getBodyTypeDescription(bodyType)
-			setWardrobe(generatedWardrobe)
+		if (
+			step === 1 &&
+			onboardingData.ageGroup &&
+			onboardingData.location !== undefined
+		) {
+			setStep(2)
+			return
 		}
-
-		if (step === 2 && bodyType) {
-			// Fetch outfits based on wardrobe (mock or real)
-			const generatedOutfits = getOutfits(bodyType as string)
-			setOutfits(generatedOutfits)
+		if (step === 2 && onboardingData.bodyType) {
 			setStep(3)
 			return
 		}
-
+		if (step === 3 && onboardingData.height) {
+			setStep(4)
+			return
+		}
+		if (step === 4 && onboardingData.favoriteParts.length > 0) {
+			setStep(5)
+			return
+		}
+		if (step === 5 && onboardingData.leastFavoriteParts.length > 0) {
+			setStep(6)
+			return
+		}
+		if (step === 6 && onboardingData.personalStyle) {
+			setStep(7)
+			return
+		}
+		if (
+			step === 7 &&
+			Object.values(onboardingData.occasions).some((v) => v > 0)
+		) {
+			setStep(8)
+			return
+		}
+		if (step === 8 && onboardingData.bodyType) {
+			const generatedWardrobe = getBodyTypeDescription(
+				onboardingData.bodyType
+			)
+			setWardrobe(generatedWardrobe)
+		}
+		if (step === 9 && onboardingData.bodyType) {
+			const generatedOutfits = getOutfits(
+				onboardingData.bodyType as string
+			)
+			setOutfits(generatedOutfits)
+			setStep(10)
+			return
+		}
 		setStep((prev) => prev + 1)
 	}
 
 	const handleBack = () => {
-		if (step > 1) setStep((prev) => prev - 1)
+		if (step > 0) setStep((prev) => prev - 1)
 	}
-  const handleSubmit = async () => {
-    // update user bodyType in database
-    const userId = await updateUserBodyType(bodyType!, clerkId as string);
-    router.push("/inventory");
-  };
+	const handleSubmit = async () => {
+		// await updateUserBodyType(onboardingData.bodyType!, clerkId as string)
+		await updateUserDetails(
+			onboardingData as OnboardingData,
+			clerkId as string
+		)
+		router.push('/inventory')
+	}
 
 	return (
 		<div>
-			{/* Top Nav with Back Button and Progress Dots */}
-			<nav className='flex items-center justify-between px-6 pt-6 md:mx-12'>
-				<button
-					className='text-accent text-3xl focus:outline-none disabled:opacity-40 cursor-pointer'
-					onClick={handleBack}
-					disabled={step === 1}
-					aria-label='Go back'
-				>
-					&#x2039;
-				</button>
-				<div className='flex items-center space-x-2'>
-					{[1, 2, 3].map((s) => (
-						<span
-							key={s}
-							className={`w-2 h-2 rounded-full inline-block ${step >= s ? 'bg-accent' : 'bg-[#cbb6a0]'}`}
-						></span>
-					))}
-				</div>
-			</nav>
+			{step !== 0 && (
+				<nav className='flex items-center justify-between px-6 pt-6 md:mx-12'>
+					<button
+						className='text-accent text-3xl focus:outline-none disabled:opacity-40 cursor-pointer'
+						onClick={handleBack}
+						disabled={step === 0}
+						aria-label='Go back'
+					>
+						&#x2039;
+					</button>
+					<div className='flex items-center space-x-2'>
+						{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((s) => (
+							<span
+								key={s}
+								className={`w-2 h-2 rounded-full inline-block ${step >= s ? 'bg-accent' : 'bg-[#cbb6a0]'}`}
+							></span>
+						))}
+					</div>
+				</nav>
+			)}
 
+			{step === 0 && <Step0_Welcome handleNext={handleNext} />}
 			{step === 1 && (
-				<Step1_SelectBodyType
-					bodyType={bodyType}
-					setBodyType={setBodyType}
+				<UserInfo
+					ageGroup={onboardingData.ageGroup}
+					setAgeGroup={(val: string) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							ageGroup: val,
+						}))
+					}
+					location={onboardingData.location}
+					setLocation={(val: string) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							location: val,
+						}))
+					}
 					handleNext={handleNext}
 				/>
 			)}
 			{step === 2 && (
-				<Step2_ShowBodyTypeResults
-					bodyType={bodyType}
-					setStep={setStep}
+				<SelectBodyType
+					bodyType={onboardingData.bodyType}
+					setBodyType={(val: string) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							bodyType: val,
+						}))
+					}
 					handleNext={handleNext}
 				/>
 			)}
 			{step === 3 && (
-				<Step3_ShowOutfits
+				<SelectHeight
+					height={onboardingData.height}
+					setHeight={(val: string) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							height: val,
+						}))
+					}
+					handleNext={handleNext}
+				/>
+			)}
+			{step === 4 && (
+				<FavoriteParts
+					favoriteParts={onboardingData.favoriteParts}
+					setFavoriteParts={(arr: string[]) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							favoriteParts: arr,
+						}))
+					}
+					handleNext={handleNext}
+				/>
+			)}
+			{step === 5 && (
+				<LeastFavoriteParts
+					leastFavoriteParts={onboardingData.leastFavoriteParts}
+					setLeastFavoriteParts={(arr: string[]) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							leastFavoriteParts: arr,
+						}))
+					}
+					handleNext={handleNext}
+				/>
+			)}
+			{step === 6 && (
+				<PersonalStyle
+					personalStyle={onboardingData.personalStyle}
+					setPersonalStyle={(val: string) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							personalStyle: val,
+						}))
+					}
+					handleNext={handleNext}
+				/>
+			)}
+			{step === 7 && (
+				<MonthlyOccasions
+					occasions={onboardingData.occasions}
+					setOccasions={(updater: any) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							occasions:
+								typeof updater === 'function'
+									? updater(prev.occasions)
+									: updater,
+						}))
+					}
+					handleNext={handleNext}
+				/>
+			)}
+			{step === 8 && (
+				<GoalFrustration
+					goal={onboardingData.goal}
+					setGoal={(val: string) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							goal: val,
+						}))
+					}
+					frustration={onboardingData.frustration}
+					setFrustration={(val: string) =>
+						setOnboardingData((prev: any) => ({
+							...prev,
+							frustration: val,
+						}))
+					}
+					handleNext={handleNext}
+				/>
+			)}
+			{step === 9 && (
+				<ShowBodyTypeResults
+					bodyType={onboardingData.bodyType}
+					handleNext={handleNext}
+				/>
+			)}
+			{step === 10 && (
+				<ShowOutfits
 					outfits={outfits}
 					handleSubmit={handleSubmit}
 					setStep={setStep}
@@ -90,235 +266,64 @@ export default function OnboardingPage() {
 	)
 }
 
-function Step1_SelectBodyType({ bodyType, setBodyType, handleNext }: any) {
+function Step0_Welcome({ handleNext }: { handleNext: () => void }) {
 	return (
-		<div className='bg-primary p-8 flex flex-col items-center justify-center'>
-			<h1 className='text-center text-[1rem] px-8 md:text-[1.5rem] mb-5 text-accent tracking-wide w-full'>
-				Pick a <span className='font-semibold'>Body Type</span> to
-				Unlock your Curated Wardrobe!
-			</h1>
-
-			<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 max-w-[1400px] w-full mx-auto px-2 justify-center'>
-				{BODY_TYPES.map((type) => {
-					const isDisabled = type.name !== 'Inverted Triangle'
-
-					return (
-						<div
-							key={type.name}
-							className={`
-              bg-secondary p-3 sm:p-4 transition-all duration-300 ease-in-out
-              flex flex-col items-center border-[1.5px] border-transparent rounded-lg
-              ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:-translate-y-1 hover:shadow-lg'}
-              ${bodyType === type.name ? 'border-accent shadow-lg' : ''}
-              ${isDisabled ? 'relative' : ''}
-            `}
-							onClick={() => {
-								if (!isDisabled) {
-									setBodyType(type.name)
-									handleNext()
-								}
-							}}
-						>
-							{isDisabled && (
-								<div className='absolute inset-0 flex items-center justify-center rounded-lg bg-secondary opacity-90'>
-									<p className='text-accent text-[0.65rem] text-center px-2 uppercase tracking-wider'>
-										Coming Soon
-									</p>
-								</div>
-							)}
-
-							<div className='w-full mb-4'>
-								<img
-									src={type.image}
-									alt={type.name}
-									className='h-[200px] object-contain sm:h-[180px] md:h-[160px] mx-auto'
-								/>
-							</div>
-
-							<div className='text-left w-full'>
-								<h3 className='text-[0.8rem] mt-2 mb-3 text-accent font-extrabold uppercase'>
-									{type.name}
-								</h3>
-								<p className='text-[0.8rem] text-accent leading-relaxed tracking-wider m-0 text-left w-full'>
-									{type.description}
-								</p>
-							</div>
-						</div>
-					)
-				})}
-			</div>
-		</div>
-	)
-}
-
-function Step2_ShowBodyTypeResults({ bodyType, handleNext }: any) {
-	const { description, recommendations, benefits } =
-		getBodyTypeDescription(bodyType)
-
-	return (
-		<div className='w-full flex items-center justify-center bg-primary px-4 py-8'>
-			<div className='rounded-2xl w-full max-w-[800px] mx-auto p-2'>
-				<p
-					className='text-accent text-[1.25rem] md:text-[1.25rem] font-medium tracking-wide text-left mb-8'
-					style={{ fontFamily: 'inherit' }}
-				>
-					Because your body shape is{' '}
-					<span className='font-bold italic text-accent'>
-						{bodyType}
-					</span>
-					,
-				</p>
-				<p
-					className='text-accent mb-8 text-[0.875rem] md:text-[1rem] leading-[1.6] tracking-wide text-left'
-					style={{ fontFamily: 'inherit' }}
-				>
-					{description}
-				</p>
-				<p
-					className='text-accent text-[0.875rem] md:text-[1rem] font-semibold tracking-wide text-left mb-4'
-					style={{ fontFamily: 'inherit' }}
-				>
-					You'll receive tailored recommendations for:
-				</p>
-				<div className='bg-secondary rounded-xl px-4 py-4 text-center mb-8'>
-					<span
-						className='text-accent text-[0.875rem] md:text-[0.95rem] font-medium tracking-wide'
-						style={{ fontFamily: 'inherit' }}
-					>
-						{recommendations}
-					</span>
-				</div>
-				<p
-					className='text-accent text-[0.875rem] md:text-[1rem] leading-[1.6] tracking-wide text-left mb-0'
-					style={{ fontFamily: 'inherit' }}
-				>
-					{benefits}
-				</p>
-				<div className='flex justify-center mt-6 w-full rounded-lg'>
+		<div className='flex flex-col items-center justify-center min-h-[80vh] px-4 bg-primary'>
+			<div className='flex flex-col items-center w-full max-w-md mx-auto py-12 rounded-2xl'>
+				{/* Capsulify Logo */}
+				<div className='mb-8 mt-4'>
 					<img
-						src={`${BODY_TYPE_IMAGES.image}`}
-						alt={BODY_TYPE_IMAGES.image}
-						width={400}
-						height={400}
-						className='rounded-lg'
+						src='/assets/images/logo/logo.svg'
+						alt='Capsulify Logo'
+						className='w-10 h-10 md:w-10 md:h-10 object-contain mx-auto fill-accent'
 					/>
 				</div>
-				<div className='flex justify-center mt-12 w-full'>
-					<button
-						className='bg-accent text-white border-none py-2 px-4 text-[0.875rem] rounded-md cursor-pointer transition-all duration-300 shadow-md tracking-wide hover:-translate-y-0.5 hover:opacity-90'
-						onClick={() => {
-							handleNext()
-						}}
-					>
-						Continue
-					</button>
-				</div>
-			</div>
-		</div>
-	)
-}
-
-function Step3_ShowOutfits({ outfits, handleSubmit }: any) {
-	const [currentIndex, setCurrentIndex] = useState(0)
-	const total = outfits.length
-
-	// Helper to handle card click (circular)
-	const handleCardClick = (idx: number) => {
-		if (idx !== currentIndex) setCurrentIndex(idx)
-	}
-
-	// Helper to get circular offset
-	const getOffset = (idx: number) => {
-		let offset = idx - currentIndex
-		if (offset > total / 2) offset -= total
-		if (offset < -total / 2) offset += total
-		return offset
-	}
-
-	return (
-		<div className='bg-primary flex flex-col items-center px-6 pt-2 md:mt-0 mt-8 mx-2'>
-			{/* Description */}
-			<div className='w-full max-w-md md:max-w-xl text-left md:text-center mb-8'>
-				<span className='text-lg md:text-[1.25rem] font-bold text-accent'>
-					Here
-				</span>
-				<span className='text-base md:text-[0.9rem] text-accent'>
-					{' '}
-					is where the transformation begins: check out a few{' '}
-					<span className='font-bold md:text-[1rem]'>
-						curated outfits
-					</span>{' '}
-					designed to flatter your body and reflect the woman you're
-					becoming.
-				</span>
-			</div>
-
-			{/* Coverflow Carousel */}
-			<div className='w-full flex flex-col items-center mt-4'>
-				<div className='relative w-full flex justify-center items-center h-96 select-none '>
-					{outfits.map((outfit: any, idx: number) => {
-						// Calculate circular offset
-						const offset = getOffset(idx)
-						let scale = 1
-						let zIndex = 10 - Math.abs(offset)
-						let translateX = offset * 80 // px
-						let opacity = 1
-						let pointer: 'auto' | 'none' = 'auto'
-						let blur = ''
-						if (offset === 0) {
-							scale = 1.1
-							zIndex = 20
-							translateX = 0
-							opacity = 1
-							blur = ''
-						} else if (Math.abs(offset) === 1) {
-							scale = 0.9
-							opacity = 0.7
-							blur = ''
-						} else {
-							scale = 0.8
-							opacity = 0.3
-							pointer = 'none'
-							blur = 'blur-sm'
-						}
-						return (
-							<div
-								key={idx}
-								className={`absolute top-0 left-1/2 -translate-x-1/2 transition-all duration-300 ease-in-out cursor-pointer ${blur}`}
-								style={{
-									zIndex,
-									transform: `translateX(${translateX}px) scale(${scale})`,
-									opacity,
-									pointerEvents: pointer,
-									width: '16rem',
-								}}
-								onClick={() => handleCardClick(idx)}
-							>
-								<div className='bg-secondary rounded-xl flex flex-col items-center py-6 px-4 w-64 mx-auto shadow-none'>
-									<p className='text-center text-accent font-bold text-sm mb-4'>
-										{outfit.event}
-									</p>
-									<img
-										src={outfit.image}
-										alt={`${outfit.event} outfit`}
-										className='h-56 object-contain mb-4'
-									/>
-								</div>
-							</div>
-						)
-					})}
-				</div>
-			</div>
-
-			{/* Navigation Button */}
-			<div className='flex justify-center w-full max-w-md'>
+				<h1 className='text-xl md:text-2xl font-bold text-accent mb-4 text-center'>
+					Hi, Aditi!
+				</h1>
+				<p className='text-accent text-[0.9rem] md:text-base text-center mb-12 px-6'>
+					Let's get to know your style a little better!
+					<br />
+					Answer a few quick questions to help us unlock your
+					personalized, curated wardrobe!
+				</p>
+				<p className='text-[#b6a99a] text-[0.75rem] text-center mb-8'>
+					Your answers will guide us through this process.
+				</p>
 				<button
-					className='bg-accent text-[0.8rem] text-white p-3 rounded-md flex items-center justify-center tracking-wide hover:opacity-90 hover:-translate-y-0.5 cursor-pointer transition-all duration-300 shadow-md'
-					onClick={handleSubmit}
+					className='w-[40%] max-w-xs bg-accent text-white font-semibold py-3 cursor-pointer rounded-md text-[0.875rem] shadow-md hover:opacity-90 transition-all duration-200'
+					onClick={handleNext}
 				>
-					Take me to my wardrobe!
+					Let's Go
 				</button>
 			</div>
 		</div>
 	)
 }
+
+/* {
+    "ageGroup": "25 – 34",
+    "location": "",
+    "bodyType": "Inverted Triangle",
+    "height": "Petite",
+    "favoriteParts": [
+        "Neck / Collarbone",
+        "Back (Upper/Mid)"
+    ],
+    "leastFavoriteParts": [
+        "Knees",
+        "Feet"
+    ],
+    "personalStyle": "Classic",
+    "occasions": {
+        "work": 3,
+        "dates": 0,
+        "social": 0,
+        "errands": 1,
+        "family": 0,
+        "evening": 2,
+        "travels": 0
+    },
+    "goal": "",
+    "frustration": ""
+} */
