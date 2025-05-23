@@ -1,14 +1,15 @@
 "use client";
 
-import { StoreIcon, MessageSquare, Menu, Heart } from "lucide-react";
+import { StoreIcon, Menu, Home } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { ReactNode, useState } from "react";
 import { TbHanger } from "react-icons/tb";
 import { FeedbackForm } from "./FeedbackForm";
+import { PiDressBold } from "react-icons/pi";
 
 type MenubarItem = {
-  name: string;
-  icon: ReactNode;
+  name?: string;
+  icon: ReactNode | string;
   pathname?: string;
   onClick?: () => void;
 };
@@ -35,36 +36,33 @@ const Menubar = () => {
 
   const menubarItems: MenubarItem[] = [
     {
-      name: "Inventory",
-      icon: <StoreIcon className="h-4 w-4" />,
+      name: "Home",
+      icon: "assets/icons/home.svg",
+      pathname: "/home",
+    },
+    {
+      name: "Fit Guide",
+      icon: "assets/icons/fit-guide.svg",
       pathname: "/inventory",
     },
     {
       name: "Outfits",
-      icon: <TbHanger className="h-4 w-4" />,
+      icon: "assets/icons/outfits.svg",
       pathname: "/outfits",
     },
     {
-      name: "Feedback",
-      icon: <MessageSquare className="h-4 w-4" />,
-      onClick: () => setIsFeedbackOpen(true),
-    },
-    {
-      name: "Favourites",
-      icon: <Heart className="h-4 w-4" />,
-      pathname: "/favourites",
-    },
-    {
       name: "Menu",
-      icon: <Menu className="h-4 w-4" />,
-      pathname: "/menu",
+      icon: "assets/icons/menu.svg",
+      onClick: () => {
+        setIsFeedbackOpen(true);
+      },
     },
   ];
 
   return (
     <>
-      <div className="hidden max-sm:flex max-sm:fixed w-[90%] rounded-full left-[50%] translate-x-[-50%] bottom-6 shadow-sm z-50 bg-secondary overflow-hidden">
-        <div className="flex justify-between items-center w-full">
+      <div className="hidden max-sm:flex max-sm:fixed w-fit rounded-full left-[50%] translate-x-[-50%] bottom-6 shadow-sm z-50 bg-primary overflow-hidden">
+        <div className="flex justify-center items-center w-full mx-auto bg-[#4a34272c] px-4">
           {menubarItems.map((item) => (
             <div
               key={item.name}
@@ -79,15 +77,14 @@ const Menubar = () => {
                 }
               }}
             >
-              <div className="flex items-center justify-center w-10 h-10 rounded-ful">
-                {item.icon}
+              <div className="flex items-center justify-center w-10 h-9">
+                <img src={item.icon as string} />
               </div>
-              <span className="text-[10px]">{item.name}</span>
+              <span className="text-[8px]">{item.name}</span>
             </div>
           ))}
         </div>
       </div>
-
       <FeedbackForm
         isOpen={isFeedbackOpen}
         onClose={() => setIsFeedbackOpen(false)}

@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  clothingItemNameBuilder,
-  EDIT_OPTIONS,
-  toTitleCase,
-} from "../constants/utils";
+import { EDIT_OPTIONS, toTitleCase } from "../constants/utils";
 import {
   getClothingVariantId,
   saveClothingVariantId,
@@ -62,19 +58,21 @@ const ClothingItemCard = (props: Props) => {
     <>
       <div
         key={item.id}
-        className="flex flex-col items-center justify-center hover:translate-y-[-4px] hover:shadow-lg w-[200px] h-[210px] max-sm:w-[175px] max-sm:h-[175px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-2"
+        className="flex flex-col items-center justify-center hover:translate-y-[-4px] hover:shadow-lg w-[200px] h-[210px] max-sm:w-[170px] max-sm:h-[185px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-2"
         onMouseOver={() => setShowEditButton(true)}
         onMouseLeave={() => setShowEditButton(false)}
       >
         <div
-          className={`absolute top-2 right-2 flex gap-2 ${
-            showEditButton ? "" : "hidden"
-          } max-sm:flex`}
+          className={`flex gap-2 ${showEditButton ? "" : "hidden"} w-full max-sm:flex px-2`}
         >
-          <div className="flex gap-2">
-            <BsInfo className="inventory-item-icon w-5 h-5 rounded-full bg-[#4a342727]" />
-            <Edit3Icon
-              className="inventory-item-icon w-5 h-5 rounded-full bg-[#4a342727]"
+          <div className="flex gap-2 ml-auto mb-2">
+            <img
+              src="/assets/icons/info.svg"
+              className="w-[16px] h-[16px] p-1 rounded-full bg-[#4a342727]"
+            />
+            <img
+              src="/assets/icons/edit-pencil.svg"
+              className="w-[16px] h-[16px] p-[3px] rounded-full bg-[#4a342727]"
               onClick={handleEdit}
             />
           </div>
@@ -84,10 +82,12 @@ const ClothingItemCard = (props: Props) => {
           <img
             src={`/assets/inverted-triangle/${currentImage}`}
             alt={currentImage}
-            className="inventory-image w-[135px] h-[135px] object-contain max-sm:w-[120px] max-sm:h-[120px]"
+            className="inventory-image w-[135px] h-[135px] object-contain max-sm:w-[100px] max-sm:h-[100px]"
           />
         </div>
-        <p className="inventory-item-name mb-1">{currentName}</p>
+        <p className="capitalize text-center text-[11px] mb-1 px-3">
+          {currentName}
+        </p>
       </div>
       {isEditing && (
         <ClothingItemModal
@@ -174,7 +174,7 @@ function ClothingItemModal({
               className="w-[135px] h-[135px] object-contain"
             />
           </div>
-          <p className="text-accent text-sm font-semibold uppercase tracking-wider text-center">
+          <p className="text-accent text-sm font-semibold capitalize tracking-wider text-center">
             {/* Item Name */}
             {name}
           </p>
