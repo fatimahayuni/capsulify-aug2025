@@ -1,11 +1,8 @@
 "use client";
 
-import { StoreIcon, Menu, Home } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import React, { ReactNode, useState } from "react";
-import { TbHanger } from "react-icons/tb";
 import { FeedbackForm } from "./FeedbackForm";
-import { PiDressBold } from "react-icons/pi";
 
 type MenubarItem = {
   name?: string;
@@ -62,7 +59,7 @@ const Menubar = () => {
 
   return (
     <div>
-      <div className="hidden max-sm:flex max-sm:fixed w-fit  left-[50%] translate-x-[-50%] bottom-6 shadow-sm z-50 bg-primary relative">
+      <div className="hidden max-sm:flex max-sm:fixed w-fit rounded-full left-[50%] translate-x-[-50%] bottom-6 shadow-sm z-50 bg-primary relative">
         <div className="flex justify-center items-center rounded-full w-full mx-auto bg-[#4a34272c] px-4">
           {menubarItems.map((item) => (
             <div
@@ -86,8 +83,9 @@ const Menubar = () => {
             </div>
           ))}
         </div>
+
         <div
-          className={`absolute top-[-1.25rem] right-[-2rem] shadow-2xl w-[90px] py-1 pl-2 z-50 rounded-md font-semibold border text-[12px] bg-secondary ${
+          className={`absolute top-[-1.25rem] right-[-2rem] shadow-2xl w-[90px]  z-50 rounded-md font-semibold border-secondary text-accent text-[12px] bg-primary ${
             menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
           onClick={() => {
@@ -95,7 +93,7 @@ const Menubar = () => {
             setMenuOpen(false);
           }}
         >
-          Feedback
+          <div className="bg-[#4a34272c] py-1 pl-2 rounded-md">Feedback</div>
         </div>
       </div>
       <FeedbackForm

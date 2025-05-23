@@ -70,6 +70,10 @@
   color: var(--secondary-color);
 }
 
+.border-secondary {
+  border: 1px solid var(--accent-color);
+}
+
 /* Base font size for rem calculations */
 html {
   font-size: 16px; /* Base font size */
@@ -297,7 +301,9 @@ body {
   align-items: center;
   background-color: var(--secondary-background);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .category-item:hover {
@@ -1191,7 +1197,9 @@ body {
   border: 2px solid var(--secondary-background);
   border-radius: 0.5rem;
   padding: 2rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   height: 280px;
   display: flex;
   flex-direction: column;
