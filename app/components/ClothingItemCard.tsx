@@ -58,14 +58,12 @@ const ClothingItemCard = (props: Props) => {
     <>
       <div
         key={item.id}
-        className="flex flex-col items-center justify-center hover:translate-y-[-4px] hover:shadow-lg w-[200px] h-[210px] max-sm:w-[170px] max-sm:h-[185px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-2"
+        className="flex flex-col items-center justify-center hover:translate-y-[-4px] hover:shadow-lg w-[200px] h-[220px] max-sm:w-[170px] max-sm:h-[185px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-2"
         onMouseOver={() => setShowEditButton(true)}
         onMouseLeave={() => setShowEditButton(false)}
       >
-        <div
-          className={`flex gap-2 ${showEditButton ? "" : "hidden"} w-full max-sm:flex px-2`}
-        >
-          <div className="flex gap-2 ml-auto mb-2">
+        <div className={`w-full flex px-2`}>
+          <div className="flex gap-2 ml-auto mb-2 py-1">
             <img
               src="/assets/icons/info.svg"
               className="w-[16px] h-[16px] p-1 rounded-full bg-[#4a342727]"

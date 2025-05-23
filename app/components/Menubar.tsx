@@ -18,6 +18,7 @@ const Menubar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleSubmit = async (data: any) => {
     const response = await fetch("/api/feedback", {
@@ -54,15 +55,15 @@ const Menubar = () => {
       name: "Menu",
       icon: "assets/icons/menu.svg",
       onClick: () => {
-        setIsFeedbackOpen(true);
+        setMenuOpen(!menuOpen);
       },
     },
   ];
 
   return (
-    <>
-      <div className="hidden max-sm:flex max-sm:fixed w-fit rounded-full left-[50%] translate-x-[-50%] bottom-6 shadow-sm z-50 bg-primary overflow-hidden">
-        <div className="flex justify-center items-center w-full mx-auto bg-[#4a34272c] px-4">
+    <div>
+      <div className="hidden max-sm:flex max-sm:fixed w-fit  left-[50%] translate-x-[-50%] bottom-6 shadow-sm z-50 bg-primary relative">
+        <div className="flex justify-center items-center rounded-full w-full mx-auto bg-[#4a34272c] px-4">
           {menubarItems.map((item) => (
             <div
               key={item.name}
@@ -72,6 +73,7 @@ const Menubar = () => {
               onClick={() => {
                 if (item.pathname) {
                   router.push(item.pathname);
+                  setMenuOpen(false);
                 } else if (item.onClick) {
                   item.onClick();
                 }
@@ -84,13 +86,27 @@ const Menubar = () => {
             </div>
           ))}
         </div>
+        <div
+          className={`absolute top-[-1.25rem] right-[-2rem] shadow-2xl w-[90px] py-1 pl-2 z-50 rounded-md font-semibold border text-[12px] bg-secondary ${
+            menuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
+          onClick={() => {
+            setIsFeedbackOpen(true);
+            setMenuOpen(false);
+          }}
+        >
+          Feedback
+        </div>
       </div>
       <FeedbackForm
         isOpen={isFeedbackOpen}
-        onClose={() => setIsFeedbackOpen(false)}
+        onClose={() => {
+          setIsFeedbackOpen(false);
+          setMenuOpen(false);
+        }}
         onSubmit={handleSubmit}
       />
-    </>
+    </div>
   );
 };
 
