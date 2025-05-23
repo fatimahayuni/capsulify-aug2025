@@ -59,8 +59,8 @@ const Menubar = () => {
 
   return (
     <div>
-      <div className="hidden max-sm:flex max-sm:fixed w-fit rounded-full left-[50%] translate-x-[-50%] bottom-6 shadow-sm z-50 bg-primary relative">
-        <div className="flex justify-center items-center rounded-full w-full mx-auto bg-[#4a34272c] px-4">
+      <div className="max-sm:flex fixed w-fit rounded-full left-[50%] translate-x-[-50%] bottom-6 shadow-sm z-20 bg-primary ">
+        <div className="flex justify-center items-center rounded-full w-full mx-auto bg-[#4a34272c] px-4 relative">
           {menubarItems.map((item) => (
             <div
               key={item.name}

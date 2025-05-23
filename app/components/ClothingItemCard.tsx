@@ -154,8 +154,8 @@ function ClothingItemModal({
   const [activeClass, setActiveClass] = useState(Object.keys(editOptions)[0]);
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-primary w-[350px] h-[600px] rounded-lg shadow-lg relative overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 w-full h-full">
+      <div className="bg-primary w-[350px] h-[625px] rounded-lg shadow-lg relative overflow-y-auto">
         <button
           onClick={() => setIsEditing(false)}
           className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center  text-amber-950 rounded-full  hover:scale-120 transition-transform duration-200 cursor-pointer"
@@ -172,7 +172,7 @@ function ClothingItemModal({
               className="w-[135px] h-[135px] object-contain"
             />
           </div>
-          <p className="text-accent text-sm font-semibold capitalize tracking-wider text-center">
+          <p className="text-accent text-sm capitalize text-center px-4">
             {/* Item Name */}
             {name}
           </p>
