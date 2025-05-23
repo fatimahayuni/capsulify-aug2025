@@ -159,8 +159,9 @@ export const updateUserDetails = async (
 		await client.query('SET search_path TO capsulify_live')
 
 		// Update age group
-		const ageGroupQuery = `SELECT id from age_group WHERE name = $1`
+		const ageGroupQuery = `SELECT id FROM age_group WHERE name = $1`
 		const ageGroupResult = await client.query(ageGroupQuery, [ageGroup])
+		console.log('age group result', ageGroup, ageGroupResult)
 
 		if (ageGroupResult.rows.length === 0)
 			throw new Error('age group not found')
@@ -194,11 +195,25 @@ export const updateUserDetails = async (
 
 		const heightId = heightResult.rows[0].id
 
-		const updateHeightQuery = `UPDATE users SET height_id = $1 WHERE clerk_id = $2`
-		await client.query(updateHeightQuery, [heightId, clerkId])
+		const updateHeightQuery = `UPDATE users SET height_id = $1 WHERE clerk_id = $2 RETURNING id`
+		const updateHeightResult = await client.query(updateHeightQuery, [
+			heightId,
+			clerkId,
+		])
 
 		// update favorite parts
+
+		const dbUserId = updateHeightResult.rows[0].id
+		for (const part of favoriteParts) {
+			const updateFavoritePartsQuery = `INSERT INTO user_favorite_parts (user_id, body_part_id) VALUES ($1, $2)`
+			await client.query(updateFavoritePartsQuery, [dbUserId, part])
+		}
+
 		// update least favorite parts
+		for (const part of leastFavoriteParts) {
+			const updateLeastFavoritePartsQuery = `INSERT INTO user_least_favorite_parts (user_id, body_part_id) VALUES ($1, $2)`
+			await client.query(updateLeastFavoritePartsQuery, [dbUserId, part])
+		}
 
 		// update personal style
 		const personalStyleQuery = `SELECT id from personal_style WHERE name = $1`
