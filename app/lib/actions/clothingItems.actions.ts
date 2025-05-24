@@ -12,11 +12,11 @@ export const createUserWardrobe = async (userId: number, bodyType?: string) => {
     await client.query("SET search_path TO capsulify_live");
     const defaultItems = DEFAULT_WARDROBE.INVERTED_TRIANGLE;
     const createWardrobeQuery = `
-    INSERT INTO user_clothing_variants (user_id, clothing_variant_id)
-    SELECT $1, $2`;
-    for (const item of defaultItems) {
-      await client.query(createWardrobeQuery, [userId, item]);
-    }
+  INSERT INTO user_clothing_variants (user_id, clothing_variant_id)
+  SELECT $1, UNNEST($2::int[])
+`;
+
+    await client.query(createWardrobeQuery, [userId, defaultItems]);
     console.log("User wardrobe created successfully");
   } catch (error) {
     console.error("Error creating user wardrobe:", error);
