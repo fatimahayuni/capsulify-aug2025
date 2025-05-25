@@ -130,7 +130,7 @@ export default function InventoryPage() {
               {/* <h2 className="text-xl font-semibold text-[#4b3621] mb-4 text-center uppercase">
                 {value}
               </h2> */}
-              <div className="flex flex-wrap justify-center space-x-2 space-y-4 w-full text-sm mb-8">
+              <div className="flex flex-wrap justify-center space-x-2 space-y-2 w-full text-sm mb-8">
                 {items.map((item: any) => (
                   <ClothingItemCard key={item.id} item={item} category={key} />
                 ))}
