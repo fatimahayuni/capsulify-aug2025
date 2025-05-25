@@ -35,7 +35,7 @@ const OutfitCard = (props: Props) => {
 
   const getItemLayoutClasses = (item: OutfitItem) => {
 
-    const defaultBags = "absolute top-1/2 left-2 w-10 h-10 z-20 -translate-y-1/2";
+    const defaultBags = "absolute top-1/2 left-1 w-12 h-12 z-60 -translate-y-1/2";
     const defaultShoes = "absolute bottom-1 right-4 w-10 h-10 z-10";
     const defaultLayers = "absolute top-4 right-3 w-20 h-20 z-20";
 
