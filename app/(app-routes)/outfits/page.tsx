@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getOutfits } from "./actions";
 import { Outfit } from "./types";
 import OutfitCard from "./components/OutfitCard";
@@ -10,6 +10,7 @@ export default function OutfitsPage() {
   const [outfits, setOutfits] = useState<Outfit[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 18;
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Page load event.
   useEffect(() => {
@@ -38,6 +39,10 @@ export default function OutfitsPage() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    // Scroll to top of content area
+    if (contentRef.current) {
+      contentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -54,7 +59,7 @@ export default function OutfitsPage() {
       )}
       
       {/* Content area */}
-      <div className="flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full max-sm:max-h-[calc(100vh-260px)] px-4 max-sm:px-2 mt-4">
+      <div ref={contentRef} className="flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full max-sm:max-h-[calc(100vh-260px)] px-4 max-sm:px-2 mt-4">
           <div className="flex flex-wrap justify-center space-x-2 space-y-2 w-full text-sm mb-8">
             {currentOutfits.map((outfit: Outfit, outfitIndex: number) => (
               <OutfitCard key={startIndex + outfitIndex} outfit={outfit} />
