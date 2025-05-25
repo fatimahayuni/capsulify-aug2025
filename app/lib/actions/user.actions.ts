@@ -1,8 +1,9 @@
 "use server";
 
-import { CreateUserParams } from "@/app/types";
+import { CreateUserParams, OnboardingData } from "@/app/types";
 import pool from "../database/db";
 import { createUserWardrobe, getUserWardrobe } from "./clothingItems.actions";
+import { MONTHLY_OCCASIONS } from "@/app/constants";
 
 export const createUser = async (params: CreateUserParams) => {
   const client = await pool.connect();
@@ -132,5 +133,141 @@ export const deleteUser = async (clerkId: string) => {
   } catch (error) {
     console.error("Error deleting user:", error);
     throw new Error("Failed to delete user");
+  }
+};
+
+export const updateUserDetails = async (
+  onboardingData: OnboardingData,
+  clerkId: string
+) => {
+  const {
+    ageGroup,
+    location,
+    bodyType,
+    height,
+    favoriteParts,
+    leastFavoriteParts,
+    personalStyle,
+    occasions,
+    goal,
+    frustration,
+  } = onboardingData;
+  const client = await pool.connect();
+  try {
+    await client.query("SET search_path TO capsulify_live");
+
+    // Update age group
+    const ageGroupQuery = `SELECT id FROM age_group WHERE name = $1`;
+    const ageGroupResult = await client.query(ageGroupQuery, [ageGroup]);
+    console.log("age group result", ageGroup, ageGroupResult);
+
+    if (ageGroupResult.rows.length === 0)
+      throw new Error("age group not found");
+
+    const ageGroupId = ageGroupResult.rows[0].id;
+
+    const updateAgeGroupQuery = `UPDATE users SET age_group_id = $1 WHERE clerk_id = $2`;
+    await client.query(updateAgeGroupQuery, [ageGroupId, clerkId]);
+
+    // update location
+    const updateLocationQuery = `UPDATE users SET location = $1 WHERE clerk_id = $2`;
+    await client.query(updateLocationQuery, [location, clerkId]);
+
+    // Update body type
+    const bodyTypeQuery = `SELECT id from body_shapes WHERE name = $1`;
+    const bodyTypeResult = await client.query(bodyTypeQuery, [bodyType]);
+
+    if (bodyTypeResult.rows.length === 0)
+      throw new Error("body type not found");
+
+    const bodyTypeId = bodyTypeResult.rows[0].id;
+
+    const updateBodyTypeQuery = `UPDATE users SET body_shape_id = $1 WHERE clerk_id = $2`;
+    await client.query(updateBodyTypeQuery, [bodyTypeId, clerkId]);
+
+    // update height
+    const heightQuery = `SELECT id from height WHERE name = $1`;
+    const heightResult = await client.query(heightQuery, [height]);
+
+    if (heightResult.rows.length === 0) throw new Error("height not found");
+
+    const heightId = heightResult.rows[0].id;
+
+    const updateHeightQuery = `UPDATE users SET height_id = $1 WHERE clerk_id = $2 RETURNING id`;
+    const updateHeightResult = await client.query(updateHeightQuery, [
+      heightId,
+      clerkId,
+    ]);
+
+    // update favorite parts
+
+    const dbUserId = updateHeightResult.rows[0].id;
+    for (const part of favoriteParts) {
+      const bodyPartQuery = `SELECT id from body_parts WHERE name = $1`;
+      const bodyPartResult = await client.query(bodyPartQuery, [part]);
+      const updateFavoritePartsQuery = `INSERT INTO user_fav_parts (user_id, fav_part_id) VALUES ($1, $2)`;
+      await client.query(updateFavoritePartsQuery, [
+        dbUserId,
+        bodyPartResult.rows[0].id,
+      ]);
+    }
+
+    // update least favorite parts
+    for (const part of leastFavoriteParts) {
+      const bodyPartQuery = `SELECT id from body_parts WHERE name = $1`;
+      const bodyPartResult = await client.query(bodyPartQuery, [part]);
+      const updateLeastFavoritePartsQuery = `INSERT INTO user_least_fav_parts (user_id, least_fav_part_id) VALUES ($1, $2)`;
+      await client.query(updateLeastFavoritePartsQuery, [
+        dbUserId,
+        bodyPartResult.rows[0].id,
+      ]);
+    }
+
+    // update personal style
+    const personalStyleQuery = `SELECT id from personal_style WHERE name = $1`;
+    const personalStyleResult = await client.query(personalStyleQuery, [
+      personalStyle,
+    ]);
+
+    if (personalStyleResult.rows.length === 0)
+      throw new Error("personal style not found");
+
+    const personalStyleId = personalStyleResult.rows[0].id;
+
+    const updatePersonalStyleQuery = `UPDATE users SET personal_style_id = $1 WHERE clerk_id = $2`;
+    await client.query(updatePersonalStyleQuery, [personalStyleId, clerkId]);
+
+    // update monthly occasions
+    // update monthly occasions
+    Object.entries(occasions).map(async ([key, value]) => {
+      const occasionId = MONTHLY_OCCASIONS.find((item) => item.key === key)?.id;
+
+      const insertOccassionQuery = `INSERT INTO user_occasions (user_id, occasions_id, occurence_count) VALUES ($1, $2, $3)`;
+      const insertOccassionResult = await client.query(insertOccassionQuery, [
+        dbUserId,
+        occasionId,
+        value,
+      ]);
+      console.log("inserted occasion", insertOccassionResult);
+    });
+    // update goal
+    const updateGoalQuery = `UPDATE users SET goal = $1 WHERE clerk_id = $2`;
+    await client.query(updateGoalQuery, [goal, clerkId]);
+
+    // update frustration
+    const updateFrustrationQuery = `UPDATE users SET frustration = $1, onboarded = true WHERE clerk_id = $2 RETURNING id`;
+    const result = await client.query(updateFrustrationQuery, [
+      frustration,
+      clerkId,
+    ]);
+    await createUserWardrobe(result.rows[0].id, bodyType);
+
+    console.log("User details updated successfully");
+    return result.rows[0].id;
+  } catch (error) {
+    console.error("Error updating user details:", error);
+    throw new Error("Failed to update user details");
+  } finally {
+    client.release();
   }
 };

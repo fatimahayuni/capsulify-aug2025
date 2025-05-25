@@ -3,7 +3,6 @@
 import { DEFAULT_WARDROBE } from "@/app/constants/utils";
 import pool from "../database/db";
 import { getUserId } from "../database/getUserId";
-import { getUserByClerkId } from "./user.actions";
 
 export const createUserWardrobe = async (userId: number, bodyType?: string) => {
   const client = await pool.connect();
@@ -26,7 +25,8 @@ export const createUserWardrobe = async (userId: number, bodyType?: string) => {
 };
 
 export const getUserWardrobe = async (clerkId: string) => {
-  const userId = await getUserIdByClerkId(clerkId);
+  const userId = await getUserId();
+
   if (!userId) {
     throw new Error("User not found");
   }
@@ -56,10 +56,13 @@ export const getUserWardrobe = async (clerkId: string) => {
         JOIN clothing_variants cv ON ucv.clothing_variant_id = cv.id
         JOIN clothing_items ci ON cv.clothing_item_id = ci.id
         WHERE ucv.user_id = $1
-        ORDER BY ucv.id
         `;
 
     const wardrobe = await client.query(getWardrobeQuery, [userId]);
+    const clothingVariantIds = wardrobe.rows.map(
+      (item) => item.clothing_variant_id
+    );
+
 
     // SEGREGATE CLOTHING VARIANTS BY CATEGORY
     const segregatedWardrobe = wardrobe.rows.reduce((acc, item) => {
