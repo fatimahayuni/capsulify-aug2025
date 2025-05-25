@@ -2,7 +2,7 @@
 
 import { Category } from "@/app/constants/Category";
 import { getUserClothingItems } from "@/app/lib/database/outfits";
-import { OutfitGroupType, OutfitItem, Outfit } from "./types";
+import { OutfitGroupType, Outfit } from "./types";
 
 // getOutfits returns all unique outfits for a user.
 export async function getOutfits() {
@@ -88,11 +88,55 @@ export async function getOutfits() {
 
   console.log("Outfits generated: ", outfits.length);
   
-  // Shuffle the outfits array randomly
-  for (let i = outfits.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [outfits[i], outfits[j]] = [outfits[j], outfits[i]];
+  // Group outfits by their group type
+  const outfitGroups: { [key: number]: Outfit[] } = {};
+  for (const outfit of outfits) {
+    if (!outfitGroups[outfit.grouptype_id]) {
+      outfitGroups[outfit.grouptype_id] = [];
+    }
+    outfitGroups[outfit.grouptype_id].push(outfit);
   }
+
+  // Shuffle each group separately with a fixed seed
+  const seed = 1;
+  const random = createSeededRandom(seed);
   
-  return outfits;
+  for (const groupTypeId in outfitGroups) {
+    const group = outfitGroups[groupTypeId];
+    // Reset random state for consistent shuffling across groups
+    const groupRandom = createSeededRandom(seed + parseInt(groupTypeId));
+    for (let i = group.length - 1; i > 0; i--) {
+      const j = Math.floor(groupRandom() * (i + 1));
+      [group[i], group[j]] = [group[j], group[i]];
+    }
+  }
+
+  // Interleave the groups in order: A, B, C, D, A, B, C, D, etc.
+  const interleavedOutfits: Outfit[] = [];
+  const groupTypes = Object.keys(outfitGroups).map(Number).sort();
+  const maxGroupSize = Math.max(...Object.values(outfitGroups).map(group => group.length));
+  
+  for (let i = 0; i < maxGroupSize; i++) {
+    for (const groupTypeId of groupTypes) {
+      const group = outfitGroups[groupTypeId];
+      if (i < group.length) {
+        interleavedOutfits.push(group[i]);
+      }
+    }
+  }
+
+  // TODO: If user changes clothes, remove from local storage and trigger regenerate using user flag.
+  
+  return interleavedOutfits;
 }
+
+// Simple seeded random number generator (Linear Congruential Generator)
+function createSeededRandom(seed: number) {
+  let state = seed;
+  return function() {
+    state = (state * 1664525 + 1013904223) % 4294967296;
+    return state / 4294967296;
+  };
+}
+
+

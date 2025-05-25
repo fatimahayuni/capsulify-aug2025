@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import pool from "./db";
 import { getUserId } from "./getUserId";
 

@@ -46,7 +46,9 @@ const ClothingItemCard = (props: Props) => {
 
   const handleSaveImage = (newImage: string) => {
     // Remove the wardrobe from local storage so that it is refetched from the server on page reload.
+    // We also remove the outfits so that they can be regenerated on next page load.
     localStorage.removeItem('wardrobe');
+    localStorage.removeItem('outfits');
     
     setCurrentImage(newImage);
     setIsEditing(false);
