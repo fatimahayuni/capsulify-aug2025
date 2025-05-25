@@ -1,6 +1,7 @@
 import { SubCategory } from "@/app/constants/SubCategory";
 import { Category } from "@/app/constants/Category";
 import { Outfit, OutfitGroupType, OutfitItem } from "../types";
+import { useEffect } from "react";
 
 type Props = {
   outfit: Outfit;
@@ -8,6 +9,10 @@ type Props = {
 
 const OutfitCard = (props: Props) => {
   const { outfit } = props;
+
+  useEffect(() => {
+    console.log("outfit: ", outfit);
+  }, [outfit]);
 
   // Group type flags.
   const isTopBottomLayerBagShoes = outfit.grouptype_id === OutfitGroupType.TopBottomLayerBagShoes;
@@ -94,7 +99,7 @@ const OutfitCard = (props: Props) => {
           case Category.Tops:
             return "absolute top-1/10 left-1/2 -translate-x-[calc(50%+1px)] w-22 h-22 z-40";
           case Category.Bottoms:
-            return "absolute top-4/11 left-1/2 -translate-x-[calc(50%+2px)] w-22 h-22 z-40";
+            return "absolute top-4/11 left-1/2 -translate-x-[calc(50%+2px)] w-26 h-26 z-40";
           case Category.Layers:
             return "absolute top-4 right-3 w-18 h-18 z-20";
           case Category.Bags:
