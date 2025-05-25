@@ -4,7 +4,6 @@ import { getUserWardrobe } from "@/app/lib/actions/clothingItems.actions";
 import { CATEGORIES } from "@/app/constants/utils";
 import ClothingItemCard from "@/app/components/ClothingItemCard";
 import { useAuth } from "@clerk/nextjs";
-import { SearchIcon } from "lucide-react";
 
 export default function InventoryPage() {
   const [wardrobe, setWardrobe] = useState<any>({});
@@ -48,7 +47,6 @@ export default function InventoryPage() {
       if (!clerkId) return;
       const currentUsersWardrobe = await getUserWardrobe(clerkId);
       setWardrobe(currentUsersWardrobe);
-      console.log("Wardrobe fetched successfully:", currentUsersWardrobe);
     };
     fetchWardrobe();
   }, [clerkId]);

@@ -12,6 +12,10 @@ function Navbar() {
     const pathnameParts = pathname.split("/");
     if (pathname.includes("inventory")) {
       setTitle("Fit Guide");
+    } else if (pathname.includes("outfits")) {
+      setTitle("Outfits");
+    } else if (pathname.includes("home")) {
+      setTitle("Home");
     }
   }, [pathname]);
 
