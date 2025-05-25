@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import { getOutfits } from "./actions";
 import { Outfit } from "./types";
 import OutfitCard from "./components/OutfitCard";
+import Pager from "./components/Pager";
 
 export default function OutfitsPage() {
   const [outfits, setOutfits] = useState<Outfit[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 18;
 
   // Page load event.
   useEffect(() => {
@@ -27,12 +30,34 @@ export default function OutfitsPage() {
     fetchOutfits();
   }, []);
 
+  // Calculate pagination
+  const totalPages = Math.ceil(outfits.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentOutfits = outfits.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
-    <div className="flex flex-col gap-4 items-center w-full max-w-6xl mx-auto mt-4 px-4 max-sm:px-2 relative">
-      <div className="flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full max-sm:max-h-[calc(100vh-260px)]">
+    <div className="flex flex-col items-center w-full max-w-6xl mx-auto relative">
+      {/* Static Pager at the top */}
+      {totalPages > 1 && (
+        <div className="sticky top-0 z-10 w-full bg-primary border-b border-gray-200">
+          <Pager
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
+      
+      {/* Content area */}
+      <div className="flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full max-sm:max-h-[calc(100vh-260px)] px-4 max-sm:px-2 mt-4">
           <div className="flex flex-wrap justify-center space-x-2 space-y-2 w-full text-sm mb-8">
-            {outfits.slice(0, 18).map((outfit: Outfit, outfitIndex: number) => (
-              <OutfitCard key={outfitIndex} outfit={outfit} />
+            {currentOutfits.map((outfit: Outfit, outfitIndex: number) => (
+              <OutfitCard key={startIndex + outfitIndex} outfit={outfit} />
             ))}
           </div>
         <div className="h-[10rem] w-full"></div>
