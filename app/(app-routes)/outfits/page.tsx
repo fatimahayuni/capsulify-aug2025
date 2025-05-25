@@ -8,6 +8,7 @@ import OutfitCard from "./components/OutfitCard";
 export default function OutfitsPage() {
   const [outfits, setOutfits] = useState<Outfit[]>([]);
 
+  // Page load event.
   useEffect(() => {
     const fetchOutfits = async () => {
       const data = await getOutfits();

@@ -13,6 +13,8 @@ export interface OutfitItem {
 }
 
 export interface Outfit {
-  grouptype_id: OutfitGroupType; // This tells us what type of outfit it is, such as is it a "Top, Bottom, Layer, Bag, Shoes" outfit or a "Dress, Layer, Bag, Shoes" outfit etc.
+  // This tells us what type of outfit it is, such as
+  // is it a "Top, Bottom, Layer, Bag, Shoes" outfit or a "Dress, Layer, Bag, Shoes" outfit etc.
+  grouptype_id: OutfitGroupType;
   items: OutfitItem[];
-} 
+}

@@ -45,6 +45,9 @@ const ClothingItemCard = (props: Props) => {
   const handleEdit = () => setIsEditing(true);
 
   const handleSaveImage = (newImage: string) => {
+    // Remove the wardrobe from local storage so that it is refetched from the server on page reload.
+    localStorage.removeItem('wardrobe');
+    
     setCurrentImage(newImage);
     setIsEditing(false);
   };

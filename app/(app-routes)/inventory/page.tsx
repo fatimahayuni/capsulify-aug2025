@@ -42,11 +42,35 @@ export default function InventoryPage() {
     };
   }, []);
 
+  // Page load event.
   useEffect(() => {
     const fetchWardrobe = async () => {
       if (!clerkId) return;
+
+      // Check if data exists in local storage first
+      const wardrobeKey = `wardrobe`;
+      try {
+        const cachedWardrobe = localStorage.getItem(wardrobeKey);
+        if (cachedWardrobe) {
+          const parsedWardrobe = JSON.parse(cachedWardrobe);
+          setWardrobe(parsedWardrobe);
+          return;
+        }
+      } catch (error) {
+        console.error('Error parsing cached wardrobe data:', error);
+        // Continue to fetch from server if cache is corrupted
+      }
+
+      // If no cached data or cache is corrupted, fetch from server
       const currentUsersWardrobe = await getUserWardrobe(clerkId);
       setWardrobe(currentUsersWardrobe);
+      
+      // Store the fetched data in local storage
+      try {
+        localStorage.setItem(wardrobeKey, JSON.stringify(currentUsersWardrobe));
+      } catch (error) {
+        console.error('Error storing wardrobe data in localStorage:', error);
+      }
     };
     fetchWardrobe();
   }, [clerkId]);
