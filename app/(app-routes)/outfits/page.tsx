@@ -47,17 +47,6 @@ export default function OutfitsPage() {
 
   return (
     <div className="flex flex-col items-center w-full max-w-6xl mx-auto relative">
-      {/* Static Pager at the top */}
-      {totalPages > 1 && (
-        <div className="sticky top-0 z-10 w-full bg-primary border-b border-gray-200">
-          <Pager
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        </div>
-      )}
-      
       {/* Content area */}
       <div ref={contentRef} className="flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full max-sm:max-h-[calc(100vh-260px)] px-4 max-sm:px-2 mt-4">
           <div className="flex flex-wrap justify-center space-x-2 space-y-2 w-full text-sm mb-8">
@@ -67,6 +56,17 @@ export default function OutfitsPage() {
           </div>
         <div className="h-[10rem] w-full"></div>
       </div>
+      
+      {/* Static Pager at the bottom */}
+      {totalPages > 1 && (
+        <div className="fixed bottom-20 left-0 right-0 z-10 w-full bg-primary border-t border-gray-200">
+          <Pager
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 }
