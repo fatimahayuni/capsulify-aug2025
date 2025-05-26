@@ -87,7 +87,7 @@ export default function ShowOutfits({ outfits, handleSubmit, setStep }: any) {
 					className='w-[80%] bg-accent text-white font-semibold py-3 rounded-md text-[0.875rem] shadow-md transition-all duration-200 hover:opacity-90 cursor-pointer'
 					onClick={handleSubmit}
 				>
-					Take me to my Fit Guide!
+					Take me to my Fit!
 				</button>
 			</div>
 		</div>
