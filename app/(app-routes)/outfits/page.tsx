@@ -112,9 +112,9 @@ export default function OutfitsPage() {
 			{/* Content area */}
 			<div
 				ref={contentRef}
-				className='flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full px-4 max-sm:px-2 mt-4'
+				className='flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full px-4 max-sm:px-4 mt-4'
 			>
-				<div className='flex flex-wrap justify-center space-x-2 space-y-2 w-full text-sm mb-8'>
+				<div className='flex flex-wrap justify-center space-x-2 space-y-3 w-full text-sm mb-8'>
 					{currentOutfits.map(
 						(outfit: Outfit, outfitIndex: number) => (
 							<OutfitCard

@@ -162,7 +162,7 @@ const OutfitCard = (props: Props) => {
 	}
 
 	return (
-		<div className='w-[400px] h-[300px] max-sm:w-[170px] max-sm:h-[200px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-4 px-4'>
+		<div className='w-[400px] h-[300px] max-sm:w-[160px] max-sm:h-[220px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-4 px-4 mx-auto'>
 			{outfit.items.map((item, index) => {
 				const classes = getItemLayoutClasses(item)
 				return (

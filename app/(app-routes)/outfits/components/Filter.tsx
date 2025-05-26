@@ -84,10 +84,6 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 		)
 	}
 
-	const clearAllFilters = () => {
-		setSelectedItems([])
-	}
-
 	const getCategoryName = (categoryId: number) => {
 		const categoryNames: { [key: number]: string } = {
 			[Category.Tops]: 'Tops',
@@ -125,22 +121,6 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 							<img
 								src='/assets/icons/filter-add.svg'
 								className='w-[70%] h-[70%] object-contain hover:opacity-80 transition-opacity duration-200'
-							/>
-						</button>
-
-						{/* Clear All Button */}
-						<button
-							onClick={clearAllFilters}
-							className={`flex items-center justify-center w-8 h-8 transition-colors ${
-								selectedItems.length > 0
-									? 'cursor-pointer opacity-100'
-									: 'cursor-not-allowed opacity-50'
-							}`}
-							disabled={selectedItems.length === 0}
-						>
-							<img
-								src='/assets/icons/filter-remove.svg'
-								className='w-[70%] h-[70%] object-contain'
 							/>
 						</button>
 					</div>
