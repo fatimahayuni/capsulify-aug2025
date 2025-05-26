@@ -114,13 +114,15 @@ export default function OutfitsPage() {
 				ref={contentRef}
 				className='flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full px-4 max-sm:px-4 mt-4'
 			>
-				<div className='flex flex-wrap justify-center space-x-2 space-y-3 w-full text-sm mb-8'>
+				<div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full max-w-[1600px] mx-auto'>
 					{currentOutfits.map(
 						(outfit: Outfit, outfitIndex: number) => (
-							<OutfitCard
+							<div
 								key={startIndex + outfitIndex}
-								outfit={outfit}
-							/>
+								className='flex justify-center'
+							>
+								<OutfitCard outfit={outfit} />
+							</div>
 						)
 					)}
 				</div>

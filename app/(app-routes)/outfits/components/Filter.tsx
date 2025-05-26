@@ -5,6 +5,7 @@ import { X } from 'lucide-react'
 import { OutfitItem } from '../types'
 import { getClothingItems } from '../actions'
 import { Category } from '@/app/constants/Category'
+import Dropdown from '@/app/components/Dropdown'
 
 interface FilterProps {
 	onFilterChange: (filteredItems: OutfitItem[]) => void
@@ -15,6 +16,7 @@ interface ClothingItemData {
 	category_id: number
 	subcategory_id: number
 	image_file_name: string
+	name: string
 }
 
 const Filter = ({ onFilterChange }: FilterProps) => {
@@ -22,6 +24,18 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [availableItems, setAvailableItems] = useState<ClothingItemData[]>([])
 	const [loading, setLoading] = useState(false)
+	const [selectedCategory, setSelectedCategory] = useState<number>(
+		Category.Tops
+	)
+
+	const categoryOptions = [
+		{ label: 'Tops', value: Category.Tops },
+		{ label: 'Bottoms', value: Category.Bottoms },
+		{ label: 'Dresses', value: Category.Dresses },
+		{ label: 'Layers', value: Category.Layers },
+		{ label: 'Bags', value: Category.Bags },
+		{ label: 'Shoes', value: Category.Shoes },
+	]
 
 	// Load available clothing items when modal opens
 	useEffect(() => {
@@ -63,6 +77,7 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 			category_id: item.category_id,
 			subcategory_id: item.subcategory_id,
 			image_file_name: item.image_file_name,
+			name: item.name,
 		}
 
 		// Check if item is already selected
@@ -105,6 +120,18 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 			grouped[item.category_id].push(item)
 		})
 		return grouped
+	}
+
+	// Handle category change
+	const handleCategoryChange = (value: string | number) => {
+		setSelectedCategory(Number(value))
+	}
+
+	const getFilteredItems = () => {
+		const filtered = availableItems.filter(
+			(item) => item.category_id === selectedCategory
+		)
+		return { [selectedCategory]: filtered }
 	}
 
 	return (
@@ -167,17 +194,14 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 							</h2>
 							<button
 								onClick={() => setIsModalOpen(false)}
-								className='flex items-center justify-center w-8 h-8 hover:opacity-60 transition-opacity duration-200'
+								className='flex items-center justify-center w-8 h-8 hover:opacity-60 transition-opacity duration-200 text-[0.7rem] bg-accent uppercase text-white rounded-sm px-8 py-2'
 							>
-								<X
-									size={16}
-									className='text-accent w-5 h-5 cursor-pointer'
-								/>
+								Apply
 							</button>
 						</div>
 
 						{/* Modal Body */}
-						<div className='p-4 overflow-y-auto max-h-[calc(80vh-120px)]'>
+						<div className='p-4 overflow-y-auto h-[calc(80vh-120px)]'>
 							{loading ? (
 								<div className='flex items-center justify-center py-8'>
 									<div className='text-accent opacity-80'>
@@ -186,18 +210,20 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 								</div>
 							) : (
 								<div className='space-y-6'>
-									{Object.entries(groupItemsByCategory()).map(
+									<Dropdown
+										options={categoryOptions}
+										value={selectedCategory}
+										onChange={handleCategoryChange}
+										placeholder='Select category'
+										className='w-48'
+									/>
+									{Object.entries(getFilteredItems()).map(
 										([categoryId, items]) => (
 											<div
 												key={categoryId}
 												className='py-2'
 											>
-												<h3 className='text-[0.8rem] font-medium text-accent mb-3 bg-secondary rounded-sm p-1 px-8 text-center w-fit mx-auto'>
-													{getCategoryName(
-														Number(categoryId)
-													)}
-												</h3>
-												<div className='grid grid-cols-4 sm:grid-cols-6 md:grid-cols-10 lg:grid-cols-12 gap-3 place-items-center'>
+												<div className='flex flex-col gap-3'>
 													{items.map((item) => {
 														const isSelected =
 															selectedItems.some(
@@ -210,25 +236,25 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 																key={
 																	item.clothing_variant_id
 																}
-																className={`relative w-16 h-16 rounded-lg p-1 overflow-hidden cursor-pointer transition-all ${
-																	isSelected
-																		? 'bg-secondary'
-																		: ''
-																}`}
 																onClick={() =>
 																	addItemToFilter(
 																		item
 																	)
 																}
+																className={`flex items-center justify-between bg-secondary/70 hover:bg-secondary transition-colors cursor-pointer rounded-lg px-4 py-2 min-h-[48px] mb-3 relative ${
+																	isSelected
+																		? 'bg-[#e0d3c5]'
+																		: 'bg-secondary'
+																}`}
 															>
+																<span className='text-[0.75rem] w-[75%] text-accent'>
+																	{item.name}
+																</span>
 																<img
 																	src={`/assets/inverted-triangle/${item.image_file_name}`}
 																	alt='Clothing item'
-																	className='w-full h-full object-contain'
+																	className='w-12 h-12 absolute right-2 bottom-4 object-contain ml-4 flex-shrink-0'
 																/>
-																{isSelected && (
-																	<div className='absolute inset-0 bg-opacity-20' />
-																)}
 															</div>
 														)
 													})}

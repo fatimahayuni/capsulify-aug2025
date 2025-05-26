@@ -138,7 +138,7 @@ const OutfitCard = (props: Props) => {
 				case Category.Dresses:
 					return 'absolute top-0 left-0 w-full h-full z-[3]'
 				case Category.Layers:
-					return defaultLayers
+					return 'absolute top-10 right-2 w-20 h-20 z-[2]'
 				case Category.Bags:
 					return defaultBags
 				case Category.Shoes:
