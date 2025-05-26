@@ -4,6 +4,12 @@ import { Category } from "@/app/constants/Category";
 import { getUserClothingItems } from "@/app/lib/database/outfits";
 import { OutfitGroupType, Outfit } from "./types";
 
+// getClothingItems returns all clothing items for a user.
+export async function getClothingItems() {
+  const clothingItems = await getUserClothingItems();
+  return clothingItems;
+}
+
 // getOutfits returns all unique outfits for a user.
 export async function getOutfits() {
 

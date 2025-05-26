@@ -51,7 +51,7 @@ export default function Pager({ currentPage, totalPages, onPageChange }: PagerPr
   const visiblePages = getVisiblePages();
 
   return (
-    <div className="flex items-center justify-center gap-1 py-4 bg-primary">
+    <div className="flex items-center justify-center gap-1 py-4 bg-primary z-50">
       {/* Previous button */}
       <button
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
