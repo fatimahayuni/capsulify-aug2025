@@ -8,6 +8,7 @@ import { getUserByClerkId } from '../lib/actions/user.actions'
 import { useAuth } from '@clerk/nextjs'
 import { Edit3Icon } from 'lucide-react'
 import { BsInfo } from 'react-icons/bs'
+import CacheManager from '../lib/CacheManager'
 
 type Props = {
 	item: {
@@ -45,10 +46,9 @@ const ClothingItemCard = (props: Props) => {
 	const handleEdit = () => setIsEditing(true)
 
 	const handleSaveImage = (newImage: string) => {
-		// Remove the wardrobe from local storage so that it is refetched from the server on page reload.
-		// We also remove the outfits so that they can be regenerated on next page load.
-		localStorage.removeItem('wardrobe')
-		localStorage.removeItem('outfits')
+		// Changing the fit item invalidates the fit/outfits cache.
+		CacheManager.clearFitCache()
+		CacheManager.clearOutfitsCache()
 
 		setCurrentImage(newImage)
 		setIsEditing(false)

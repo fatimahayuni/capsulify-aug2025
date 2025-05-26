@@ -59,10 +59,6 @@ export const getUserWardrobe = async (clerkId: string) => {
         `;
 
     const wardrobe = await client.query(getWardrobeQuery, [userId]);
-    const clothingVariantIds = wardrobe.rows.map(
-      (item) => item.clothing_variant_id
-    );
-
 
     // SEGREGATE CLOTHING VARIANTS BY CATEGORY
     const segregatedWardrobe = wardrobe.rows.reduce((acc, item) => {

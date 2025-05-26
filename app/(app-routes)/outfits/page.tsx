@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { getOutfits } from './actions'
 import { Outfit, OutfitItem } from './types'
 import OutfitCard from './components/OutfitCard'
 import Pager from './components/Pager'
 import Filter from './components/Filter'
+import CacheManager from '@/app/lib/CacheManager'
 
 export default function OutfitsPage() {
 	const [outfits, setOutfits] = useState<Outfit[]>([])
@@ -18,20 +18,10 @@ export default function OutfitsPage() {
 	// Page load event.
 	useEffect(() => {
 		const fetchOutfits = async () => {
-			// Check if outfits exist in localStorage
-			const storedOutfits = localStorage.getItem('outfits')
-
-			if (storedOutfits) {
-				const outfitsData = JSON.parse(storedOutfits)
-				setOutfits(outfitsData)
-				setFilteredOutfits(outfitsData)
-			} else {
-				const data = await getOutfits()
-				if (data) {
-					setOutfits(data)
-					setFilteredOutfits(data)
-					localStorage.setItem('outfits', JSON.stringify(data))
-				}
+			const data = await CacheManager.getUserOutfits()
+			if (data) {
+				setOutfits(data)
+				setFilteredOutfits(data)
 			}
 		}
 		fetchOutfits()
