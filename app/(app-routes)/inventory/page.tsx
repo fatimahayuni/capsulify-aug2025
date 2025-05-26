@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { CATEGORIES } from '@/app/constants/utils'
-import ClothingItemCard from '@/app/components/ClothingItemCard'
+import ClothingItemCard from '@/app/(app-routes)/inventory/ClothingItemCard'
 import { useAuth } from '@clerk/nextjs'
 import CacheManager from '@/app/lib/CacheManager'
 

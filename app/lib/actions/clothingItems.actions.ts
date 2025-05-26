@@ -176,3 +176,38 @@ async function getUserIdByClerkId(clerkId: string) {
     client.release();
   }
 }
+
+
+
+export const getAllClothingVariants = async () => {
+  const client = await pool.connect();
+
+  try {
+    await client.query("SET search_path TO capsulify_live");
+
+    // Get all clothing variants with their subcategory information
+    const getAllVariantsQuery = `
+      SELECT cv.id, cv.image_file_name, cv.name,
+             cv.top_sleeve_type_id, cv.blouse_sleeve_type_id, cv.neckline_id,
+             cv.dress_cut_id, cv.bottom_cut_id, cv.short_cut_id, cv.skirt_cut_id,
+             ci.subcategory_id, ci.colour_type_id
+      FROM clothing_variants cv
+      JOIN clothing_items ci ON cv.clothing_item_id = ci.id
+      ORDER BY ci.subcategory_id, ci.colour_type_id
+    `;
+
+    const variants = await client.query(getAllVariantsQuery);
+
+    console.log(
+      "All clothing variants retrieved successfully:",
+      variants.rows.length
+    );
+
+    return variants.rows;
+  } catch (error) {
+    console.error("Error getting all clothing variants:", error);
+    throw new Error("Failed to get all clothing variants");
+  } finally {
+    client.release();
+  }
+};
