@@ -7,7 +7,7 @@ import {
 	updateUserBodyType,
 	updateUserDetails,
 } from '../lib/actions/user.actions'
-import { useAuth } from '@clerk/nextjs'
+import { useAuth, useUser } from '@clerk/nextjs'
 import SelectBodyType from './SelectBodyType'
 import SelectHeight from './SelectHeight'
 import FavoriteParts from './FavoriteParts'
@@ -23,6 +23,7 @@ import { OnboardingData } from '../types'
 export default function OnboardingPage() {
 	const { userId: clerkId } = useAuth()
 	const [step, setStep] = useState(0)
+
 	const [onboardingData, setOnboardingData] = useState({
 		ageGroup: '',
 		location: '',
@@ -267,6 +268,7 @@ export default function OnboardingPage() {
 }
 
 function Step0_Welcome({ handleNext }: { handleNext: () => void }) {
+	const { user: clerkUser } = useUser()
 	return (
 		<div className='flex flex-col items-center justify-center min-h-[80vh] px-4 bg-primary'>
 			<div className='flex flex-col items-center w-full max-w-md mx-auto py-12 rounded-2xl'>
@@ -279,7 +281,7 @@ function Step0_Welcome({ handleNext }: { handleNext: () => void }) {
 					/>
 				</div>
 				<h1 className='text-xl md:text-2xl font-bold text-accent mb-4 text-center'>
-					Hi, Aditi!
+					Hi, {clerkUser?.firstName}!
 				</h1>
 				<p className='text-accent text-[0.9rem] md:text-base text-center mb-12 px-6'>
 					Let's get to know your style a little better!
