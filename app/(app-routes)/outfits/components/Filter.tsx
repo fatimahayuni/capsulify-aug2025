@@ -194,7 +194,7 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 							</h2>
 							<button
 								onClick={() => setIsModalOpen(false)}
-								className='flex items-center justify-center w-8 h-8 hover:opacity-60 transition-opacity duration-200 text-[0.7rem] bg-accent uppercase text-white rounded-sm px-8 py-2'
+								className='flex items-center justify-center w-8 h-8 hover:opacity-60 transition-opacity duration-200 text-[0.7rem] bg-accent uppercase text-white rounded-sm px-8 py-2 cursor-pointer'
 							>
 								Apply
 							</button>
