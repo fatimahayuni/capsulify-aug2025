@@ -1,267 +1,275 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import { X } from "lucide-react";
-import { OutfitItem } from "../types";
-import { getClothingItems } from "../actions";
-import { Category } from "@/app/constants/Category";
+import { useState, useEffect } from 'react'
+import { X } from 'lucide-react'
+import { OutfitItem } from '../types'
+import { getClothingItems } from '../actions'
+import { Category } from '@/app/constants/Category'
+import Dropdown from '@/app/components/Dropdown'
 
 interface FilterProps {
-  onFilterChange: (filteredItems: OutfitItem[]) => void;
+	onFilterChange: (filteredItems: OutfitItem[]) => void
 }
 
 interface ClothingItemData {
-  clothing_variant_id: number;
-  category_id: number;
-  subcategory_id: number;
-  image_file_name: string;
+	clothing_variant_id: number
+	category_id: number
+	subcategory_id: number
+	image_file_name: string
+	name: string
 }
 
 const Filter = ({ onFilterChange }: FilterProps) => {
-  const [selectedItems, setSelectedItems] = useState<OutfitItem[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [availableItems, setAvailableItems] = useState<ClothingItemData[]>([]);
-  const [loading, setLoading] = useState(false);
+	const [selectedItems, setSelectedItems] = useState<OutfitItem[]>([])
+	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [availableItems, setAvailableItems] = useState<ClothingItemData[]>([])
+	const [loading, setLoading] = useState(false)
+	const [selectedCategory, setSelectedCategory] = useState<number>(
+		Category.Tops
+	)
 
-  // Load available clothing items when modal opens
-  useEffect(() => {
-    if (isModalOpen && availableItems.length === 0) {
-      loadClothingItems();
-    }
-  }, [isModalOpen]);
+	const categoryOptions = [
+		{ label: 'Tops', value: Category.Tops },
+		{ label: 'Bottoms', value: Category.Bottoms },
+		{ label: 'Dresses', value: Category.Dresses },
+		{ label: 'Layers', value: Category.Layers },
+		{ label: 'Bags', value: Category.Bags },
+		{ label: 'Shoes', value: Category.Shoes },
+	]
 
-  // Notify parent component when filter changes
-  useEffect(() => {
-    onFilterChange(selectedItems);
-  }, [selectedItems, onFilterChange]);
+	// Load available clothing items when modal opens
+	useEffect(() => {
+		if (isModalOpen && availableItems.length === 0) {
+			loadClothingItems()
+		}
+	}, [isModalOpen])
 
-  const loadClothingItems = async () => {
-    setLoading(true);
-    try {
-      // Check if items exist in localStorage first
-      const storedItems = localStorage.getItem('clothingItems');
-      
-      if (storedItems) {
-        setAvailableItems(JSON.parse(storedItems));
-      } else {
-        const items = await getClothingItems();
-        if (items) {
-          setAvailableItems(items);
-          localStorage.setItem('clothingItems', JSON.stringify(items));
-        }
-      }
-    } catch (error) {
-      console.error('Error loading clothing items:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+	// Notify parent component when filter changes
+	useEffect(() => {
+		onFilterChange(selectedItems)
+	}, [selectedItems, onFilterChange])
 
-  const addItemToFilter = (item: ClothingItemData) => {
-    const outfitItem: OutfitItem = {
-      clothing_variant_id: item.clothing_variant_id,
-      category_id: item.category_id,
-      subcategory_id: item.subcategory_id,
-      image_file_name: item.image_file_name,
-    };
+	const loadClothingItems = async () => {
+		setLoading(true)
+		try {
+			// Check if items exist in localStorage first
+			const storedItems = localStorage.getItem('clothingItems')
 
-    // Check if item is already selected
-    const isAlreadySelected = selectedItems.some(
-      (selected) => selected.clothing_variant_id === item.clothing_variant_id
-    );
+			if (storedItems) {
+				setAvailableItems(JSON.parse(storedItems))
+			} else {
+				const items = await getClothingItems()
+				if (items) {
+					setAvailableItems(items)
+					localStorage.setItem('clothingItems', JSON.stringify(items))
+				}
+			}
+		} catch (error) {
+			console.error('Error loading clothing items:', error)
+		} finally {
+			setLoading(false)
+		}
+	}
 
-    if (!isAlreadySelected) {
-      setSelectedItems([...selectedItems, outfitItem]);
-    }
-  };
+	const addItemToFilter = (item: ClothingItemData) => {
+		const outfitItem: OutfitItem = {
+			clothing_variant_id: item.clothing_variant_id,
+			category_id: item.category_id,
+			subcategory_id: item.subcategory_id,
+			image_file_name: item.image_file_name,
+			name: item.name,
+		}
 
-  const removeItemFromFilter = (itemId: number) => {
-    setSelectedItems(selectedItems.filter(item => item.clothing_variant_id !== itemId));
-  };
+		// Check if item is already selected
+		const isAlreadySelected = selectedItems.some(
+			(selected) =>
+				selected.clothing_variant_id === item.clothing_variant_id
+		)
 
-  const clearAllFilters = () => {
-    setSelectedItems([]);
-  };
+		if (!isAlreadySelected) {
+			setSelectedItems([...selectedItems, outfitItem])
+		} else {
+			removeItemFromFilter(item.clothing_variant_id)
+		}
+	}
 
-  const getCategoryName = (categoryId: number) => {
-    const categoryNames: { [key: number]: string } = {
-      [Category.Tops]: 'Tops',
-      [Category.Bottoms]: 'Bottoms',
-      [Category.Dresses]: 'Dresses',
-      [Category.Layers]: 'Layers',
-      [Category.Bags]: 'Bags',
-      [Category.Shoes]: 'Shoes',
-    };
-    return categoryNames[categoryId] || 'Unknown';
-  };
+	const removeItemFromFilter = (itemId: number) => {
+		setSelectedItems(
+			selectedItems.filter((item) => item.clothing_variant_id !== itemId)
+		)
+	}
 
-  const groupItemsByCategory = () => {
-    const grouped: { [key: number]: ClothingItemData[] } = {};
-    availableItems.forEach(item => {
-      if (!grouped[item.category_id]) {
-        grouped[item.category_id] = [];
-      }
-      grouped[item.category_id].push(item);
-    });
-    return grouped;
-  };
+	const getCategoryName = (categoryId: number) => {
+		const categoryNames: { [key: number]: string } = {
+			[Category.Tops]: 'Tops',
+			[Category.Bottoms]: 'Bottoms',
+			[Category.Dresses]: 'Dresses',
+			[Category.Layers]: 'Layers',
+			[Category.Bags]: 'Bags',
+			[Category.Shoes]: 'Shoes',
+		}
+		return categoryNames[categoryId] || 'Unknown'
+	}
 
-  // Simple Filter Icons matching the original design
-  const FilterPlusIcon = ({ size = 16, className = "" }) => (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
-      {/* Simple funnel shape */}
-      <path
-        d="M2 2h12l-4 4v6l-4-2V6L2 2z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      {/* Small plus in top right */}
-      <path d="M12 1v2M11 2h2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
-    </svg>
-  );
+	const groupItemsByCategory = () => {
+		const grouped: { [key: number]: ClothingItemData[] } = {}
+		availableItems.forEach((item) => {
+			if (!grouped[item.category_id]) {
+				grouped[item.category_id] = []
+			}
+			grouped[item.category_id].push(item)
+		})
+		return grouped
+	}
 
-  const FilterXIcon = ({ size = 16, className = "", dimmed = false }) => (
-    <svg width={size} height={size} viewBox="0 0 16 16" fill="none" className={className}>
-      {/* Simple funnel shape */}
-      <path
-        d="M2 2h12l-4 4v6l-4-2V6L2 2z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        fill="none"
-        opacity={dimmed ? 0.3 : 1}
-      />
-      {/* Small X in top right */}
-      <path 
-        d="M11.5 0.5l1 1M12.5 0.5l-1 1" 
-        stroke="currentColor" 
-        strokeWidth="1" 
-        strokeLinecap="round"
-        opacity={dimmed ? 0.3 : 1}
-      />
-    </svg>
-  );
+	// Handle category change
+	const handleCategoryChange = (value: string | number) => {
+		setSelectedCategory(Number(value))
+	}
 
-  return (
-    <>
-      {/* Filter Bar */}
-      <div className="sticky top-0 z-20 bg-primary border-b border-gray-200 px-4 py-3">
-        <div className="flex items-center gap-3 max-w-6xl mx-auto">
-          {/* Add Button */}
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex items-center justify-center w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
-          >
-            <FilterPlusIcon size={16} className="text-gray-600" />
-          </button>
+	const getFilteredItems = () => {
+		const filtered = availableItems.filter(
+			(item) => item.category_id === selectedCategory
+		)
+		return { [selectedCategory]: filtered }
+	}
 
-          {/* Selected Items */}
-          <div className="flex items-center gap-2 flex-1 overflow-x-auto">
-            {selectedItems.map((item) => (
-              <div
-                key={item.clothing_variant_id}
-                className="relative flex-shrink-0 w-12 h-12 bg-white rounded-lg border border-gray-200 overflow-hidden cursor-pointer hover:border-gray-300 transition-colors"
-                onClick={() => removeItemFromFilter(item.clothing_variant_id)}
-              >
-                <img
-                  src={`/assets/inverted-triangle/${item.image_file_name}`}
-                  alt="Selected clothing item"
-                  className="w-full h-full object-contain"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-10 transition-all" />
-              </div>
-            ))}
-          </div>
+	return (
+		<>
+			{/* Filter Bar */}
+			<div className='w-full sticky top-13 z-20 bg-primary px-3 pt-2 pb-1'>
+				<div className='flex justify-center items-center max-w-4xl py-2 px-2 mx-auto'>
+					<div className='  flex bg-secondary rounded-md p-1'>
+						{/* Add Button */}
+						<button
+							onClick={() => setIsModalOpen(true)}
+							className='flex items-center justify-center w-8 h-8 transition-colors cursor-pointer'
+						>
+							<img
+								src='/assets/icons/filter-add.svg'
+								className='w-[70%] h-[70%] object-contain hover:opacity-80 transition-opacity duration-200'
+							/>
+						</button>
+					</div>
 
-          {/* Clear All Button */}
-          <button
-            onClick={clearAllFilters}
-            className={`flex items-center justify-center w-8 h-8 bg-gray-100 rounded-full transition-colors ${
-              selectedItems.length > 0 ? 'hover:bg-gray-200 cursor-pointer' : 'cursor-not-allowed'
-            }`}
-            disabled={selectedItems.length === 0}
-          >
-            <FilterXIcon 
-              size={16} 
-              className="text-gray-600" 
-              dimmed={selectedItems.length === 0}
-            />
-          </button>
-        </div>
-      </div>
+					{/* Selected Items */}
+					<div className='flex items-center gap-2 flex-1 overflow-x-auto px-2'>
+						{selectedItems.map((item) => (
+							<div
+								key={item.clothing_variant_id}
+								className='relative flex-shrink-0 w-10 h-10 rounded-lg overflow-hidden cursor-pointer hover:border-gray-300 transition-colors'
+								onClick={() =>
+									removeItemFromFilter(
+										item.clothing_variant_id
+									)
+								}
+							>
+								<img
+									src={`/assets/inverted-triangle/${item.image_file_name}`}
+									alt='Selected clothing item'
+									className='w-full h-full object-contain'
+								/>
+								<div className='absolute inset-0 bg-opacity-0 hover:bg-opacity-10 transition-all' />
+							</div>
+						))}
+					</div>
+				</div>
+			</div>
 
-      {/* Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black bg-opacity-10"
-            onClick={() => setIsModalOpen(false)}
-          />
-          
-          {/* Modal Content */}
-          <div className="relative bg-white rounded-lg shadow-xl max-w-4xl max-h-[80vh] w-full mx-4 overflow-hidden">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Add Clothing Items</h2>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="flex items-center justify-center w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
-              >
-                <X size={16} className="text-gray-600" />
-              </button>
-            </div>
+			{/* Modal */}
+			{isModalOpen && (
+				<div className='fixed inset-0 z-50 flex items-center justify-center'>
+					{/* Backdrop */}
+					<div
+						className='absolute inset-0 bg-black/50'
+						onClick={() => setIsModalOpen(false)}
+					/>
 
-            {/* Modal Body */}
-            <div className="p-4 overflow-y-auto max-h-[calc(80vh-120px)]">
-              {loading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="text-gray-500">Loading clothing items...</div>
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {Object.entries(groupItemsByCategory()).map(([categoryId, items]) => (
-                    <div key={categoryId}>
-                      <h3 className="text-md font-medium text-gray-900 mb-3">
-                        {getCategoryName(Number(categoryId))}
-                      </h3>
-                      <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-3">
-                        {items.map((item) => {
-                          const isSelected = selectedItems.some(
-                            (selected) => selected.clothing_variant_id === item.clothing_variant_id
-                          );
-                          return (
-                            <div
-                              key={item.clothing_variant_id}
-                              className={`relative w-16 h-16 bg-white rounded-lg border-2 overflow-hidden cursor-pointer transition-all ${
-                                isSelected
-                                  ? 'border-blue-500 bg-blue-50'
-                                  : 'border-gray-200 hover:border-gray-300'
-                              }`}
-                              onClick={() => addItemToFilter(item)}
-                            >
-                              <img
-                                src={`/assets/inverted-triangle/${item.image_file_name}`}
-                                alt="Clothing item"
-                                className="w-full h-full object-contain"
-                              />
-                              {isSelected && (
-                                <div className="absolute inset-0 bg-blue-500 bg-opacity-20" />
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
-};
+					{/* Modal Content */}
+					<div className='relative bg-primary rounded-lg shadow-xl max-w-4xl max-h-[80vh] w-full mx-6 overflow-hidden '>
+						{/* Modal Header */}
+						<div className='flex items-center justify-between p-4'>
+							<h2 className='text-[0.9rem] font-semibold text-accent'>
+								Filter By Category
+							</h2>
+							<button
+								onClick={() => setIsModalOpen(false)}
+								className='flex items-center justify-center w-8 h-8 hover:opacity-60 transition-opacity duration-200 text-[0.7rem] bg-accent uppercase text-white rounded-sm px-8 py-2'
+							>
+								Apply
+							</button>
+						</div>
 
-export default Filter;
+						{/* Modal Body */}
+						<div className='p-4 overflow-y-auto h-[calc(80vh-120px)]'>
+							{loading ? (
+								<div className='flex items-center justify-center py-8'>
+									<div className='text-accent opacity-80'>
+										Loading clothing items...
+									</div>
+								</div>
+							) : (
+								<div className='space-y-6'>
+									<Dropdown
+										options={categoryOptions}
+										value={selectedCategory}
+										onChange={handleCategoryChange}
+										placeholder='Select category'
+										className='w-48'
+									/>
+									{Object.entries(getFilteredItems()).map(
+										([categoryId, items]) => (
+											<div
+												key={categoryId}
+												className='py-2'
+											>
+												<div className='flex flex-col gap-3'>
+													{items.map((item) => {
+														const isSelected =
+															selectedItems.some(
+																(selected) =>
+																	selected.clothing_variant_id ===
+																	item.clothing_variant_id
+															)
+														return (
+															<div
+																key={
+																	item.clothing_variant_id
+																}
+																onClick={() =>
+																	addItemToFilter(
+																		item
+																	)
+																}
+																className={`flex items-center justify-between bg-secondary/70 hover:bg-secondary transition-colors cursor-pointer rounded-lg px-4 py-2 min-h-[48px] mb-3 relative ${
+																	isSelected
+																		? 'bg-[#e0d3c5]'
+																		: 'bg-secondary'
+																}`}
+															>
+																<span className='text-[0.75rem] w-[75%] text-accent'>
+																	{item.name}
+																</span>
+																<img
+																	src={`/assets/inverted-triangle/${item.image_file_name}`}
+																	alt='Clothing item'
+																	className='w-12 h-12 absolute right-2 bottom-4 object-contain ml-4 flex-shrink-0'
+																/>
+															</div>
+														)
+													})}
+												</div>
+											</div>
+										)
+									)}
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
+			)}
+		</>
+	)
+}
+
+export default Filter
