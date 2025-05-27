@@ -138,17 +138,20 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 		<>
 			{/* Filter Bar */}
 			<div className='w-full sticky top-13 z-20 bg-primary px-3 pt-2 pb-1'>
-				<div className='flex justify-center items-center max-w-4xl py-2 px-2 mx-auto'>
-					<div className='  flex bg-secondary rounded-md p-1'>
+				<div className='flex justify-center items-center max-w-xl py-2 px-2 mx-auto'>
+					<div className='flex items-center hover:opacity-70 transition-opacity duration-200 mx-4'>
 						{/* Add Button */}
 						<button
 							onClick={() => setIsModalOpen(true)}
-							className='flex items-center justify-center w-8 h-8 transition-colors cursor-pointer'
+							className='flex items-center gap-1 justify-center w-8 h-8 transition-colors cursor-pointer'
 						>
 							<img
-								src='/assets/icons/filter-add.svg'
-								className='w-[70%] h-[70%] object-contain hover:opacity-80 transition-opacity duration-200'
+								src='/assets/icons/filter-horizontal.svg'
+								className='w-[60%] h-[60%] object-contain '
 							/>
+							<span className='text-[0.875rem] text-accent font-semibold cursor-pointer'>
+								Filter
+							</span>
 						</button>
 					</div>
 
