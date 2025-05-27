@@ -4,26 +4,6 @@ import { DEFAULT_WARDROBE } from "@/app/constants/utils";
 import pool from "../database/db";
 import { getUserId } from "../database/getUserId";
 
-export const createUserWardrobe = async (userId: number, bodyType?: string) => {
-  const client = await pool.connect();
-
-  try {
-    await client.query("SET search_path TO capsulify_live");
-    const defaultItems = DEFAULT_WARDROBE.INVERTED_TRIANGLE;
-    const createWardrobeQuery = `
-      INSERT INTO user_clothing_variants (user_id, clothing_variant_id)
-      SELECT $1, UNNEST($2::int[])`;
-
-    await client.query(createWardrobeQuery, [userId, defaultItems]);
-    console.log("User wardrobe created successfully");
-  } catch (error) {
-    console.error("Error creating user wardrobe:", error);
-    throw new Error("Failed to create user wardrobe");
-  } finally {
-    client.release();
-  }
-};
-
 export const getUserWardrobe = async (clerkId: string) => {
   const userId = await getUserId();
 
@@ -158,27 +138,6 @@ export const saveClothingVariantId = async (
   }
 };
 
-// TODO: Move this to middleware to make it available to every HTTP request.
-async function getUserIdByClerkId(clerkId: string) {
-  const client = await pool.connect();
-
-  try {
-    await client.query("SET search_path TO capsulify_live");
-    const getUserIdQuery = `
-			SELECT id FROM users WHERE clerk_id = $1
-		`;
-    const userId = await client.query(getUserIdQuery, [clerkId]);
-    return Number(userId.rows[0].id);
-  } catch (error) {
-    console.error("Error getting user ID by clerk ID:", error);
-    throw new Error("Failed to get user ID by clerk ID");
-  } finally {
-    client.release();
-  }
-}
-
-
-
 export const getAllClothingVariants = async () => {
   const client = await pool.connect();
 
@@ -197,11 +156,6 @@ export const getAllClothingVariants = async () => {
     `;
 
     const variants = await client.query(getAllVariantsQuery);
-
-    console.log(
-      "All clothing variants retrieved successfully:",
-      variants.rows.length
-    );
 
     return variants.rows;
   } catch (error) {
