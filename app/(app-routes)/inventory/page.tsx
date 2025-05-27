@@ -1,12 +1,12 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { getUserWardrobe } from '@/app/lib/actions/clothingItems.actions'
 import { CATEGORIES } from '@/app/constants/utils'
-import ClothingItemCard from '@/app/components/ClothingItemCard'
+import ClothingItemCard from '@/app/(app-routes)/inventory/ClothingItemCard'
 import { useAuth } from '@clerk/nextjs'
+import CacheManager from '@/app/lib/CacheManager'
 
 export default function InventoryPage() {
-	const [wardrobe, setWardrobe] = useState<any>({})
+	const [fit, setFit] = useState<any>({})
 	const { userId: clerkId } = useAuth()
 
 	const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
@@ -44,41 +44,13 @@ export default function InventoryPage() {
 
 	// Page load event.
 	useEffect(() => {
-		const fetchWardrobe = async () => {
+		const fetchFit = async () => {
 			if (!clerkId) return
 
-			// Check if data exists in local storage first
-			const wardrobeKey = `wardrobe`
-			try {
-				const cachedWardrobe = localStorage.getItem(wardrobeKey)
-				if (cachedWardrobe) {
-					const parsedWardrobe = JSON.parse(cachedWardrobe)
-					setWardrobe(parsedWardrobe)
-					return
-				}
-			} catch (error) {
-				console.error('Error parsing cached wardrobe data:', error)
-				// Continue to fetch from server if cache is corrupted
-			}
-
-			// If no cached data or cache is corrupted, fetch from server
-			const currentUsersWardrobe = await getUserWardrobe(clerkId)
-			setWardrobe(currentUsersWardrobe)
-
-			// Store the fetched data in local storage
-			try {
-				localStorage.setItem(
-					wardrobeKey,
-					JSON.stringify(currentUsersWardrobe)
-				)
-			} catch (error) {
-				console.error(
-					'Error storing wardrobe data in localStorage:',
-					error
-				)
-			}
+			const currentUsersFit = await CacheManager.getUserFitItems(clerkId)
+			setFit(currentUsersFit)
 		}
-		fetchWardrobe()
+		fetchFit()
 	}, [clerkId])
 
 	const scrollToSection = (key: string) => {
@@ -113,7 +85,7 @@ export default function InventoryPage() {
 			{/* Sections */}
 			<div className='flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full'>
 				{Object.entries(CATEGORIES).map(([key, value]) => {
-					const items = wardrobe[key] || []
+					const items = fit[key] || []
 					return (
 						<div
 							key={key}

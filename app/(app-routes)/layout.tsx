@@ -1,5 +1,6 @@
 import Menubar from '../components/Menubar'
 import Navbar from '../components/Navbar'
+import DataPreloader from '../components/DataPreloader'
 
 export default function RootLayout({
 	children,
@@ -8,6 +9,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<div>
+			<DataPreloader />
 			<Navbar />
 			{children}
 			<Menubar />

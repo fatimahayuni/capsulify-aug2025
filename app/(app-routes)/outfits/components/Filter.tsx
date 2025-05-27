@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
 import { OutfitItem } from '../types'
-import { getClothingItems } from '../actions'
 import { Category } from '@/app/constants/Category'
 import Dropdown from '@/app/components/Dropdown'
+import CacheManager from '@/app/lib/CacheManager'
 
 interface FilterProps {
 	onFilterChange: (filteredItems: OutfitItem[]) => void
@@ -52,17 +52,9 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 	const loadClothingItems = async () => {
 		setLoading(true)
 		try {
-			// Check if items exist in localStorage first
-			const storedItems = localStorage.getItem('clothingItems')
-
-			if (storedItems) {
-				setAvailableItems(JSON.parse(storedItems))
-			} else {
-				const items = await getClothingItems()
-				if (items) {
-					setAvailableItems(items)
-					localStorage.setItem('clothingItems', JSON.stringify(items))
-				}
+			const items = await CacheManager.getClothingItems()
+			if (items) {
+				setAvailableItems(items)
 			}
 		} catch (error) {
 			console.error('Error loading clothing items:', error)
