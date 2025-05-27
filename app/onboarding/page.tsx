@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { getBodyTypeDescription, getOutfits } from '../constants/utils'
 import {
 	updateUserBodyType,
-	updateUserDetails,
+	saveOnboardingData,
 } from '../lib/actions/user.actions'
 import { useAuth, useUser } from '@clerk/nextjs'
 import SelectBodyType from './SelectBodyType'
@@ -19,12 +19,108 @@ import UserInfo from './UserInfo'
 import MonthlyOccasions from './MonthlyOccasions'
 import GoalFrustration from './GoalFrustration'
 import { OnboardingData } from '../types'
+import { 
+	BODY_TYPE_ID, 
+	AGE_GROUP_ID, 
+	HEIGHT_GROUP_ID, 
+	BODY_PARTS_ID, 
+	PERSONAL_STYLE_ID 
+} from '../constants'
+
+// Type for the UI state (using display strings)
+type OnboardingUIState = {
+	ageGroup: string
+	location: string
+	bodyType: string
+	height: string
+	favoriteParts: string[]
+	leastFavoriteParts: string[]
+	personalStyle: string
+	occasions: {
+		work: number
+		dates: number
+		social: number
+		errands: number
+		family: number
+		evening: number
+		travels: number
+	}
+	goal: string
+	frustration: string
+}
+
+// Helper functions to convert display names to enum IDs
+const getAgeGroupIdByName = (name: string): number => {
+	const entries = Object.entries(AGE_GROUP_ID)
+	for (const [id, ageGroupName] of entries) {
+		if (ageGroupName === name) {
+			return parseInt(id)
+		}
+	}
+	throw new Error(`Age group '${name}' not found`)
+}
+
+const getBodyTypeIdByName = (name: string): number => {
+	const entries = Object.entries(BODY_TYPE_ID)
+	for (const [id, bodyTypeName] of entries) {
+		if (bodyTypeName === name) {
+			return parseInt(id)
+		}
+	}
+	throw new Error(`Body type '${name}' not found`)
+}
+
+const getHeightIdByName = (name: string): number => {
+	const entries = Object.entries(HEIGHT_GROUP_ID)
+	for (const [id, heightName] of entries) {
+		if (heightName === name) {
+			return parseInt(id)
+		}
+	}
+	throw new Error(`Height '${name}' not found`)
+}
+
+const getBodyPartIdByName = (name: string): number => {
+	const entries = Object.entries(BODY_PARTS_ID)
+	for (const [id, bodyPartName] of entries) {
+		if (bodyPartName === name) {
+			return parseInt(id)
+		}
+	}
+	throw new Error(`Body part '${name}' not found`)
+}
+
+const getPersonalStyleIdByName = (name: string): number => {
+	const entries = Object.entries(PERSONAL_STYLE_ID)
+	for (const [id, styleName] of entries) {
+		if (styleName === name) {
+			return parseInt(id)
+		}
+	}
+	throw new Error(`Personal style '${name}' not found`)
+}
+
+// Convert string-based onboarding data to ID-based format
+const convertToOnboardingData = (data: OnboardingUIState): OnboardingData => {
+	return {
+		ageGroupId: getAgeGroupIdByName(data.ageGroup),
+		location: data.location,
+		bodyTypeId: getBodyTypeIdByName(data.bodyType),
+		heightId: getHeightIdByName(data.height),
+		favoritePartIds: data.favoriteParts.map((part: string) => getBodyPartIdByName(part)),
+		leastFavoritePartIds: data.leastFavoriteParts.map((part: string) => getBodyPartIdByName(part)),
+		personalStyleId: getPersonalStyleIdByName(data.personalStyle),
+		occasions: data.occasions,
+		goal: data.goal,
+		frustration: data.frustration,
+	}
+}
 
 export default function OnboardingPage() {
 	const { userId: clerkId } = useAuth()
 	const [step, setStep] = useState(0)
 
-	const [onboardingData, setOnboardingData] = useState({
+	const [onboardingData, setOnboardingData] = useState<OnboardingUIState>({
 		ageGroup: '',
 		location: '',
 		bodyType: '',
@@ -105,9 +201,9 @@ export default function OnboardingPage() {
 		if (step > 0) setStep((prev) => prev - 1)
 	}
 	const handleSubmit = async () => {
-		// await updateUserBodyType(onboardingData.bodyType!, clerkId as string)
-		await updateUserDetails(
-			onboardingData as OnboardingData,
+		const convertedData = convertToOnboardingData(onboardingData)
+		await saveOnboardingData(
+			convertedData,
 			clerkId as string
 		)
 		router.push('/inventory')

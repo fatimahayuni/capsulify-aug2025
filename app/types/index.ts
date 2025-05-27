@@ -28,13 +28,13 @@ export type InventoryItem = {
 }
 
 export type OnboardingData = {
-	ageGroup: string
+	ageGroupId: number
 	location: string
-	bodyType: string
-	height: string
-	favoriteParts: string[]
-	leastFavoriteParts: string[]
-	personalStyle: string
+	bodyTypeId: number
+	heightId: number
+	favoritePartIds: number[]
+	leastFavoritePartIds: number[]
+	personalStyleId: number
 	occasions: {
 		work: number
 		dates: number

@@ -2,9 +2,29 @@
 
 import { CreateUserParams, OnboardingData } from '@/app/types'
 import pool from '../database/db'
-import { getUserWardrobe } from './clothingItems.actions'
-import { MONTHLY_OCCASIONS } from '@/app/constants'
+import { MONTHLY_OCCASIONS, BODY_TYPE_ID } from '@/app/constants'
 import { DEFAULT_WARDROBE } from '@/app/constants/utils'
+
+
+
+// Helper function to convert string values to enum IDs (kept for backward compatibility with updateUserBodyType)
+const getBodyTypeIdByName = (name: string): number => {
+	const bodyTypeEntries = Object.entries(BODY_TYPE_ID)
+	for (const [id, bodyTypeName] of bodyTypeEntries) {
+		if (bodyTypeName === name) {
+			return parseInt(id)
+		}
+	}
+	throw new Error(`Body type '${name}' not found`)
+}
+
+const getOccasionIdByKey = (key: string): number => {
+	const occasion = MONTHLY_OCCASIONS.find(item => item.key === key)
+	if (!occasion) {
+		throw new Error(`Occasion '${key}' not found`)
+	}
+	return occasion.id
+}
 
 export const createUser = async (params: CreateUserParams) => {
 	const client = await pool.connect()
@@ -70,13 +90,8 @@ export const updateUserBodyType = async (bodyType: string, clerkId: string) => {
 		// Begin transaction
 		await client.query('BEGIN')
 
-		const bodyTypeQuery = `SELECT id FROM body_shapes WHERE name = $1`
-		const bodyTypeResult = await client.query(bodyTypeQuery, [bodyType])
-
-		if (bodyTypeResult.rows.length === 0)
-			throw new Error('body type not found')
-
-		const bodyTypeId = bodyTypeResult.rows[0].id
+		// Get body type ID using enum helper function
+		const bodyTypeId = getBodyTypeIdByName(bodyType)
 
 		const updateUserQuery = `
       UPDATE users SET body_shape_id = $1, onboarded = true WHERE clerk_id = $2 RETURNING id
@@ -160,18 +175,18 @@ export const deleteUser = async (clerkId: string) => {
 	}
 }
 
-export const updateUserDetails = async (
+export const saveOnboardingData = async (
 	onboardingData: OnboardingData,
 	clerkId: string
 ) => {
 	const {
-		ageGroup,
+		ageGroupId,
 		location,
-		bodyType,
-		height,
-		favoriteParts,
-		leastFavoriteParts,
-		personalStyle,
+		bodyTypeId,
+		heightId,
+		favoritePartIds,
+		leastFavoritePartIds,
+		personalStyleId,
 		occasions,
 		goal,
 		frustration,
@@ -182,23 +197,17 @@ export const updateUserDetails = async (
 		await client.query('SET search_path TO capsulify_live')
 		await client.query('BEGIN')
 
-		// Lookup all reference IDs
-		const lookupMap = await lookupReferenceIds(client, {
-			ageGroup,
-			bodyType,
-			height,
-			personalStyle,
-		})
-
-		// Get body part IDs
-		const bodyPartIds = await lookupBodyPartIds(client, [
-			...favoriteParts,
-			...leastFavoriteParts,
-		])
+		// Reference IDs are already provided as enum IDs
+		const referenceIds = {
+			ageGroupId,
+			bodyTypeId,
+			heightId,
+			personalStyleId,
+		}
 
 		// Update user with all main fields
 		const dbUserId = await updateUserMainFields(client, {
-			lookupMap,
+			referenceIds,
 			location,
 			goal,
 			frustration,
@@ -208,10 +217,9 @@ export const updateUserDetails = async (
 		// Insert user preferences
 		await insertUserPreferences(client, {
 			dbUserId,
-			favoriteParts,
-			leastFavoriteParts,
+			favoritePartIds,
+			leastFavoritePartIds,
 			occasions,
-			bodyPartIds,
 		})
 
 		// Create user wardrobe
@@ -228,97 +236,25 @@ export const updateUserDetails = async (
 	}
 }
 
-// Helper function to lookup reference IDs for age group, body shape, height, and personal style
-const lookupReferenceIds = async (
-	client: any,
-	params: {
-		ageGroup: string
-		bodyType: string
-		height: string
-		personalStyle: string
-	}
-) => {
-	const { ageGroup, bodyType, height, personalStyle } = params
-	
-	const lookupQuery = `
-		SELECT 
-			'age_group' as type, ag.id, ag.name
-		FROM age_group ag WHERE ag.name = $1
-		UNION ALL
-		SELECT 
-			'body_shape' as type, bs.id, bs.name
-		FROM body_shapes bs WHERE bs.name = $2
-		UNION ALL
-		SELECT 
-			'height' as type, h.id, h.name
-		FROM height h WHERE h.name = $3
-		UNION ALL
-		SELECT 
-			'personal_style' as type, ps.id, ps.name
-		FROM personal_style ps WHERE ps.name = $4
-	`
-	
-	const lookupResult = await client.query(lookupQuery, [
-		ageGroup,
-		bodyType,
-		height,
-		personalStyle,
-	])
 
-	// Process lookup results
-	const lookupMap = new Map()
-	lookupResult.rows.forEach((row: any) => {
-		lookupMap.set(row.type, row.id)
-	})
-
-	// Validate all required IDs were found
-	const requiredTypes = ['age_group', 'body_shape', 'height', 'personal_style']
-	for (const type of requiredTypes) {
-		if (!lookupMap.has(type)) {
-			throw new Error(`${type.replace('_', ' ')} not found`)
-		}
-	}
-
-	return lookupMap
-}
-
-// Helper function to lookup body part IDs
-const lookupBodyPartIds = async (client: any, bodyParts: string[]) => {
-	const bodyPartIds = new Map()
-	
-	if (bodyParts.length > 0) {
-		const bodyPartsQuery = `
-			SELECT id, name FROM body_parts 
-			WHERE name = ANY($1)
-		`
-		const bodyPartsResult = await client.query(bodyPartsQuery, [bodyParts])
-		bodyPartsResult.rows.forEach((row: any) => {
-			bodyPartIds.set(row.name, row.id)
-		})
-
-		// Validate all body parts were found
-		for (const part of bodyParts) {
-			if (!bodyPartIds.has(part)) {
-				throw new Error(`Body part '${part}' not found`)
-			}
-		}
-	}
-
-	return bodyPartIds
-}
 
 // Helper function to update user main fields
 const updateUserMainFields = async (
 	client: any,
 	params: {
-		lookupMap: Map<string, number>
+		referenceIds: {
+			ageGroupId: number
+			bodyTypeId: number
+			heightId: number
+			personalStyleId: number
+		}
 		location: string
 		goal: string
 		frustration: string
 		clerkId: string
 	}
 ) => {
-	const { lookupMap, location, goal, frustration, clerkId } = params
+	const { referenceIds, location, goal, frustration, clerkId } = params
 	
 	const updateUserQuery = `
 		UPDATE users SET 
@@ -335,11 +271,11 @@ const updateUserMainFields = async (
 	`
 
 	const updateResult = await client.query(updateUserQuery, [
-		lookupMap.get('age_group'),
+		referenceIds.ageGroupId,
 		location,
-		lookupMap.get('body_shape'),
-		lookupMap.get('height'),
-		lookupMap.get('personal_style'),
+		referenceIds.bodyTypeId,
+		referenceIds.heightId,
+		referenceIds.personalStyleId,
 		goal,
 		frustration,
 		clerkId,
@@ -357,17 +293,16 @@ const insertUserPreferences = async (
 	client: any,
 	params: {
 		dbUserId: number
-		favoriteParts: string[]
-		leastFavoriteParts: string[]
+		favoritePartIds: number[]
+		leastFavoritePartIds: number[]
 		occasions: Record<string, number>
-		bodyPartIds: Map<string, number>
 	}
 ) => {
-	const { dbUserId, favoriteParts, leastFavoriteParts, occasions, bodyPartIds } = params
+	const { dbUserId, favoritePartIds, leastFavoritePartIds, occasions } = params
 
 	// Batch insert favorite parts
-	if (favoriteParts.length > 0) {
-		const favoritePartsValues = favoriteParts.map((part, index) => 
+	if (favoritePartIds.length > 0) {
+		const favoritePartsValues = favoritePartIds.map((partId, index) => 
 			`($1, $${index + 2})`
 		).join(', ')
 		
@@ -376,17 +311,14 @@ const insertUserPreferences = async (
 			VALUES ${favoritePartsValues}
 		`
 		
-		const favoritePartsParams = [
-			dbUserId,
-			...favoriteParts.map(part => bodyPartIds.get(part))
-		]
+		const favoritePartsParams = [dbUserId, ...favoritePartIds]
 		
 		await client.query(insertFavoritePartsQuery, favoritePartsParams)
 	}
 
 	// Batch insert least favorite parts
-	if (leastFavoriteParts.length > 0) {
-		const leastFavoritePartsValues = leastFavoriteParts.map((part, index) => 
+	if (leastFavoritePartIds.length > 0) {
+		const leastFavoritePartsValues = leastFavoritePartIds.map((partId, index) => 
 			`($1, $${index + 2})`
 		).join(', ')
 		
@@ -395,10 +327,7 @@ const insertUserPreferences = async (
 			VALUES ${leastFavoritePartsValues}
 		`
 		
-		const leastFavoritePartsParams = [
-			dbUserId,
-			...leastFavoriteParts.map(part => bodyPartIds.get(part))
-		]
+		const leastFavoritePartsParams = [dbUserId, ...leastFavoritePartIds]
 		
 		await client.query(insertLeastFavoritePartsQuery, leastFavoritePartsParams)
 	}
@@ -418,10 +347,7 @@ const insertUserPreferences = async (
 		
 		const occasionParams = [dbUserId]
 		occasionEntries.forEach(([key, value]) => {
-			const occasionId = MONTHLY_OCCASIONS.find(item => item.key === key)?.id
-			if (!occasionId) {
-				throw new Error(`Occasion '${key}' not found`)
-			}
+			const occasionId = getOccasionIdByKey(key)
 			occasionParams.push(occasionId, value)
 		})
 		
