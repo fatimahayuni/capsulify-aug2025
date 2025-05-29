@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 export default function ShowOutfits({ outfits, handleSubmit, setStep }: any) {
 	const [currentIndex, setCurrentIndex] = useState(0)
+	const [isLoading, setIsLoading] = useState(false)
 	const total = outfits.length
 	const handleCardClick = (idx: number) => {
 		if (idx !== currentIndex) setCurrentIndex(idx)
@@ -12,6 +13,22 @@ export default function ShowOutfits({ outfits, handleSubmit, setStep }: any) {
 		if (offset < -total / 2) offset += total
 		return offset
 	}
+
+	const handleButtonClick = async () => {
+		if (isLoading) return // Prevent multiple clicks
+		
+		setIsLoading(true)
+		try {
+			await handleSubmit()
+			// If we reach here, the database call was successful
+			// The parent component will handle navigation
+		} catch (error) {
+			console.error('Error during onboarding submission:', error)
+			// Re-enable the button on error so user can try again
+			setIsLoading(false)
+		}
+	}
+
 	return (
 		<div className='bg-primary flex flex-col items-center px-6 pt-2 md:mt-0 mt-8 mx-2'>
 			<div className='w-full max-w-md md:max-w-xl text-left md:text-center mb-8'>
@@ -84,10 +101,15 @@ export default function ShowOutfits({ outfits, handleSubmit, setStep }: any) {
 			</div>
 			<div className='flex justify-center w-full max-w-md'>
 				<button
-					className='w-[80%] bg-accent text-white font-semibold py-3 rounded-md text-[0.875rem] shadow-md transition-all duration-200 hover:opacity-90 cursor-pointer'
-					onClick={handleSubmit}
+					className={`w-[80%] bg-accent text-white font-semibold py-3 rounded-md text-[0.875rem] shadow-md transition-all duration-200 ${
+						isLoading 
+							? 'opacity-50 cursor-not-allowed' 
+							: 'hover:opacity-90 cursor-pointer'
+					}`}
+					onClick={handleButtonClick}
+					disabled={isLoading}
 				>
-					Take me to my Fit!
+					{isLoading ? 'Setting up your profile...' : 'Take me to my Fit!'}
 				</button>
 			</div>
 		</div>
