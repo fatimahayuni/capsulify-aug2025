@@ -124,7 +124,7 @@ function ClothingItemModal({
 		)
 		
 		// Clear the fit cache since we've modified the user's wardrobe
-		CacheManager.clearFitCache()
+		CacheManager.clearUserFitCache()
 		
 		onSaveImage(image) // Update the parent with new image
 		onSaveName(name)

@@ -217,7 +217,7 @@ class CacheManager {
 
 	// Clears the fit cache.
     // This should be called if the users fit is modified in any way.
-	clearFitCache(): void {
+	clearUserFitCache(): void {
 		try {
 			localStorage.removeItem(this.FIT_KEY)
 		} catch (error) {
@@ -227,7 +227,7 @@ class CacheManager {
 
 	// Clears the outfits cache
     // This should be called if the users fit or capsule items are modified.
-	clearOutfitsCache(): void {
+	clearUserOutfitsCache(): void {
 		try {
 			localStorage.removeItem(this.OUTFITS_KEY)
 		} catch (error) {
@@ -255,8 +255,8 @@ class CacheManager {
 
 	// Clears all cached data.
 	invalidateCache(): void {
-		this.clearFitCache()
-		this.clearOutfitsCache()
+		this.clearUserFitCache()
+		this.clearUserOutfitsCache()
 		this.clearClothingItemsCache()
 		this.clearClothingVariantsCache()
 	}

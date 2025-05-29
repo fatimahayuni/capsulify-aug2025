@@ -26,6 +26,7 @@ import {
 	BODY_PARTS_ID, 
 	PERSONAL_STYLE_ID 
 } from '../constants'
+import CacheManager from '../lib/CacheManager'
 
 // Type for the UI state (using display strings)
 type OnboardingUIState = {
@@ -206,6 +207,11 @@ export default function OnboardingPage() {
 			convertedData,
 			clerkId as string
 		)
+
+		// Clear the fit and outfits cache.
+		await CacheManager.clearUserFitCache()
+		await CacheManager.clearUserOutfitsCache()
+
 		router.push('/inventory')
 	}
 

@@ -33,8 +33,8 @@ const ClothingItemCard = (props: Props) => {
 
 	const handleSaveImage = (newImage: string) => {
 		// Changing the fit item invalidates the fit/outfits cache.
-		CacheManager.clearFitCache()
-		CacheManager.clearOutfitsCache()
+		CacheManager.clearUserFitCache()
+		CacheManager.clearUserOutfitsCache()
 
 		setCurrentImage(newImage)
 		setIsEditing(false)
