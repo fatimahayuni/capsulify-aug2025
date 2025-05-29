@@ -300,58 +300,38 @@ const insertUserPreferences = async (
 ) => {
 	const { dbUserId, favoritePartIds, leastFavoritePartIds, occasions } = params
 
-	// Batch insert favorite parts
+	// Batch insert favorite parts using UNNEST
 	if (favoritePartIds.length > 0) {
-		const favoritePartsValues = favoritePartIds.map((partId, index) => 
-			`($1, $${index + 2})`
-		).join(', ')
-		
 		const insertFavoritePartsQuery = `
 			INSERT INTO user_fav_parts (user_id, fav_part_id) 
-			VALUES ${favoritePartsValues}
+			SELECT $1, UNNEST($2::int[])
 		`
 		
-		const favoritePartsParams = [dbUserId, ...favoritePartIds]
-		
-		await client.query(insertFavoritePartsQuery, favoritePartsParams)
+		await client.query(insertFavoritePartsQuery, [dbUserId, favoritePartIds])
 	}
 
-	// Batch insert least favorite parts
+	// Batch insert least favorite parts using UNNEST
 	if (leastFavoritePartIds.length > 0) {
-		const leastFavoritePartsValues = leastFavoritePartIds.map((partId, index) => 
-			`($1, $${index + 2})`
-		).join(', ')
-		
 		const insertLeastFavoritePartsQuery = `
 			INSERT INTO user_least_fav_parts (user_id, least_fav_part_id) 
-			VALUES ${leastFavoritePartsValues}
+			SELECT $1, UNNEST($2::int[])
 		`
 		
-		const leastFavoritePartsParams = [dbUserId, ...leastFavoritePartIds]
-		
-		await client.query(insertLeastFavoritePartsQuery, leastFavoritePartsParams)
+		await client.query(insertLeastFavoritePartsQuery, [dbUserId, leastFavoritePartIds])
 	}
 
-	// Batch insert monthly occasions
+	// Batch insert monthly occasions using UNNEST with arrays
 	const occasionEntries = Object.entries(occasions).filter(([key, value]) => value > 0)
 	if (occasionEntries.length > 0) {
-		const occasionValues = occasionEntries.map((entry, index) => {
-			const baseIndex = index * 3
-			return `($1, $${baseIndex + 2}, $${baseIndex + 3})`
-		}).join(', ')
+		const occasionIds = occasionEntries.map(([key]) => getOccasionIdByKey(key))
+		const occurrenceCounts = occasionEntries.map(([, value]) => value)
 		
 		const insertOccasionsQuery = `
 			INSERT INTO user_monthly_occasions (user_id, occasions_id, occurence_count) 
-			VALUES ${occasionValues}
+			SELECT $1, UNNEST($2::int[]), UNNEST($3::int[])
 		`
 		
-		const occasionParams = [dbUserId]
-		occasionEntries.forEach(([key, value]) => {
-			const occasionId = getOccasionIdByKey(key)
-			occasionParams.push(occasionId, value)
-		})
-		
-		await client.query(insertOccasionsQuery, occasionParams)
+		await client.query(insertOccasionsQuery, [dbUserId, occasionIds, occurrenceCounts])
 	}
 }
 
