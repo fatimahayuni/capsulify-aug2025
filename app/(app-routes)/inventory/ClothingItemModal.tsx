@@ -64,6 +64,7 @@ function ClothingItemModal({
 	)
 	const [allVariants, setAllVariants] = useState<ClothingVariant[]>([])
 	const [isLoading, setIsLoading] = useState(true)
+	const [isSaving, setIsSaving] = useState(false)
 	const prevClothingVariantId = item.clothing_variant_id
 
 	// Load all variants on mount
@@ -116,19 +117,27 @@ function ClothingItemModal({
 	}, [options, allVariants])
 
 	const handleSave = async () => {
-		const user = await getUserByClerkId(clerkId!)
-		await saveClothingVariantId(
-			Number(user.id),
-			clothingVariantId,
-			prevClothingVariantId
-		)
-		
-		// Clear the fit cache since we've modified the user's wardrobe
-		CacheManager.clearUserFitCache()
-		
-		onSaveImage(image) // Update the parent with new image
-		onSaveName(name)
-		setIsEditing(false) // Close the modal after saving
+		try {
+			setIsSaving(true)
+			const user = await getUserByClerkId(clerkId!)
+			await saveClothingVariantId(
+				Number(user.id),
+				clothingVariantId,
+				prevClothingVariantId
+			)
+
+			// Clear the fit cache since we've modified the user's wardrobe
+			CacheManager.clearUserFitCache()
+
+			onSaveImage(image) // Update the parent with new image
+			onSaveName(name)
+			setIsEditing(false) // Close the modal after saving
+		} catch (error) {
+			console.error('Error saving clothing item:', error)
+			// Button will be re-enabled due to setIsSaving(false) in finally block
+		} finally {
+			setIsSaving(false)
+		}
 	}
 
 	//@ts-ignore
@@ -171,11 +180,10 @@ function ClothingItemModal({
 								{Object.keys(editOptions).map((key) => (
 									<div
 										key={key}
-										className={`px-4 py-2 cursor-pointer text-accent ${
-											activeClass === key
+										className={`px-4 py-2 cursor-pointer text-accent ${activeClass === key
 												? 'border-b-2 border-b-accent '
 												: 'border-b-2 border-transparent'
-										}`}
+											}`}
 										onClick={() => setActiveClass(key)}
 									>
 										{toTitleCase(key)}
@@ -214,8 +222,8 @@ function ClothingItemModal({
 																checked={
 																	// @ts-ignore
 																	options[
-																		// @ts-ignore
-																		value.name
+																	// @ts-ignore
+																	value.name
 																	] === option.id
 																}
 																onChange={() =>
@@ -243,9 +251,14 @@ function ClothingItemModal({
 						<div className='flex justify-end mt-4 text-sm px-4 mr-4'>
 							<button
 								onClick={handleSave}
-								className='bg-accent text-white px-6 py-2 rounded-md shadow-md hover:scale-105 transition-transform duration-200'
+								disabled={isSaving}
+								className={`px-6 py-2 rounded-md shadow-md transition-all duration-200 ${
+									isSaving
+										? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+										: 'bg-accent text-white hover:scale-105'
+								}`}
 							>
-								Save
+								{isSaving ? 'Saving...' : 'Save'}
 							</button>
 						</div>
 					</>

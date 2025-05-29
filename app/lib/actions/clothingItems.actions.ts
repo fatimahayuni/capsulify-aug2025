@@ -118,7 +118,7 @@ export const saveClothingVariantId = async (
     const saveClothingVariantIdQuery = `
       UPDATE user_clothing_variants
       SET clothing_variant_id = $1
-      WHERE user_id = $2 AND clothing_variant_id = $3 
+      WHERE user_id = $2 AND clothing_variant_id = $3
 	`;
 
     const result = await client.query(saveClothingVariantIdQuery, [
