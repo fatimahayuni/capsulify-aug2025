@@ -3,7 +3,6 @@
 import { CreateUserParams, OnboardingData } from '@/app/types'
 import pool from '../database/db'
 import { MONTHLY_OCCASIONS, BODY_TYPE_ID } from '@/app/constants'
-import { DEFAULT_WARDROBE } from '@/app/constants/utils'
 
 
 
@@ -102,19 +101,8 @@ export const updateUserBodyType = async (bodyType: string, clerkId: string) => {
 			clerkId,
 		])
 		
-		// Create user wardrobe
-		const defaultItems = DEFAULT_WARDROBE.INVERTED_TRIANGLE
-		
-		// Delete existing wardrobe items
-		const deleteWardrobeQuery = `DELETE FROM user_clothing_variants WHERE user_id = $1`
-		await client.query(deleteWardrobeQuery, [result.rows[0].id])
-		
-		// Insert new wardrobe items
-		const insertWardrobeQuery = `
-			INSERT INTO user_clothing_variants (user_id, clothing_variant_id)
-			SELECT $1, UNNEST($2::int[])
-		`
-		await client.query(insertWardrobeQuery, [result.rows[0].id, defaultItems])
+		// Create user wardrobe using the helper function
+		await insertUserWardrobe(client, result.rows[0].id, bodyTypeId)
 		
 		// Commit transaction
 		await client.query('COMMIT')
@@ -229,7 +217,7 @@ export const saveOnboardingData = async (
 		})
 
 		// Create user wardrobe
-		await insertUserWardrobe(client, dbUserId)
+		await insertUserWardrobe(client, dbUserId, bodyTypeId)
 
 		await client.query('COMMIT')
 		console.log('User details updated successfully')
@@ -354,19 +342,19 @@ const insertUserPreferences = async (
 }
 
 // Helper function to insert user wardrobe
-const insertUserWardrobe = async (client: any, dbUserId: number) => {
-	const defaultItems = DEFAULT_WARDROBE.INVERTED_TRIANGLE
-	
+const insertUserWardrobe = async (client: any, dbUserId: number, bodyTypeId: number) => {
 	// Delete existing wardrobe items
 	const deleteWardrobeQuery = `DELETE FROM user_clothing_variants WHERE user_id = $1`
 	await client.query(deleteWardrobeQuery, [dbUserId])
 	
-	// Insert new wardrobe items
+	// Insert new wardrobe items directly from default_clothing_variants table
 	const insertWardrobeQuery = `
 		INSERT INTO user_clothing_variants (user_id, clothing_variant_id)
-		SELECT $1, UNNEST($2::int[])
+		SELECT $1, clothing_variant_id 
+		FROM default_clothing_variants 
+		WHERE body_shape_id = $2
 	`
-	await client.query(insertWardrobeQuery, [dbUserId, defaultItems])
+	await client.query(insertWardrobeQuery, [dbUserId, bodyTypeId])
 }
 
 // Helper function to handle transaction errors

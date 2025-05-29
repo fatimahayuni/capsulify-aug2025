@@ -1,6 +1,5 @@
 "use server";
 
-import { DEFAULT_WARDROBE } from "@/app/constants/utils";
 import pool from "../database/db";
 import { getUserId } from "../database/getUserId";
 
@@ -114,7 +113,6 @@ export const saveClothingVariantId = async (
   try {
     await client.query("SET search_path TO capsulify_live");
 
-    // update the clothing variant ID in the user_clothing_variants table with the user_id and prev_clothing_variant_id
     const saveClothingVariantIdQuery = `
       UPDATE user_clothing_variants
       SET clothing_variant_id = $1
