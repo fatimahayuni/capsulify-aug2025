@@ -104,11 +104,17 @@ export const updateUserBodyType = async (bodyType: string, clerkId: string) => {
 		
 		// Create user wardrobe
 		const defaultItems = DEFAULT_WARDROBE.INVERTED_TRIANGLE
-		const createWardrobeQuery = `
+		
+		// Delete existing wardrobe items
+		const deleteWardrobeQuery = `DELETE FROM user_clothing_variants WHERE user_id = $1`
+		await client.query(deleteWardrobeQuery, [result.rows[0].id])
+		
+		// Insert new wardrobe items
+		const insertWardrobeQuery = `
 			INSERT INTO user_clothing_variants (user_id, clothing_variant_id)
 			SELECT $1, UNNEST($2::int[])
 		`
-		await client.query(createWardrobeQuery, [result.rows[0].id, defaultItems])
+		await client.query(insertWardrobeQuery, [result.rows[0].id, defaultItems])
 		
 		// Commit transaction
 		await client.query('COMMIT')
@@ -302,21 +308,29 @@ const insertUserPreferences = async (
 
 	// Batch insert favorite parts using UNNEST
 	if (favoritePartIds.length > 0) {
+		// Delete existing favorite parts
+		const deleteFavoritePartsQuery = `DELETE FROM user_fav_parts WHERE user_id = $1`
+		await client.query(deleteFavoritePartsQuery, [dbUserId])
+		
+		// Insert new favorite parts
 		const insertFavoritePartsQuery = `
 			INSERT INTO user_fav_parts (user_id, fav_part_id) 
 			SELECT $1, UNNEST($2::int[])
 		`
-		
 		await client.query(insertFavoritePartsQuery, [dbUserId, favoritePartIds])
 	}
 
 	// Batch insert least favorite parts using UNNEST
 	if (leastFavoritePartIds.length > 0) {
+		// Delete existing least favorite parts
+		const deleteLeastFavoritePartsQuery = `DELETE FROM user_least_fav_parts WHERE user_id = $1`
+		await client.query(deleteLeastFavoritePartsQuery, [dbUserId])
+		
+		// Insert new least favorite parts
 		const insertLeastFavoritePartsQuery = `
 			INSERT INTO user_least_fav_parts (user_id, least_fav_part_id) 
 			SELECT $1, UNNEST($2::int[])
 		`
-		
 		await client.query(insertLeastFavoritePartsQuery, [dbUserId, leastFavoritePartIds])
 	}
 
@@ -326,11 +340,15 @@ const insertUserPreferences = async (
 		const occasionIds = occasionEntries.map(([key]) => getOccasionIdByKey(key))
 		const occurrenceCounts = occasionEntries.map(([, value]) => value)
 		
+		// Delete existing monthly occasions
+		const deleteOccasionsQuery = `DELETE FROM user_monthly_occasions WHERE user_id = $1`
+		await client.query(deleteOccasionsQuery, [dbUserId])
+		
+		// Insert new monthly occasions
 		const insertOccasionsQuery = `
 			INSERT INTO user_monthly_occasions (user_id, occasions_id, occurence_count) 
 			SELECT $1, UNNEST($2::int[]), UNNEST($3::int[])
 		`
-		
 		await client.query(insertOccasionsQuery, [dbUserId, occasionIds, occurrenceCounts])
 	}
 }
@@ -338,11 +356,17 @@ const insertUserPreferences = async (
 // Helper function to insert user wardrobe
 const insertUserWardrobe = async (client: any, dbUserId: number) => {
 	const defaultItems = DEFAULT_WARDROBE.INVERTED_TRIANGLE
-	const createWardrobeQuery = `
+	
+	// Delete existing wardrobe items
+	const deleteWardrobeQuery = `DELETE FROM user_clothing_variants WHERE user_id = $1`
+	await client.query(deleteWardrobeQuery, [dbUserId])
+	
+	// Insert new wardrobe items
+	const insertWardrobeQuery = `
 		INSERT INTO user_clothing_variants (user_id, clothing_variant_id)
 		SELECT $1, UNNEST($2::int[])
 	`
-	await client.query(createWardrobeQuery, [dbUserId, defaultItems])
+	await client.query(insertWardrobeQuery, [dbUserId, defaultItems])
 }
 
 // Helper function to handle transaction errors
