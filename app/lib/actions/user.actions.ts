@@ -59,16 +59,12 @@ export const getUserByClerkId = async (clerkId: string) => {
 
 		await client.query('SET search_path TO capsulify_live')
 
-		console.log('clerk id', clerkId)
-
 		const getUserQuery = `
-      SELECT * FROM users
-      WHERE clerk_id = $1
-    `
+			SELECT * FROM users
+			WHERE clerk_id = $1
+			`
 
 		const user = await client.query(getUserQuery, [clerkId])
-
-		console.log('User retrieved successfully:', user.rows[0])
 
 		return user.rows[0]
 	} catch (error) {

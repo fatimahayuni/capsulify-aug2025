@@ -125,8 +125,6 @@ export const saveClothingVariantId = async (
       prev_clothing_variant_id,
     ]);
 
-    console.log("Clothing variant ID saved successfully:", result.rows[0]);
-
     return result.rows[0];
   } catch (error) {
     console.error("Error saving clothing variant ID:", error);
