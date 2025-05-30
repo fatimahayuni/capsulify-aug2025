@@ -6,26 +6,44 @@ import OutfitCard from './components/OutfitCard'
 import Pager from './components/Pager'
 import Filter from './components/Filter'
 import CacheManager from '@/app/lib/CacheManager'
+import * as LoadingIcons from 'react-loading-icons'
 
 export default function OutfitsPage() {
 	const [outfits, setOutfits] = useState<Outfit[]>([])
 	const [filteredOutfits, setFilteredOutfits] = useState<Outfit[]>([])
 	const [currentPage, setCurrentPage] = useState(1)
 	const [filterItems, setFilterItems] = useState<OutfitItem[]>([])
+	const [isLoading, setIsLoading] = useState(true)
+	const [showSpinner, setShowSpinner] = useState(false)
 	const itemsPerPage = 18
 	const contentRef = useRef<HTMLDivElement>(null)
 
 	// Page load event.
 	useEffect(() => {
 		const fetchOutfits = async () => {
-			const data = await CacheManager.getUserOutfits()
-			if (data) {
-				setOutfits(data)
-				setFilteredOutfits(data)
+			setIsLoading(true)
+			try {
+				const data = await CacheManager.getUserOutfits()
+				if (data) {
+					setOutfits(data)
+					setFilteredOutfits(data)
+				}
+			} finally {
+				setIsLoading(false)
 			}
 		}
 		fetchOutfits()
 	}, [])
+
+	useEffect(() => {
+		let spinnerTimeout: NodeJS.Timeout
+		if (isLoading) {
+			spinnerTimeout = setTimeout(() => setShowSpinner(true), 100)
+		} else {
+			setShowSpinner(false)
+		}
+		return () => clearTimeout(spinnerTimeout)
+	}, [isLoading])
 
 	// Filter outfits when filter items change
 	useEffect(() => {
@@ -81,6 +99,17 @@ export default function OutfitsPage() {
 		if (contentRef.current) {
 			contentRef.current.scrollTo({ top: 0, behavior: 'smooth' })
 		}
+	}
+
+	if (isLoading && showSpinner) {
+		return (
+			<div className='flex flex-col items-center justify-center min-h-[60vh] w-full'>
+				<LoadingIcons.Oval stroke='#B9805A' height={60} width={60} />
+				<span className='text-accent text-sm font-medium mt-4 animate-pulse'>
+					Loading your outfits...
+				</span>
+			</div>
+		)
 	}
 
 	return (

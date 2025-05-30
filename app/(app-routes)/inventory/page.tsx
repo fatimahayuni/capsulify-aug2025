@@ -4,9 +4,12 @@ import { CATEGORIES } from '@/app/constants/utils'
 import ClothingItemCard from '@/app/(app-routes)/inventory/ClothingItemCard'
 import { useAuth } from '@clerk/nextjs'
 import CacheManager from '@/app/lib/CacheManager'
+import * as LoadingIcons from 'react-loading-icons'
 
 export default function InventoryPage() {
 	const [fit, setFit] = useState<any>({})
+	const [isLoading, setIsLoading] = useState(true)
+	const [showSpinner, setShowSpinner] = useState(false)
 	const { userId: clerkId } = useAuth()
 
 	const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
@@ -42,13 +45,28 @@ export default function InventoryPage() {
 		}
 	}, [])
 
+	useEffect(() => {
+		let spinnerTimeout: NodeJS.Timeout
+		if (isLoading) {
+			spinnerTimeout = setTimeout(() => setShowSpinner(true), 100)
+		} else {
+			setShowSpinner(false)
+		}
+		return () => clearTimeout(spinnerTimeout)
+	}, [isLoading])
+
 	// Page load event.
 	useEffect(() => {
 		const fetchFit = async () => {
 			if (!clerkId) return
-
-			const currentUsersFit = await CacheManager.getUserFitItems(clerkId)
-			setFit(currentUsersFit)
+			setIsLoading(true)
+			try {
+				const currentUsersFit =
+					await CacheManager.getUserFitItems(clerkId)
+				setFit(currentUsersFit)
+			} finally {
+				setIsLoading(false)
+			}
 		}
 		fetchFit()
 	}, [clerkId])
@@ -59,6 +77,17 @@ export default function InventoryPage() {
 			section?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 			setActiveSection(key)
 		}
+	}
+
+	if (isLoading && showSpinner) {
+		return (
+			<div className='flex flex-col items-center justify-center min-h-[60vh] w-full'>
+				<LoadingIcons.Oval stroke='#B9805A' height={60} width={60} />
+				<span className='text-accent text-sm font-medium mt-4 animate-pulse'>
+					Loading your wardrobe...
+				</span>
+			</div>
+		)
 	}
 
 	return (
@@ -95,9 +124,6 @@ export default function InventoryPage() {
 							className='w-full scroll-mt-[75px] '
 							data-key={key}
 						>
-							{/* <h2 className="text-xl font-semibold text-[#4b3621] mb-4 text-center uppercase">
-                {value}
-              </h2> */}
 							<div className='flex flex-wrap justify-center space-x-2 space-y-2 w-full text-sm mb-8'>
 								{items.map((item: any) => (
 									<ClothingItemCard
@@ -114,24 +140,4 @@ export default function InventoryPage() {
 			</div>
 		</div>
 	)
-}
-
-{
-	/* Search bar */
-}
-{
-	/* <div className="flex bg-secondary gap-2 justify-center items-center p-2 rounded-lg w-[450px] max-sm:w-[95%] mx-auto">
-          <SearchIcon className="w-4 h-4 mr-2" />
-          <input
-            type="text"
-            className="outline-0 border-0 text-sm rounded-lg w-full"
-            placeholder="Search for items..."
-          />
-        </div> */
-}
-
-{
-	/* <button className="bg-accent text-white text-[14px] px-4 py-2 mb-2 rounded-md fixed bottom-[10%]">
-        Generate Outfits
-      </button> */
 }

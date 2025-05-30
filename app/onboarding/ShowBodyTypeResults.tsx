@@ -28,7 +28,7 @@ export default function ShowBodyTypeResults({ bodyType, handleNext }: any) {
 					className='text-accent text-[0.875rem] md:text-[1rem] font-semibold tracking-wide text-left mb-4'
 					style={{ fontFamily: 'inherit' }}
 				>
-					You'll receive tailored recommendations for:
+					You'll receive tailored recommendations containing:
 				</p>
 				<div className='bg-secondary rounded-xl px-4 py-4 text-center mb-8'>
 					<span
