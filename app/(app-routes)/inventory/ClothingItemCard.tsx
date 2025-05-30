@@ -57,11 +57,13 @@ const ClothingItemCard = (props: Props) => {
 							src='/assets/icons/info.svg'
 							className='w-[16px] h-[16px] p-1 rounded-full bg-[#4a342727]'
 						/>
-						<img
-							src='/assets/icons/edit-pencil.svg'
-							className='w-[16px] h-[16px] p-[3px] rounded-full bg-[#4a342727]'
-							onClick={handleEdit}
-						/>
+						{!['layers', 'shoes', 'bags'].includes(props.category.toLowerCase()) && (
+							<img
+								src='/assets/icons/edit-pencil.svg'
+								className='w-[16px] h-[16px] p-[3px] rounded-full bg-[#4a342727]'
+								onClick={handleEdit}
+							/>
+						)}
 					</div>
 				</div>
 
