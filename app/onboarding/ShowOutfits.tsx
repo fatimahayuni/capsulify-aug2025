@@ -16,7 +16,7 @@ export default function ShowOutfits({ outfits, handleSubmit, setStep }: any) {
 
 	const handleButtonClick = async () => {
 		if (isLoading) return // Prevent multiple clicks
-		
+
 		setIsLoading(true)
 		try {
 			await handleSubmit()
@@ -30,7 +30,7 @@ export default function ShowOutfits({ outfits, handleSubmit, setStep }: any) {
 	}
 
 	return (
-		<div className='bg-primary flex flex-col items-center px-6 pt-2 md:mt-0 mt-8 mx-2'>
+		<div className='bg-primary flex flex-col items-center px-6 pt-2 md:mt-0 mt-8 mx-2 overflow-x-hidden'>
 			<div className='w-full max-w-md md:max-w-xl text-left md:text-center mb-8'>
 				<span className='text-lg md:text-[1.25rem] font-bold text-accent'>
 					Here
@@ -45,8 +45,8 @@ export default function ShowOutfits({ outfits, handleSubmit, setStep }: any) {
 					becoming.
 				</span>
 			</div>
-			<div className='w-full flex flex-col items-center mt-4'>
-				<div className='relative w-full flex justify-center items-center h-85 md:h-96 select-none '>
+			<div className='w-full flex flex-col items-center mt-4 '>
+				<div className='relative w-full flex justify-center items-center h-85 md:h-96 select-none'>
 					{outfits.map((outfit: any, idx: number) => {
 						const offset = getOffset(idx)
 						let scale = 1
@@ -102,14 +102,16 @@ export default function ShowOutfits({ outfits, handleSubmit, setStep }: any) {
 			<div className='flex justify-center w-full max-w-md'>
 				<button
 					className={`w-[80%] bg-accent text-white font-semibold py-3 rounded-md text-[0.875rem] shadow-md transition-all duration-200 ${
-						isLoading 
-							? 'opacity-50 cursor-not-allowed' 
+						isLoading
+							? 'opacity-50 cursor-not-allowed'
 							: 'hover:opacity-90 cursor-pointer'
 					}`}
 					onClick={handleButtonClick}
 					disabled={isLoading}
 				>
-					{isLoading ? 'Setting up your profile...' : 'Take me to my Fit!'}
+					{isLoading
+						? 'Setting up your profile...'
+						: 'Take me to my Fit!'}
 				</button>
 			</div>
 		</div>
