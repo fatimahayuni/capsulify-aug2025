@@ -21,9 +21,6 @@ export default function MonthlyOccasions({
 			<div className='w-[90%] max-w-md mx-auto'>
 				<h2 className='text-accent text-md font-semibold mb-8 w-full text-left'>
 					Typical Monthly Occasions.
-					<span className='text-[0.7rem] text-[#908075]'>
-						(Optional)
-					</span>
 				</h2>
 				<div className='flex flex-col gap-2 mb-8'>
 					{MONTHLY_OCCASIONS.map(({ key, label }) => (
@@ -36,7 +33,7 @@ export default function MonthlyOccasions({
 									{label}
 								</div>
 								<div className='text-[#b6a99a] text-[0.7rem]'>
-									How many days this month?
+									How many days per month?
 								</div>
 							</div>
 							<div className='flex items-center'>
