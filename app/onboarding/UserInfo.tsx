@@ -45,9 +45,6 @@ export default function UserInfo({
 				<div className='mb-8 mt-6'>
 					<h3 className='text-accent text-[0.875rem] font-semibold mb-3'>
 						Where is your location/Where do you live?{' '}
-						<span className='text-[0.7rem] text-[#908075]'>
-							(Optional)
-						</span>
 					</h3>
 					<input
 						type='text'

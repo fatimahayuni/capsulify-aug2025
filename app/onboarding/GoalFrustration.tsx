@@ -17,9 +17,6 @@ export default function GoalFrustration({
 					>
 						What is your goal with Capsulify? Please describe in a
 						few words.{' '}
-						<span className='text-[0.7rem] text-[#908075]'>
-							(Optional)
-						</span>
 					</label>
 					<textarea
 						id='goal'
@@ -36,9 +33,6 @@ export default function GoalFrustration({
 					>
 						What is your biggest frustration when it comes to
 						styling?{' '}
-						<span className='text-[0.7rem] text-[#908075]'>
-							(Optional)
-						</span>
 					</label>
 					<textarea
 						id='frustration'
