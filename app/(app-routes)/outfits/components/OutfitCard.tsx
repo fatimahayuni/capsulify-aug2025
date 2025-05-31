@@ -168,7 +168,7 @@ const OutfitCard = (props: Props) => {
 			{/* Favorite Heart Icon */}
 			<button
 				aria-label='Favorite outfit'
-				className='absolute top-2 right-2 text-accent hover:scale-110 transition-all text-md rounded-full p-1 cursor-pointer'
+				className='absolute top-2 right-2 text-accent hover:scale-110 transition-all text-md rounded-full p-1 cursor-pointer z-[10]'
 				onClick={() => setIsFavorite((fav) => !fav)}
 			>
 				{isFavorite ? <FaHeart /> : <FaRegHeart />}
