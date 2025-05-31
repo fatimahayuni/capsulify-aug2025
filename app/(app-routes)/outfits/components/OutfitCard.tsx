@@ -1,7 +1,8 @@
 import { SubCategory } from '@/app/constants/SubCategory'
 import { Category } from '@/app/constants/Category'
 import { Outfit, OutfitGroupType, OutfitItem } from '../types'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { FaHeart, FaRegHeart } from 'react-icons/fa'
 
 type Props = {
 	outfit: Outfit
@@ -9,6 +10,7 @@ type Props = {
 
 const OutfitCard = (props: Props) => {
 	const { outfit } = props
+	const [isFavorite, setIsFavorite] = useState(false)
 
 	// Group type flags.
 	const isTopBottomLayerBagShoes =
@@ -163,6 +165,14 @@ const OutfitCard = (props: Props) => {
 
 	return (
 		<div className='w-[400px] h-[300px] max-sm:w-[160px] max-sm:h-[220px] transition-all duration-300 ease-in-out relative rounded-md bg-secondary py-4 px-4 mx-auto'>
+			{/* Favorite Heart Icon */}
+			<button
+				aria-label='Favorite outfit'
+				className='absolute top-2 right-2 text-accent hover:scale-110 transition-all text-md rounded-full p-1 cursor-pointer'
+				onClick={() => setIsFavorite((fav) => !fav)}
+			>
+				{isFavorite ? <FaHeart /> : <FaRegHeart />}
+			</button>
 			{outfit.items.map((item, index) => {
 				const classes = getItemLayoutClasses(item)
 				return (
