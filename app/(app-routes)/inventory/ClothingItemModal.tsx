@@ -4,19 +4,7 @@ import { saveClothingVariantId } from '../../lib/actions/clothingItems.actions'
 import { getUserByClerkId } from '../../lib/actions/user.actions'
 import { useAuth } from '@clerk/nextjs'
 import CacheManager from '../../lib/CacheManager'
-
-type ClothingVariant = {
-	id: number
-	image_file_name: string
-	name: string
-	top_sleeve_type_id: number | null
-	blouse_sleeve_type_id: number | null
-	neckline_id: number | null
-	dress_cut_id: number | null
-	bottom_cut_id: number | null
-	short_cut_id: number | null
-	skirt_cut_id: number | null
-}
+import { ClothingVariantData } from '../../lib/database/clothing'
 
 type ClothingItemModalProps = {
 	setIsEditing: (isEditing: boolean) => void
@@ -62,7 +50,7 @@ function ClothingItemModal({
 	const [clothingVariantId, setClothingVariantId] = useState(
 		item.clothing_variant_id
 	)
-	const [allVariants, setAllVariants] = useState<ClothingVariant[]>([])
+	const [allVariants, setAllVariants] = useState<ClothingVariantData[]>([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [isSaving, setIsSaving] = useState(false)
 	const prevClothingVariantId = item.clothing_variant_id
@@ -72,11 +60,16 @@ function ClothingItemModal({
 		const loadAllVariants = async () => {
 			try {
 				setIsLoading(true)
-				const variants = await CacheManager.getVariantsForSubcategoryAndColor(
-					item.subcategory_id,
-					item.colour_type_id
+				const allClothingVariants = await CacheManager.getClothingVariants()
+
+				// Filter variants to match the current item's subcategory and color
+				const filteredVariants = allClothingVariants.filter(
+					(variant) =>
+						variant.subcategory_id === item.subcategory_id &&
+						variant.colour_type_id === item.colour_type_id
 				)
-				setAllVariants(variants)
+				
+				setAllVariants(filteredVariants)
 			} catch (error) {
 				console.error('Error loading variants:', error)
 			} finally {

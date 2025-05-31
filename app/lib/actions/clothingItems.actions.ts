@@ -1,60 +1,26 @@
 "use server";
 
+import { ClothingVariantData, getClothingVariantsDB } from "../database/clothing";
 import pool from "../database/db";
 import { getUserId } from "../database/getUserId";
+import { getUserClothingVariants as getUserClothingVariantsDB, UserClothingVariantData } from "../database/userdata";
 
-export const getUserWardrobe = async (clerkId: string) => {
+export const getUserClothingVariants = async (): Promise<UserClothingVariantData[]> => {
   const userId = await getUserId();
 
   if (!userId) {
     throw new Error("User not found");
   }
 
-  const client = await pool.connect();
-
   try {
-    await client.query("SET search_path TO capsulify_live");
-
-    const getWardrobeQuery = `
-        SELECT 
-        ucv.id AS id,
-        ci.category_id,
-        ci.subcategory_id,
-		    ci.colour_type_id,
-        cv.name,
-		    cv.top_sleeve_type_id,
-		    cv.blouse_sleeve_type_id,
-		    cv.neckline_id,
-		    cv.dress_cut_id,
-		    cv.bottom_cut_id,
-		    cv.short_cut_id,
-		    cv.skirt_cut_id,
-        cv.image_file_name,
-		    cv.id as clothing_variant_id
-        FROM user_clothing_variants ucv
-        JOIN clothing_variants cv ON ucv.clothing_variant_id = cv.id
-        JOIN clothing_items ci ON cv.clothing_item_id = ci.id
-        WHERE ucv.user_id = $1
-        `;
-
-    const wardrobe = await client.query(getWardrobeQuery, [userId]);
-
-    // SEGREGATE CLOTHING VARIANTS BY CATEGORY
-    const segregatedWardrobe = wardrobe.rows.reduce((acc, item) => {
-      const categoryId = item.category_id;
-      if (!acc[categoryId]) {
-        acc[categoryId] = [];
-      }
-      acc[categoryId].push(item);
-      return acc;
-    }, {});
-
-    return segregatedWardrobe;
+    const clothingVariants = await getUserClothingVariantsDB();
+    if (!clothingVariants) {
+      throw new Error("No clothing variants found");
+    }
+    return clothingVariants;
   } catch (error) {
     console.error("Error getting user wardrobe:", error);
     throw new Error("Failed to get user wardrobe");
-  } finally {
-    client.release();
   }
 };
 
@@ -134,30 +100,12 @@ export const saveClothingVariantId = async (
   }
 };
 
-export const getAllClothingVariants = async () => {
-  const client = await pool.connect();
-
+export const getAllClothingVariants = async (): Promise<ClothingVariantData[]> => {
   try {
-    await client.query("SET search_path TO capsulify_live");
-
-    // Get all clothing variants with their subcategory information
-    const getAllVariantsQuery = `
-      SELECT cv.id, cv.image_file_name, cv.name,
-             cv.top_sleeve_type_id, cv.blouse_sleeve_type_id, cv.neckline_id,
-             cv.dress_cut_id, cv.bottom_cut_id, cv.short_cut_id, cv.skirt_cut_id,
-             ci.subcategory_id, ci.colour_type_id
-      FROM clothing_variants cv
-      JOIN clothing_items ci ON cv.clothing_item_id = ci.id
-      ORDER BY ci.subcategory_id, ci.colour_type_id
-    `;
-
-    const variants = await client.query(getAllVariantsQuery);
-
-    return variants.rows;
+    const variants = await getClothingVariantsDB();
+    return variants;
   } catch (error) {
     console.error("Error getting all clothing variants:", error);
     throw new Error("Failed to get all clothing variants");
-  } finally {
-    client.release();
   }
 };

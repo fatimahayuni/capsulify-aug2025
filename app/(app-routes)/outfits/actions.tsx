@@ -1,12 +1,12 @@
 "use server";
 
 import { Category } from "@/app/constants/Category";
-import { getUserClothingItems } from "@/app/lib/database/outfits";
+import { getUserClothingVariants } from "@/app/lib/database/userdata";
 import { OutfitGroupType, Outfit } from "./types";
 
-// getClothingItems returns all clothing items for a user.
-export async function getClothingItems() {
-  const clothingItems = await getUserClothingItems();
+// getUserClotheItems returns all clothing items for a user.
+export async function getUserClotheItems() {
+  const clothingItems = await getUserClothingVariants();
   return clothingItems;
 }
 
@@ -14,7 +14,7 @@ export async function getClothingItems() {
 export async function getOutfits() {
 
   // Load clothing items from db.
-  const clothingItems = await getUserClothingItems();
+  const clothingItems = await getUserClothingVariants();
   if (!clothingItems) {
     console.log("No clothing items found");
     return null;

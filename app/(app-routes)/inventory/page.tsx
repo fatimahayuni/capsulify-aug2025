@@ -61,9 +61,21 @@ export default function InventoryPage() {
 			if (!clerkId) return
 			setIsLoading(true)
 			try {
-				const currentUsersFit =
-					await CacheManager.getUserFitItems(clerkId)
-				setFit(currentUsersFit)
+				const currentUsersFit = await CacheManager.getUserClothingItems()
+
+				// Group items by category
+				const groupedByCategory = (currentUsersFit || []).reduce((acc: any, item: any) => {
+					const category = item.category_id
+					if (!acc[category]) {
+						acc[category] = []
+					}
+					acc[category].push(item)
+					return acc
+				}, {})
+
+				console.log(groupedByCategory)
+				
+				setFit(groupedByCategory)
 			} finally {
 				setIsLoading(false)
 			}

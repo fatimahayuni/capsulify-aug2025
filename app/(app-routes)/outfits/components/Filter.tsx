@@ -52,7 +52,7 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 	const loadClothingItems = async () => {
 		setLoading(true)
 		try {
-			const items = await CacheManager.getClothingItems()
+			const items = await CacheManager.getUserClothingItems()
 			if (items) {
 				setAvailableItems(items)
 			}
