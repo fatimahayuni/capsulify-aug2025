@@ -25,7 +25,7 @@ export default function HomePage() {
 
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
-			const outfits = JSON.parse(localStorage.getItem('outfits') || '[]')
+			const outfits = JSON.parse(localStorage.getItem('userOutfits') || '[]')
 			setOutfitCount(outfits.length)
 		}
 	}, [])
@@ -48,7 +48,7 @@ export default function HomePage() {
 					<p className='text-[0.875rem] text-accent font-normal mb-6 mt-6 text-left leading-6 w-[90%]'>
 						You have{' '}
 						<span className='font-bold text-[1.1rem]'>
-							{outfitCount}
+							{outfitCount.toLocaleString()}
 						</span>
 						{'  '}
 						more looks awaiting you.
