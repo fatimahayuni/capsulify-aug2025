@@ -5,9 +5,15 @@ import ClothingItemCard from '@/app/(app-routes)/inventory/ClothingItemCard'
 import { useAuth } from '@clerk/nextjs'
 import CacheManager from '@/app/lib/CacheManager'
 import * as LoadingIcons from 'react-loading-icons'
+import { UserClothingVariantData } from '@/app/lib/database/userdata'
+
+// Type definitions
+interface FitByCategory {
+	[categoryId: string]: UserClothingVariantData[]
+}
 
 export default function InventoryPage() {
-	const [fit, setFit] = useState<any>({})
+	const [fit, setFit] = useState<FitByCategory>({})
 	const [isLoading, setIsLoading] = useState(true)
 	const [showSpinner, setShowSpinner] = useState(false)
 	const { userId: clerkId } = useAuth()
@@ -64,14 +70,14 @@ export default function InventoryPage() {
 				const currentUsersFit = await CacheManager.getUserClothingItems()
 
 				// Group items by category
-				const groupedByCategory = (currentUsersFit || []).reduce((acc: any, item: any) => {
-					const category = item.category_id
+				const groupedByCategory = (currentUsersFit || []).reduce((acc: FitByCategory, item: UserClothingVariantData) => {
+					const category = item.category_id.toString()
 					if (!acc[category]) {
 						acc[category] = []
 					}
 					acc[category].push(item)
 					return acc
-				}, {})
+				}, {} as FitByCategory)
 
 				console.log(groupedByCategory)
 				
