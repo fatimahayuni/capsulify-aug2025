@@ -8,9 +8,22 @@ class CacheManager {
 	private static instance: CacheManager
 	private readonly USERFIT_KEY = 'userFit'
 	private readonly USEROUTFITS_KEY = 'userOutfits'
-	private readonly CLOTHING_VARIANTS_KEY = 'clothingVariants'
+
+	private readonly CLOTHING_VARIANTS_KEY_PREFIX = 'clothingVariants'
+	private readonly CLOTHING_VARIANTS_KEY = 'clothingVariants_v2'
 
 	private constructor() {}
+
+	async cleanupOldVersions(prefix: string, newKey: string): Promise<void> {
+		const keysToRemove: string[] = []
+		for (let i = 0; i < localStorage.length; i++) {
+			const key = localStorage.key(i)
+			if (key?.startsWith(prefix) && key !== newKey) {
+				keysToRemove.push(key)
+			}
+		}
+		keysToRemove.forEach(key => localStorage.removeItem(key))
+	}
 
 	static getInstance(): CacheManager {
 		if (!CacheManager.instance) {
@@ -82,6 +95,8 @@ class CacheManager {
 	async getClothingVariants(): Promise<ClothingVariantData[]> {
 		// Check if clothing variants exist in localStorage first
 		try {
+			await this.cleanupOldVersions(this.CLOTHING_VARIANTS_KEY_PREFIX, this.CLOTHING_VARIANTS_KEY)
+			
 			const storedVariants = localStorage.getItem(this.CLOTHING_VARIANTS_KEY)
 			if (storedVariants) {
 				return JSON.parse(storedVariants)
