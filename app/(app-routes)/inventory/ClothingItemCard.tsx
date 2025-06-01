@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import CacheManager from '../../lib/CacheManager'
 import ClothingItemModal from './ClothingItemModal'
+import InfoModal from './InfoModal'
 
 type Props = {
 	item: {
@@ -17,6 +18,7 @@ type Props = {
 		clothing_variant_id: number
 		colour_type_id: number
 		name: string
+		info_text_id: string
 	}
 	category: string
 }
@@ -26,10 +28,12 @@ type Props = {
 const ClothingItemCard = (props: Props) => {
 	const { item } = props
 	const [isEditing, setIsEditing] = useState(false)
+	const [isInfoOpen, setIsInfoOpen] = useState(false)
 	const [currentImage, setCurrentImage] = useState(item.image_file_name)
 	const [currentName, setCurrentName] = useState(item.name)
 
 	const handleEdit = () => setIsEditing(true)
+	const handleInfo = () => setIsInfoOpen(true)
 
 	const handleSaveImage = (newImage: string) => {
 		// Changing the fit item invalidates the fit/outfits cache.
@@ -55,12 +59,13 @@ const ClothingItemCard = (props: Props) => {
 					<div className='flex gap-2 ml-auto mb-2 py-1'>
 						<img
 							src='/assets/icons/info.svg'
-							className='w-[16px] h-[16px] p-1 rounded-full bg-[#4a342727]'
+							className='w-[16px] h-[16px] p-1 rounded-full bg-[#4a342727] cursor-pointer'
+							onClick={handleInfo}
 						/>
 						{!['4', '5', '6'].includes(props.category) && (
 							<img
 								src='/assets/icons/edit-pencil.svg'
-								className='w-[16px] h-[16px] p-[3px] rounded-full bg-[#4a342727]'
+								className='w-[16px] h-[16px] p-[3px] rounded-full bg-[#4a342727] cursor-pointer'
 								onClick={handleEdit}
 							/>
 						)}
@@ -84,6 +89,12 @@ const ClothingItemCard = (props: Props) => {
 					item={item}
 					onSaveImage={handleSaveImage}
 					onSaveName={handleSaveName}
+				/>
+			)}
+			{isInfoOpen && (
+				<InfoModal
+					setIsInfoOpen={setIsInfoOpen}
+					infoTextId={item.info_text_id}
 				/>
 			)}
 		</>

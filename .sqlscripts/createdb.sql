@@ -340,7 +340,8 @@ CREATE TABLE clothing_variants (
   bottom_cut_id INTEGER,
   short_cut_id INTEGER,
   skirt_cut_id INTEGER,
-  image_file_name VARCHAR(255) NOT NULL
+  image_file_name VARCHAR(255) NOT NULL,
+  info_text_id VARCHAR(50),
 );
 
 SELECT setval(pg_get_serial_sequence('clothing_variants', 'id'), (SELECT MAX(id) FROM clothing_variants));

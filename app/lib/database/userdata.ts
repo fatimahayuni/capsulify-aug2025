@@ -17,6 +17,7 @@ export interface UserClothingVariantData {
 	skirt_cut_id: number | null;
 	image_file_name: string;
 	clothing_variant_id: number;
+	info_text_id: string;
   }
 
 // getUserClothingVariants returns all the clothing variants for a user to be used in outfit generation.
@@ -48,7 +49,8 @@ export async function getUserClothingVariants(): Promise<
 		    cv.short_cut_id,
 		    cv.skirt_cut_id,
         	cv.image_file_name,
-		    cv.id as clothing_variant_id
+		    cv.id as clothing_variant_id,
+		    cv.info_text_id
         FROM user_clothing_variants ucv
         JOIN clothing_variants cv ON ucv.clothing_variant_id = cv.id
         JOIN clothing_items ci ON cv.clothing_item_id = ci.id
