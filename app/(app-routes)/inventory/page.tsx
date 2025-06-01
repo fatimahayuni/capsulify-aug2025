@@ -78,9 +78,7 @@ export default function InventoryPage() {
 					acc[category].push(item)
 					return acc
 				}, {} as FitByCategory)
-
-				console.log(groupedByCategory)
-				
+			
 				setFit(groupedByCategory)
 			} finally {
 				setIsLoading(false)
