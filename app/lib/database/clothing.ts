@@ -1,19 +1,20 @@
 import pool from './db'
 
 export interface ClothingVariantData {
-	id: number;
+	  id: number;
     image_file_name: string;
     name: string;
     top_sleeve_type_id: number | null;
     blouse_sleeve_type_id: number | null;
     neckline_id: number | null;
     dress_cut_id: number | null;
-	bottom_cut_id: number | null;
-	short_cut_id: number | null;
+    bottom_cut_id: number | null;
+    short_cut_id: number | null;
     skirt_cut_id: number | null;
     subcategory_id: number;
     colour_type_id: number;
-	category_id: number;
+    category_id: number;
+    info_text_id: string;
 }
 
 export const getClothingVariantsDB = async (): Promise<ClothingVariantData[]> => {
@@ -36,7 +37,8 @@ export const getClothingVariantsDB = async (): Promise<ClothingVariantData[]> =>
             cv.skirt_cut_id,
             ci.subcategory_id,
             ci.colour_type_id,
-            ci.category_id
+            ci.category_id,
+            cv.info_text_id
       FROM
         clothing_variants cv
       JOIN clothing_items ci ON cv.clothing_item_id = ci.id

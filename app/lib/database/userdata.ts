@@ -36,9 +36,9 @@ export async function getUserClothingVariants(): Promise<
 
 		const getClothingItemsQuery = `
         SELECT 
-        ucv.id AS id,
-        ci.category_id,
-        ci.subcategory_id,
+			ucv.id AS id,
+			ci.category_id,
+			ci.subcategory_id,
 		    ci.colour_type_id,
         	cv.name,
 		    cv.top_sleeve_type_id,

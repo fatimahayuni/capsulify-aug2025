@@ -6,7 +6,9 @@ import { ClothingVariantData } from './database/clothing'
 
 class CacheManager {
 	private static instance: CacheManager
-	private readonly USERFIT_KEY = 'userFit'
+	private readonly USERFIT_KEY_PREFIX = 'userFit'
+	private readonly USERFIT_KEY = 'userFit_v2'
+
 	private readonly USEROUTFITS_KEY = 'userOutfits'
 
 	private readonly CLOTHING_VARIANTS_KEY_PREFIX = 'clothingVariants'
@@ -65,6 +67,8 @@ class CacheManager {
 	async getUserClothingItems(): Promise<UserClothingVariantData[] | null> {
 		// Check if clothing items exist in localStorage first
 		try {
+			await this.cleanupOldVersions(this.USERFIT_KEY_PREFIX, this.USERFIT_KEY)
+
 			const storedItems = localStorage.getItem(this.USERFIT_KEY)
 			if (storedItems) {
 				return JSON.parse(storedItems)
@@ -96,7 +100,7 @@ class CacheManager {
 		// Check if clothing variants exist in localStorage first
 		try {
 			await this.cleanupOldVersions(this.CLOTHING_VARIANTS_KEY_PREFIX, this.CLOTHING_VARIANTS_KEY)
-			
+
 			const storedVariants = localStorage.getItem(this.CLOTHING_VARIANTS_KEY)
 			if (storedVariants) {
 				return JSON.parse(storedVariants)
