@@ -28,8 +28,14 @@ function InfoModal({ setIsInfoOpen, infoTextId }: InfoModalProps) {
 	}, [infoTextId])
 
 	return (
-		<div className='fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 w-full h-full'>
-			<div className='bg-primary w-full max-w-2xl max-h-[80vh] rounded-lg shadow-lg relative overflow-y-auto'>
+		<div 
+			className='fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 w-full h-full'
+			onClick={() => setIsInfoOpen(false)}
+		>
+			<div 
+				className='bg-primary w-full max-w-2xl max-h-[80vh] rounded-lg shadow-lg relative overflow-y-auto'
+				onClick={(e) => e.stopPropagation()}
+			>
 				<button
 					onClick={() => setIsInfoOpen(false)}
 					className='absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-amber-950 rounded-full hover:scale-120 transition-transform duration-200 cursor-pointer'
