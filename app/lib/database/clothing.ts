@@ -1,5 +1,4 @@
 import pool from './db'
-import { getUserId } from './getUserId'
 
 export interface ClothingVariantData {
 	id: number;

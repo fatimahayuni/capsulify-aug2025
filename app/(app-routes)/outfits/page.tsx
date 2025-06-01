@@ -6,6 +6,7 @@ import OutfitCard from './components/OutfitCard'
 import Pager from './components/Pager'
 import Filter from './components/Filter'
 import CacheManager from '@/app/lib/CacheManager'
+import { getUserOutfitFavouriteKeys } from '@/app/lib/database/outfit'
 import * as LoadingIcons from 'react-loading-icons'
 
 export default function OutfitsPage() {
@@ -15,24 +16,33 @@ export default function OutfitsPage() {
 	const [filterItems, setFilterItems] = useState<OutfitItem[]>([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [showSpinner, setShowSpinner] = useState(false)
+	const [favoriteKeys, setFavoriteKeys] = useState<Set<string>>(new Set())
 	const itemsPerPage = 18
 	const contentRef = useRef<HTMLDivElement>(null)
 
 	// Page load event.
 	useEffect(() => {
-		const fetchOutfits = async () => {
+		const fetchData = async () => {
 			setIsLoading(true)
 			try {
-				const data = await CacheManager.getUserOutfits()
-				if (data) {
-					setOutfits(data)
-					setFilteredOutfits(data)
+				// Load outfits and favorite keys in parallel
+				const [outfitsData, favoriteKeysData] = await Promise.all([
+					CacheManager.getUserOutfits(),
+					getUserOutfitFavouriteKeys()
+				])
+				
+				if (outfitsData) {
+					setOutfits(outfitsData)
+					setFilteredOutfits(outfitsData)
 				}
+				
+				// Convert array to Set for faster lookup
+				setFavoriteKeys(new Set(favoriteKeysData))
 			} finally {
 				setIsLoading(false)
 			}
 		}
-		fetchOutfits()
+		fetchData()
 	}, [])
 
 	useEffect(() => {
@@ -101,6 +111,19 @@ export default function OutfitsPage() {
 		}
 	}
 
+	// Handle favorite state changes from OutfitCard
+	const handleFavoriteChange = (outfitKey: string, isFavorite: boolean) => {
+		setFavoriteKeys(prev => {
+			const newSet = new Set(prev)
+			if (isFavorite) {
+				newSet.add(outfitKey)
+			} else {
+				newSet.delete(outfitKey)
+			}
+			return newSet
+		})
+	}
+
 	if (isLoading && showSpinner) {
 		return (
 			<div className='flex flex-col items-center justify-center min-h-[60vh] w-full'>
@@ -140,7 +163,11 @@ export default function OutfitsPage() {
 								key={startIndex + outfitIndex}
 								className='flex justify-center'
 							>
-								<OutfitCard outfit={outfit} />
+								<OutfitCard 
+									outfit={outfit} 
+									favoriteKeys={favoriteKeys}
+									onFavoriteChange={handleFavoriteChange}
+								/>
 							</div>
 						)
 					)}

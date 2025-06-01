@@ -470,7 +470,8 @@ CREATE TABLE user_saved_outfits (
   dress_variant_id INTEGER,
   layer_variant_id INTEGER,
   bag_variant_id INTEGER,
-  shoe_variant_id INTEGER);
+  shoe_variant_id INTEGER,
+  outfit_key VARCHAR(100) NOT NULL);
 
-CREATE INDEX ON user_saved_outfits (user_id);
+CREATE INDEX ON user_saved_outfits (user_id, outfit_key);
 

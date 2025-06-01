@@ -1,16 +1,109 @@
 import { SubCategory } from '@/app/constants/SubCategory'
 import { Category } from '@/app/constants/Category'
 import { Outfit, OutfitGroupType, OutfitItem } from '../types'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { FaHeart, FaRegHeart } from 'react-icons/fa'
+import { saveOutfitFavourite, deleteOutfitFavourite, OutfitFavourite } from '@/app/lib/database/outfit'
 
 type Props = {
 	outfit: Outfit
+	favoriteKeys: Set<string>
+	onFavoriteChange: (outfitKey: string, isFavorite: boolean) => void
 }
 
 const OutfitCard = (props: Props) => {
-	const { outfit } = props
+	const { outfit, favoriteKeys, onFavoriteChange } = props
 	const [isFavorite, setIsFavorite] = useState(false)
+	const isInitialized = useRef(false)
+	const isProcessing = useRef(false)
+
+	// Helper function to convert Outfit to OutfitFavourite format
+	const convertToOutfitFavourite = (outfit: Outfit): OutfitFavourite => {
+		const outfitFav: OutfitFavourite = {
+			top_variant_id: null,
+			bottom_variant_id: null,
+			dress_variant_id: null,
+			layer_variant_id: null,
+			bag_variant_id: null,
+			shoe_variant_id: null,
+		}
+
+		outfit.items.forEach(item => {
+			switch (item.category_id) {
+				case Category.Tops:
+					outfitFav.top_variant_id = item.clothing_variant_id
+					break
+				case Category.Bottoms:
+					outfitFav.bottom_variant_id = item.clothing_variant_id
+					break
+				case Category.Dresses:
+					outfitFav.dress_variant_id = item.clothing_variant_id
+					break
+				case Category.Layers:
+					outfitFav.layer_variant_id = item.clothing_variant_id
+					break
+				case Category.Bags:
+					outfitFav.bag_variant_id = item.clothing_variant_id
+					break
+				case Category.Shoes:
+					outfitFav.shoe_variant_id = item.clothing_variant_id
+					break
+			}
+		})
+
+		return outfitFav
+	}
+
+	// Helper function to generate outfit key
+	const generateOutfitKey = (outfitFav: OutfitFavourite): string => {
+		return [
+			outfitFav.top_variant_id ?? 0,
+			outfitFav.bottom_variant_id ?? 0,
+			outfitFav.dress_variant_id ?? 0,
+			outfitFav.layer_variant_id ?? 0,
+			outfitFav.bag_variant_id ?? 0,
+			outfitFav.shoe_variant_id ?? 0
+		].join('-')
+	}
+
+	// Initialize favorite state only once based on favoriteKeys
+	useEffect(() => {
+		if (isInitialized.current) return
+		
+		const outfitFav = convertToOutfitFavourite(outfit)
+		const outfitKey = generateOutfitKey(outfitFav)
+		setIsFavorite(favoriteKeys.has(outfitKey))
+		isInitialized.current = true
+	}, [favoriteKeys, outfit])
+
+	// Handle favorite toggle
+	const handleFavoriteToggle = useCallback(async () => {
+		if (isProcessing.current) return
+		
+		isProcessing.current = true
+		const newFavoriteState = !isFavorite
+		setIsFavorite(newFavoriteState)
+
+		try {
+			const outfitFav = convertToOutfitFavourite(outfit)
+			const outfitKey = generateOutfitKey(outfitFav)
+
+			if (newFavoriteState) {
+				await saveOutfitFavourite(outfitFav)
+			} else {
+				await deleteOutfitFavourite(outfitKey)
+			}
+
+			// Notify parent component of the change
+			onFavoriteChange(outfitKey, newFavoriteState)
+		} catch (error) {
+			console.error('Error updating favorite:', error)
+			// Revert state on error
+			setIsFavorite(!newFavoriteState)
+		} finally {
+			isProcessing.current = false
+		}
+	}, [isFavorite, outfit, onFavoriteChange])
 
 	// Group type flags.
 	const isTopBottomLayerBagShoes =
@@ -169,7 +262,7 @@ const OutfitCard = (props: Props) => {
 			<button
 				aria-label='Favorite outfit'
 				className='absolute top-2 right-2 text-accent hover:scale-110 transition-all text-md rounded-full p-1 cursor-pointer z-[10]'
-				onClick={() => setIsFavorite((fav) => !fav)}
+				onClick={handleFavoriteToggle}
 			>
 				{isFavorite ? <FaHeart /> : <FaRegHeart />}
 			</button>
