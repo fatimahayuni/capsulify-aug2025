@@ -28,14 +28,14 @@ export default function OutfitsPage() {
 				// Load outfits and favorite keys in parallel
 				const [outfitsData, favoriteKeysData] = await Promise.all([
 					CacheManager.getUserOutfits(),
-					getUserOutfitFavouriteKeys()
+					getUserOutfitFavouriteKeys(),
 				])
-				
+
 				if (outfitsData) {
 					setOutfits(outfitsData)
 					setFilteredOutfits(outfitsData)
 				}
-				
+
 				// Convert array to Set for faster lookup
 				setFavoriteKeys(new Set(favoriteKeysData))
 			} finally {
@@ -113,7 +113,7 @@ export default function OutfitsPage() {
 
 	// Handle favorite state changes from OutfitCard
 	const handleFavoriteChange = (outfitKey: string, isFavorite: boolean) => {
-		setFavoriteKeys(prev => {
+		setFavoriteKeys((prev) => {
 			const newSet = new Set(prev)
 			if (isFavorite) {
 				newSet.add(outfitKey)
@@ -139,7 +139,7 @@ export default function OutfitsPage() {
 		<div className='flex flex-col items-center w-full max-w-6xl mx-auto relative'>
 			{/* Top Pager */}
 			{totalPages > 1 && (
-				<div className='w-full bg-primary sticky top-0 z-20 pt-2'>
+				<div className='w-full bg-primary sticky top-0 z-20'>
 					<Pager
 						currentPage={currentPage}
 						totalPages={totalPages}
@@ -154,7 +154,7 @@ export default function OutfitsPage() {
 			{/* Content area */}
 			<div
 				ref={contentRef}
-				className='flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full px-4 max-sm:px-4 mt-4'
+				className='flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full px-4 max-sm:px-4 mt-6'
 			>
 				<div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full max-w-[1600px] mx-auto'>
 					{currentOutfits.map(
@@ -163,8 +163,8 @@ export default function OutfitsPage() {
 								key={startIndex + outfitIndex}
 								className='flex justify-center'
 							>
-								<OutfitCard 
-									outfit={outfit} 
+								<OutfitCard
+									outfit={outfit}
 									favoriteKeys={favoriteKeys}
 									onFavoriteChange={handleFavoriteChange}
 								/>

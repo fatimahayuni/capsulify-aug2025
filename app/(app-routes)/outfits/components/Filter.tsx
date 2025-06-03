@@ -129,7 +129,7 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 	return (
 		<>
 			{/* Filter Bar */}
-			<div className='w-full sticky top-13 z-20 bg-primary px-3 pt-2 pb-1'>
+			<div className='w-full sticky top-13 z-20 bg-primary px-3 pt-2 pb-1 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)]'>
 				<div className='flex justify-center items-center max-w-xl py-2 px-2 mx-auto'>
 					<div className='flex items-center hover:opacity-70 transition-opacity duration-200 mx-4'>
 						{/* Add Button */}
@@ -148,11 +148,19 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 					</div>
 
 					{/* Selected Items */}
-					<div className='flex items-center gap-2 flex-1 overflow-x-auto px-2'>
+					<div className='flex items-center gap-3 flex-1 overflow-x-auto px-2'>
+						{selectedItems.length > 0 && (
+							<button
+								onClick={() => setSelectedItems([])}
+								className='text-[0.7rem] text-accent hover:opacity-60 transition-opacity duration-200'
+							>
+								Clear All
+							</button>
+						)}
 						{selectedItems.map((item) => (
 							<div
 								key={item.clothing_variant_id}
-								className='relative flex-shrink-0 w-10 h-10 rounded-lg overflow-hidden cursor-pointer hover:border-gray-300 transition-colors'
+								className='relative flex-shrink-0 w-8 h-8 rounded-lg overflow-hidden cursor-pointer hover:border-gray-300 transition-colors'
 								onClick={() =>
 									removeItemFromFilter(
 										item.clothing_variant_id
@@ -187,12 +195,22 @@ const Filter = ({ onFilterChange }: FilterProps) => {
 							<h2 className='text-[0.9rem] font-semibold text-accent'>
 								Filter By Category
 							</h2>
-							<button
-								onClick={() => setIsModalOpen(false)}
-								className='flex items-center justify-center w-8 h-8 hover:opacity-60 transition-opacity duration-200 text-[0.7rem] bg-accent uppercase text-white rounded-sm px-8 py-2 cursor-pointer'
-							>
-								Apply
-							</button>
+							<div className='flex items-center'>
+								{selectedItems.length > 0 && (
+									<button
+										onClick={() => setSelectedItems([])}
+										className='text-[0.8rem] text-accent font-semibold hover:opacity-60 transition-opacity duration-200 mx-5'
+									>
+										Clear All
+									</button>
+								)}
+								<button
+									onClick={() => setIsModalOpen(false)}
+									className='flex items-center justify-center w-8 h-8 hover:opacity-60 transition-opacity duration-200 text-[0.7rem] bg-accent uppercase text-white rounded-sm px-8 py-2 cursor-pointer'
+								>
+									Apply
+								</button>
+							</div>
 						</div>
 
 						{/* Modal Body */}
