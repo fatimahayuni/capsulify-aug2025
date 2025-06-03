@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import Link from 'next/link'
+import Navbar from '@/app/components/Navbar'
 
 const outfitImages = [
 	'/assets/images/clothing-variations/rectangle/tops/black-satin-top.png',
@@ -25,13 +26,16 @@ export default function HomePage() {
 
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
-			const outfits = JSON.parse(localStorage.getItem('userOutfits') || '[]')
+			const outfits = JSON.parse(
+				localStorage.getItem('userOutfits') || '[]'
+			)
 			setOutfitCount(outfits.length)
 		}
 	}, [])
 
 	return (
 		<div className='bg-primary flex flex-col relative'>
+			<Navbar />
 			<main className='flex-1 flex flex-col items-center px-4 pt-4 pb-32'>
 				<div className='w-full max-w-xs mx-auto text-center mt-2'>
 					<p className='text-[1rem] text-accent font-normal mb-1 text-left'>

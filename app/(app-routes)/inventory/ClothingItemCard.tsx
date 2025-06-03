@@ -23,8 +23,6 @@ type Props = {
 	category: string
 }
 
-
-
 const ClothingItemCard = (props: Props) => {
 	const { item } = props
 	const [isEditing, setIsEditing] = useState(false)
@@ -100,7 +98,5 @@ const ClothingItemCard = (props: Props) => {
 		</>
 	)
 }
-
-
 
 export default ClothingItemCard

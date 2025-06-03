@@ -67,18 +67,22 @@ export default function InventoryPage() {
 			if (!clerkId) return
 			setIsLoading(true)
 			try {
-				const currentUsersFit = await CacheManager.getUserClothingItems()
+				const currentUsersFit =
+					await CacheManager.getUserClothingItems()
 
 				// Group items by category
-				const groupedByCategory = (currentUsersFit || []).reduce((acc: FitByCategory, item: UserClothingVariantData) => {
-					const category = item.category_id.toString()
-					if (!acc[category]) {
-						acc[category] = []
-					}
-					acc[category].push(item)
-					return acc
-				}, {} as FitByCategory)
-			
+				const groupedByCategory = (currentUsersFit || []).reduce(
+					(acc: FitByCategory, item: UserClothingVariantData) => {
+						const category = item.category_id.toString()
+						if (!acc[category]) {
+							acc[category] = []
+						}
+						acc[category].push(item)
+						return acc
+					},
+					{} as FitByCategory
+				)
+
 				setFit(groupedByCategory)
 			} finally {
 				setIsLoading(false)
@@ -98,7 +102,7 @@ export default function InventoryPage() {
 	if (isLoading && showSpinner) {
 		return (
 			<div className='flex flex-col items-center justify-center min-h-[60vh] w-full'>
-				<LoadingIcons.Oval stroke='#B9805A' height={60} width={60} />
+				<LoadingIcons.Oval stroke='#4a3427' height={60} width={60} />
 				<span className='text-accent text-sm font-medium mt-4 animate-pulse'>
 					Loading your wardrobe...
 				</span>
@@ -107,18 +111,18 @@ export default function InventoryPage() {
 	}
 
 	return (
-		<div className='flex flex-col gap-6 items-center w-full max-w-6xl mx-auto mt-4 px-4 max-sm:px-2 relative'>
-			<div className='flex flex-col gap-4 items-center w-full max-w-6xl mx-auto sticky top-0 z-10 bg-primary py-4'>
+		<div className='flex flex-col gap-6 items-center w-full max-w-6xl mx-auto relative'>
+			<div className='flex flex-col gap-4 items-center w-full max-w-6xl mx-auto sticky top-0 z-10 bg-primary py-6 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)] md:rounded-b-xl lg:rounded-b-xl'>
 				{/* Scroll Buttons */}
 				<div className='flex gap-2 justify-start sm:justify-center text-[12px] overflow-x-auto w-full scrollbar-hide px-2'>
 					{Object.entries(CATEGORIES).map(([key, value]) => (
 						<button
 							key={key}
 							onClick={() => scrollToSection(key)}
-							className={`flex-shrink-0 px-4 py-2 rounded-lg transition ${
+							className={`flex-shrink-0 px-4 py-1.5 rounded-lg transition ${
 								activeSection === key
 									? 'bg-accent text-white'
-									: 'bg-primary text-[#4b3621] border border-[#d3cfc9]'
+									: 'bg-primary text-[#4b3621] border border-accent'
 							}`}
 						>
 							{value}
@@ -137,7 +141,11 @@ export default function InventoryPage() {
 							ref={(el) => {
 								sectionRefs.current[key] = el
 							}}
-							className='w-full scroll-mt-[75px] '
+							className={`w-full  ${
+								value === 'Tops'
+									? 'scroll-mt-[10rem]'
+									: 'scroll-mt-[6rem]'
+							}`}
 							data-key={key}
 						>
 							<div className='flex flex-wrap justify-center space-x-2 space-y-2 w-full text-sm mb-8'>
