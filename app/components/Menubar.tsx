@@ -59,46 +59,48 @@ const Menubar = () => {
 
 	return (
 		<div>
-			<div className='fixed bottom-0 left-1/2 -translate-x-1/2 z-20 bg-[#f7efe7] px-2 py-1.5 flex items-center w-screen max-w-md justify-between sm:w-[95vw] shadow-[0_-8px_24px_-4px_rgba(0,0,0,0.12)] md:rounded-t-xl lg:rounded-t-xl'>
-				{menubarItems.map((item) => (
+			<div className='fixed bottom-0 left-0 w-full z-50 bg-primary pb-[env(safe-area-inset-bottom)]'>
+				<div className='fixed bottom-0 left-1/2 -translate-x-1/2 z-20 bg-[#f7efe7] px-2 py-1.5 flex items-center w-screen max-w-md justify-between sm:w-[95vw] shadow-[0_-8px_24px_-4px_rgba(0,0,0,0.12)] md:rounded-t-xl lg:rounded-t-xl'>
+					{menubarItems.map((item) => (
+						<div
+							key={item.name}
+							className={`flex flex-col items-center justify-center cursor-pointer px-3 py-1 transition-all ${
+								pathname === item.pathname
+									? 'bg-[#e6dbd0] rounded-full'
+									: ''
+							}`}
+							onClick={() => {
+								if (item.pathname) {
+									router.push(item.pathname)
+									setMenuOpen(false)
+								} else if (item.onClick) {
+									item.onClick()
+								}
+							}}
+						>
+							<div className='flex items-center justify-center w-10 h-9'>
+								<img
+									src={item.icon as string}
+									className={`w-6 h-6 ${item.icon === 'assets/icons/fit-guide.svg' ? 'w-7 h-7' : ''}`}
+									style={{ filter: 'var(--accent-filter)' }}
+								/>
+							</div>
+						</div>
+					))}
 					<div
-						key={item.name}
-						className={`flex flex-col items-center justify-center cursor-pointer px-3 py-1 transition-all ${
-							pathname === item.pathname
-								? 'bg-[#e6dbd0] rounded-full'
-								: ''
+						className={`absolute top-[-1.5rem] right-[1.6rem] shadow-2xl w-[90px]  z-50 rounded-md font-semibold border-secondary text-accent text-[12px] bg-primary ${
+							menuOpen
+								? 'opacity-100'
+								: 'opacity-0 pointer-events-none'
 						}`}
 						onClick={() => {
-							if (item.pathname) {
-								router.push(item.pathname)
-								setMenuOpen(false)
-							} else if (item.onClick) {
-								item.onClick()
-							}
+							setIsFeedbackOpen(true)
+							setMenuOpen(false)
 						}}
 					>
-						<div className='flex items-center justify-center w-10 h-9'>
-							<img
-								src={item.icon as string}
-								className={`w-6 h-6 ${item.icon === 'assets/icons/fit-guide.svg' ? 'w-7 h-7' : ''}`}
-								style={{ filter: 'var(--accent-filter)' }}
-							/>
+						<div className='bg-secondary text-[0.875rem] py-1 rounded-md text-center'>
+							Feedback
 						</div>
-					</div>
-				))}
-				<div
-					className={`absolute top-[-1.5rem] right-[1.6rem] shadow-2xl w-[90px]  z-50 rounded-md font-semibold border-secondary text-accent text-[12px] bg-primary ${
-						menuOpen
-							? 'opacity-100'
-							: 'opacity-0 pointer-events-none'
-					}`}
-					onClick={() => {
-						setIsFeedbackOpen(true)
-						setMenuOpen(false)
-					}}
-				>
-					<div className='bg-secondary text-[0.875rem] py-1 rounded-md text-center'>
-						Feedback
 					</div>
 				</div>
 			</div>
