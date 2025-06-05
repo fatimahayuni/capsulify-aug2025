@@ -1,16 +1,26 @@
 import React from 'react'
 import { MONTHLY_OCCASIONS } from '../constants'
 
+type Occasions = {
+	[key: string]: number
+}
+
 export default function MonthlyOccasions({
 	occasions,
 	setOccasions,
 	handleNext,
-}: any) {
-	// Page is now optional: Continue is always enabled
-	const canContinue = true
+}: {
+	occasions: Occasions
+	setOccasions: (
+		occasions: Occasions | ((prev: Occasions) => Occasions)
+	) => void
+	handleNext: () => void
+}) {
+	// Require at least one occasion to have a value of 1 or more
+	const canContinue = Object.values(occasions).some((value) => value >= 1)
 
 	const handleChange = (key: string, delta: number) => {
-		setOccasions((prev: any) => {
+		setOccasions((prev: Occasions) => {
 			const next = Math.max(0, (prev[key] || 0) + delta)
 			return { ...prev, [key]: next }
 		})
@@ -63,7 +73,8 @@ export default function MonthlyOccasions({
 					))}
 				</div>
 				<button
-					className={`w-full bg-accent text-white font-semibold py-3 mb-8 rounded-md text-[0.875rem] shadow-md transition-all duration-200 hover:opacity-90 cursor-pointer`}
+					className={`w-full bg-accent text-white font-semibold py-3 mb-8 rounded-md text-[0.875rem] shadow-md transition-all duration-200 ${!canContinue ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90 cursor-pointer'}`}
+					disabled={!canContinue}
 					onClick={handleNext}
 				>
 					Continue

@@ -9,7 +9,7 @@ export default function UserInfo({
 	handleNext,
 }: any) {
 	const [touched, setTouched] = useState(false)
-	const canContinue = !!ageGroup
+	const canContinue = !!ageGroup && !!location
 
 	return (
 		<div className='flex flex-col items-center w-full min-h-[70vh] px-4 pt-8'>
