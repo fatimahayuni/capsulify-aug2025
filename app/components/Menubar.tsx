@@ -59,7 +59,7 @@ const Menubar = () => {
 
 	return (
 		<div>
-			<div className='fixed bottom-0 left-0 w-full z-50 bg-primary pb-[env(safe-area-inset-bottom)]'>
+			<div className='fixed bottom-0 left-0 w-full z-30 bg-primary pb-[env(safe-area-inset-bottom)]'>
 				<div className='fixed bottom-0 left-1/2 -translate-x-1/2 z-20 bg-[#f7efe7] px-2 py-1.5 flex items-center w-screen max-w-md justify-between sm:w-[95vw] shadow-[0_-8px_24px_-4px_rgba(0,0,0,0.12)] md:rounded-t-xl lg:rounded-t-xl'>
 					{menubarItems.map((item) => (
 						<div

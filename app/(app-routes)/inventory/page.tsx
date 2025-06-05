@@ -6,6 +6,7 @@ import { useAuth } from '@clerk/nextjs'
 import CacheManager from '@/app/lib/CacheManager'
 import * as LoadingIcons from 'react-loading-icons'
 import { UserClothingVariantData } from '@/app/lib/database/userdata'
+import FitGuideTooltip from './FitGuideTooltip'
 
 // Type definitions
 interface FitByCategory {
@@ -16,6 +17,7 @@ export default function InventoryPage() {
 	const [fit, setFit] = useState<FitByCategory>({})
 	const [isLoading, setIsLoading] = useState(true)
 	const [showSpinner, setShowSpinner] = useState(false)
+	const [showGuide, setShowGuide] = useState(false)
 	const { userId: clerkId } = useAuth()
 
 	const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
@@ -69,6 +71,8 @@ export default function InventoryPage() {
 			try {
 				const currentUsersFit =
 					await CacheManager.getUserClothingItems()
+				const isFirstVisit =
+					localStorage.getItem('hasVisitedInventory') !== 'true'
 
 				// Group items by category
 				const groupedByCategory = (currentUsersFit || []).reduce(
@@ -84,6 +88,12 @@ export default function InventoryPage() {
 				)
 
 				setFit(groupedByCategory)
+
+				// Show guide modal if this is the first visit after onboarding
+				if (isFirstVisit) {
+					setShowGuide(true)
+					localStorage.setItem('hasVisitedInventory', 'true')
+				}
 			} finally {
 				setIsLoading(false)
 			}
@@ -111,57 +121,62 @@ export default function InventoryPage() {
 	}
 
 	return (
-		<div className='flex flex-col gap-6 items-center w-full max-w-6xl mx-auto relative'>
-			<div className='flex flex-col gap-4 items-center w-full max-w-6xl mx-auto sticky top-0 z-10 bg-primary py-6 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)] md:rounded-b-xl lg:rounded-b-xl'>
-				{/* Scroll Buttons */}
-				<div className='flex gap-2 justify-start sm:justify-center text-[12px] overflow-x-auto w-full scrollbar-hide px-2'>
-					{Object.entries(CATEGORIES).map(([key, value]) => (
-						<button
-							key={key}
-							onClick={() => scrollToSection(key)}
-							className={`flex-shrink-0 px-4 py-1.5 rounded-lg transition ${
-								activeSection === key
-									? 'bg-accent text-white'
-									: 'bg-primary text-[#4b3621] border border-accent'
-							}`}
-						>
-							{value}
-						</button>
-					))}
+		<>
+			{showGuide && (
+				<FitGuideTooltip onClose={() => setShowGuide(false)} />
+			)}
+			<div className='flex flex-col gap-6 items-center w-full max-w-6xl mx-auto relative'>
+				<div className='flex flex-col gap-4 items-center w-full max-w-6xl mx-auto sticky top-0 z-10 bg-primary py-6 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)] md:rounded-b-xl lg:rounded-b-xl'>
+					{/* Scroll Buttons */}
+					<div className='flex gap-2 justify-start sm:justify-center text-[12px] overflow-x-auto w-full scrollbar-hide px-2'>
+						{Object.entries(CATEGORIES).map(([key, value]) => (
+							<button
+								key={key}
+								onClick={() => scrollToSection(key)}
+								className={`flex-shrink-0 px-4 py-1.5 rounded-lg transition ${
+									activeSection === key
+										? 'bg-accent text-white'
+										: 'bg-primary text-[#4b3621] border border-accent'
+								}`}
+							>
+								{value}
+							</button>
+						))}
+					</div>
+				</div>
+
+				{/* Sections */}
+				<div className='flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full'>
+					{Object.entries(CATEGORIES).map(([key, value]) => {
+						const items = fit[key] || []
+						return (
+							<div
+								key={key}
+								ref={(el) => {
+									sectionRefs.current[key] = el
+								}}
+								className={`w-full  ${
+									value === 'Tops'
+										? 'scroll-mt-[10rem]'
+										: 'scroll-mt-[6rem]'
+								}`}
+								data-key={key}
+							>
+								<div className='flex flex-wrap justify-center space-x-2 space-y-2 w-full text-sm mb-8'>
+									{items.map((item: any) => (
+										<ClothingItemCard
+											key={item.id}
+											item={item}
+											category={key}
+										/>
+									))}
+								</div>
+							</div>
+						)
+					})}
+					<div className='h-[10rem] w-full'></div>
 				</div>
 			</div>
-
-			{/* Sections */}
-			<div className='flex flex-col gap-8 overflow-y-scroll scrollbar-hide w-full'>
-				{Object.entries(CATEGORIES).map(([key, value]) => {
-					const items = fit[key] || []
-					return (
-						<div
-							key={key}
-							ref={(el) => {
-								sectionRefs.current[key] = el
-							}}
-							className={`w-full  ${
-								value === 'Tops'
-									? 'scroll-mt-[10rem]'
-									: 'scroll-mt-[6rem]'
-							}`}
-							data-key={key}
-						>
-							<div className='flex flex-wrap justify-center space-x-2 space-y-2 w-full text-sm mb-8'>
-								{items.map((item: any) => (
-									<ClothingItemCard
-										key={item.id}
-										item={item}
-										category={key}
-									/>
-								))}
-							</div>
-						</div>
-					)
-				})}
-				<div className='h-[10rem] w-full'></div>
-			</div>
-		</div>
+		</>
 	)
 }

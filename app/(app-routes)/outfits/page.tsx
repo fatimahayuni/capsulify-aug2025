@@ -138,13 +138,17 @@ export default function OutfitsPage() {
 	return (
 		<div className='flex flex-col items-center w-full max-w-6xl mx-auto relative'>
 			{/* Top Pager */}
-			{totalPages > 1 && (
+			{totalPages > 1 ? (
 				<div className='w-full bg-primary sticky top-0 z-20'>
 					<Pager
 						currentPage={currentPage}
 						totalPages={totalPages}
 						onPageChange={handlePageChange}
 					/>
+				</div>
+			) : (
+				<div className='w-full bg-primary sticky top-0 z-20'>
+					<div className='h-[3rem]'></div>
 				</div>
 			)}
 
