@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ClerkProvider, SignedIn, UserButton } from '@clerk/nextjs'
-import Navbar from './components/Navbar'
+import { ClerkProvider } from '@clerk/nextjs'
+import ThemeIconUpdater from './themeUpdater'
 
 const inter = Inter({
 	variable: '--font-inter',
@@ -12,6 +12,9 @@ const inter = Inter({
 export const metadata: Metadata = {
 	title: 'Capsulify',
 	description: 'Capsule Wardrobe',
+	icons: {
+		icon: '/assets/images/logo/logo.svg',
+	},
 }
 
 export default function RootLayout({
@@ -21,7 +24,8 @@ export default function RootLayout({
 }>) {
 	return (
 		<ClerkProvider>
-			<html lang='en'>
+			<html lang='en' className='dark'>
+				<ThemeIconUpdater />
 				<body>{children}</body>
 			</html>
 		</ClerkProvider>
