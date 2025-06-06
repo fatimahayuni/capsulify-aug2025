@@ -69,7 +69,7 @@ export default function FitGuideTooltip({ onClose }: FitGuideTooltipProps) {
 			<div className='fixed inset-0 bg-black/30 z-40' />
 			<div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 flex flex-col items-center w-full max-w-xs sm:max-w-sm'>
 				<div className='bg-primary text-accent rounded-lg shadow-xl px-5 py-6 w-full min-h-[100px] flex flex-col justify-between relative'>
-					<div className='text-[0.85rem] text-primary font-medium mb-2 min-h-[60px] flex  flex-col items-center'>
+					<div className='text-[0.85rem] text-accent font-medium mb-2 min-h-[60px] flex  flex-col items-center'>
 						{steps[step].text}
 					</div>
 					<div className='flex items-center justify-between w-full mt-2'>
