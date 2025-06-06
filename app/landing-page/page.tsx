@@ -43,7 +43,7 @@ function FAQItem({ question, answer, open, onClick }: FAQItemProps) {
 	return (
 		<div className='pb-2'>
 			<button
-				className='flex items-center w-full text-left text-accent font-inter text-[0.9rem] font-medium focus:outline-none py-2'
+				className='flex items-center w-full text-left text-accent font-inter text-[1rem] font-medium focus:outline-none py-2'
 				onClick={onClick}
 				aria-expanded={open}
 				type='button'
@@ -83,7 +83,7 @@ function FAQItem({ question, answer, open, onClick }: FAQItemProps) {
 				</span>
 			</button>
 			{open && (
-				<div className='pl-2 pr-2 pb-2 text-accent/90 text-[0.8rem] animate-fade-in leading-6'>
+				<div className='pl-2 pr-2 pb-2 text-accent/90 text-[0.95rem] animate-fade-in leading-6'>
 					{answer}
 				</div>
 			)}
@@ -135,11 +135,11 @@ function CountdownTimer() {
 	}, [])
 
 	const boxClass =
-		'bg-accent text-white rounded-lg w-14 h-14 md:w-18 md:h-18 flex flex-col items-center justify-center mx-1 shadow-md'
+		'bg-primary text-accent rounded-lg w-14 h-14 md:w-18 md:h-18 flex flex-col items-center justify-center mx-1 shadow-md'
 	const numberClass =
-		'font-mono text-[1.25rem] md:text-2xl font-extrabold leading-none tracking-wider'
+		'font-mono text-[1.25rem] text-accent md:text-2xl font-extrabold leading-none tracking-wider'
 	const labelClass =
-		'text-[0.45rem] md:text-[0.65rem] font-medium mt-1 tracking-wide text-primary uppercase tracking-wider'
+		'text-[0.45rem] md:text-[0.65rem] font-medium mt-1 tracking-wide text-accent uppercase tracking-wider'
 
 	return (
 		<div className='flex justify-center items-center gap-0 mt-2'>
@@ -176,20 +176,20 @@ const page = () => {
 		<div className='min-h-screen bg-primary text-accent font-inter flex flex-col'>
 			{/* Header */}
 			<header className='fixed top-0 left-0 right-0 w-full flex items-center justify-between px-2 md:px-6 py-4 bg-primary z-50 shadow-lg'>
-				<div className='flex items-center gap-0.5 cursor-pointer hover:bg-accent/20 rounded-lg px-1 md:px-2 py-1 transition-colors flex-1 justify-start'>
+				<div className='flex items-center gap-1 cursor-pointer hover:bg-accent/20 rounded-lg px-1 md:px-2 py-1 transition-colors flex-1 justify-start'>
 					<Image
 						src='/assets/images/logo/logo.svg'
 						alt='Capsulify Logo'
-						width={32}
-						height={32}
-						className='w-5 h-5 md:w-8 md:h-8'
+						width={40}
+						height={40}
+						className='w-6 h-6 md:w-8 md:h-8'
 					/>
-					<span className='font-semibold text-[0.85rem] md:text-xl tracking-tight'>
+					<span className='font-semibold text-[1rem] md:text-xl tracking-tight'>
 						CAPSULIFY
 					</span>
 				</div>
 				<nav className='flex-1 flex justify-end'>
-					<button className='max-sm:text-[0.65rem] text-[0.875rem] cursor-pointer bg-accent hover:bg-accent/80 text-primary font-semibold px-8 py-2 max-sm:px-4 max-sm:py-2 rounded-lg transition-all duration-300 hover:shadow-md hover:scale-[1.08] active:scale-[0.98]'>
+					<button className='max-sm:text-[0.85rem] text-[0.875rem] cursor-pointer bg-accent hover:bg-accent/80 text-primary font-semibold px-8 py-2 max-sm:px-4 max-sm:py-2 rounded-lg transition-all duration-300 hover:shadow-md hover:scale-[1.08] active:scale-[0.98]'>
 						Get instant access
 					</button>
 				</nav>
@@ -198,22 +198,19 @@ const page = () => {
 			{/* Main Content */}
 			<main className='flex-1 flex flex-col items-center px-0 pt-17 max-sm:pt-15'>
 				{/* Top Section */}
-				<div className='w-full bg-[#a09080] py-4'>
-					<h2 className='text-center text-primary font-semibold text-md md:text-2xl font-inter flex items-center justify-center gap-2'>
-						<span role='img' aria-label='lightbulb'>
-							💡
-						</span>
-						Tired of Dressing for a Body Shape?
+				<div className='w-full pt-8'>
+					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter px-1.5'>
+						Tired of Dressing for a Body Shape that Fashion Forgot?
 					</h2>
 				</div>
 				<section className='w-full max-w-5xl mt-10 mx-auto px-4'>
-					<p className='text-sm md:text-lg mb-8 text-accent/80'>
+					<p className='text-md md:text-lg mb-8 text-accent/80'>
 						If you've ever looked in the mirror and thought:
 					</p>
 					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
 						{/* Boxy */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='thinking'>
 									🤔
 								</span>
@@ -221,7 +218,7 @@ const page = () => {
 									<em>"Everything looks boxy on me."</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								Tops and jackets often feel like they hang
 								straight from the shoulders, creating a blocky
 								silhouette with no waist definition.
@@ -229,7 +226,7 @@ const page = () => {
 						</div>
 						{/* Sleeveless */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='thinking'>
 									🤔
 								</span>
@@ -240,7 +237,7 @@ const page = () => {
 									</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								Strapless, halters, and thin-strapped tops can
 								exaggerate broad shoulders, making you feel
 								masculine or top-heavy even when the style is
@@ -249,7 +246,7 @@ const page = () => {
 						</div>
 						{/* Jeans */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='thinking'>
 									🤔
 								</span>
@@ -257,7 +254,7 @@ const page = () => {
 									<em>"My jeans never balance me out."</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								No matter how much you love skinny jeans, they
 								often emphasize the narrowness of your hips —
 								making your upper body look even wider in
@@ -266,7 +263,7 @@ const page = () => {
 						</div>
 						{/* Dresses */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='thinking'>
 									🤔
 								</span>
@@ -274,7 +271,7 @@ const page = () => {
 									<em>"Dresses just don't fit right."</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								Dresses often either cling weirdly at the top or
 								float shapelessly, leaving you feeling
 								unstructured or overwhelmed by fabric.
@@ -282,7 +279,7 @@ const page = () => {
 						</div>
 						{/* Blazers */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='thinking'>
 									🤔
 								</span>
@@ -292,7 +289,7 @@ const page = () => {
 									</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								Structured outerwear, especially with shoulder
 								pads, can push your proportions even further out
 								of balance.
@@ -300,7 +297,7 @@ const page = () => {
 						</div>
 						{/* Feminine */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='thinking'>
 									🤔
 								</span>
@@ -311,7 +308,7 @@ const page = () => {
 									</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								Fashion often tells you to "embrace your strong
 								frame," but it rarely teaches you how to create
 								softness, movement, or curve in your outfits —
@@ -330,7 +327,7 @@ const page = () => {
 							</span>
 							You're not alone.
 						</h2>
-						<p className='text-sm md:text-[0.95rem] leading-6'>
+						<p className='text-[0.95rem] leading-6'>
 							If you've got broad shoulders, a strong upper body,
 							and narrow hips — you're likely an{' '}
 							<span className='font-semibold'>
@@ -355,8 +352,8 @@ const page = () => {
 				</section>
 
 				{/* Founder Story Section */}
-				<div className='w-full bg-[#a09080] py-3'>
-					<h2 className='text-center text-primary font-semibold text-md md:text-2xl font-inter'>
+				<div className='w-full py-3'>
+					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
 						From Frustration to Function:
 						<br />
 						Why I Built Capsulify?
@@ -377,7 +374,7 @@ const page = () => {
 							</div>
 						</div>
 						{/* Text */}
-						<div className='flex-1 text-accent font-inter text-[0.85rem] md:text-[0.875rem]'>
+						<div className='flex-1 text-accent font-inter text-[0.95rem]'>
 							<p className='mb-3 leading-6'>
 								Hi, I'm Ayuni, founder of Capsulify, and an
 								inverted triangle. That means I'm broader at the
@@ -456,8 +453,8 @@ const page = () => {
 				</section>
 
 				{/* Feelings Section */}
-				<div className='w-full bg-[#a09080] py-3'>
-					<h2 className='text-center text-primary font-semibold text-md md:text-2xl font-inter '>
+				<div className='w-full py-3'>
+					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
 						You Don't Want More Clothes.
 						<br />
 						You Want <em>These</em> Feelings.
@@ -467,7 +464,7 @@ const page = () => {
 					<div className='max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4'>
 						{/* 1 */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='sparkle'>
 									🧚‍♀️
 								</span>
@@ -478,7 +475,7 @@ const page = () => {
 									</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								You want clothes that balance your athletic
 								shoulders and bring out your waist, hips, and
 								curves — without looking harsh or masculine.
@@ -486,7 +483,7 @@ const page = () => {
 						</div>
 						{/* 2 */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='shirt'>
 									👚
 								</span>
@@ -497,7 +494,7 @@ const page = () => {
 									</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								You want outfits that effortlessly flatter —
 								where every cut, neckline, and proportion feels
 								intentional, not like guesswork.
@@ -505,7 +502,7 @@ const page = () => {
 						</div>
 						{/* 3 */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='sparkle'>
 									💁‍♀️
 								</span>
@@ -517,7 +514,7 @@ const page = () => {
 									</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								You want to look{' '}
 								<em className='font-semibold'>
 									stylish without overthinking it
@@ -528,7 +525,7 @@ const page = () => {
 						</div>
 						{/* 4 */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='sparkle'>
 									💬
 								</span>
@@ -539,7 +536,7 @@ const page = () => {
 									</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								You want people to say,{' '}
 								<em className='font-semibold'>
 									"You look amazing — that outfit really suits
@@ -551,7 +548,7 @@ const page = () => {
 						</div>
 						{/* 5 */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='dress'>
 									👗
 								</span>
@@ -562,7 +559,7 @@ const page = () => {
 									</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								Whether it's work, dates, social events, or
 								weekends, you want a wardrobe that truly fits
 								your life — and always makes you feel like your
@@ -571,7 +568,7 @@ const page = () => {
 						</div>
 						{/* 6 */}
 						<div>
-							<p className='font-semibold mb-1 flex items-center gap-1 text-sm md:text-[0.875rem]'>
+							<p className='font-semibold mb-1 flex items-center gap-1 text-[0.98rem]'>
 								<span role='img' aria-label='mirror'>
 									🪞
 								</span>
@@ -582,7 +579,7 @@ const page = () => {
 									</em>
 								</span>
 							</p>
-							<p className='text-sm md:text-[0.875rem] leading-6 mt-2'>
+							<p className='text-[0.95rem] leading-6 mt-2'>
 								You want to feel good every morning — not
 								defeated before the day even begins. You want
 								dressing to be a{' '}
@@ -594,18 +591,12 @@ const page = () => {
 				</section>
 
 				{/* Closet That Works Section */}
-				<div className='w-full bg-[#a09080] py-3'>
-					<h2 className='text-center text-primary font-semibold text-md md:text-2xl font-inter'>
-						<span role='img' aria-label='sparkles'>
-							✨
-						</span>
-						Finally! A Closet That Works for <em>Your</em> Body
-						Shape{' '}
-						<span role='img' aria-label='sparkles'>
-							✨
-						</span>
+				<div className='w-full py-3'>
+					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold px-4'>
+						<p>✨ Finally! </p>A Closet That Works for
+						<em className='text-accent'>Your </em> Body Shape
 					</h2>
-					<p className='text-center text-primary text-sm md:text-lg font-semibold pb-3 font-inter mt-4'>
+					<p className='text-center text-accent text-md md:text-lg font-semibold pb-3 font-inter mt-4'>
 						1,000+ Outfit Combinations.{' '}
 						<span className='font-bold'>Just 30 Pieces.</span>
 					</p>
@@ -660,11 +651,11 @@ const page = () => {
 								alt='necklines'
 								className='rounded-lg w-full h-60 object-cover mb-4 p-6 border-1 border-accent'
 							/>
-							<h3 className='font-bold text-[0.85rem] mb-2 text-left w-full'>
+							<h3 className='font-bold text-[0.95rem] mb-2 text-left w-full'>
 								Learn which sleeves, necklines, and cuts flatter
 								inverted triangle shape
 							</h3>
-							<p className='text-left text-[0.8rem] leading-6'>
+							<p className='text-left text-[0.95rem] leading-6'>
 								Tired of looking top-heavy in every outfit?
 								We'll show you the exact details that soften
 								your shoulders and create harmony without hiding
@@ -681,11 +672,11 @@ const page = () => {
 								alt='bottom cuts'
 								className='rounded-lg w-full h-60 object-cover mb-4 p-6 border-1 border-accent'
 							/>
-							<h3 className='font-bold text-[0.85rem] mb-2 text-left w-full'>
+							<h3 className='font-bold text-[0.95rem] mb-2 text-left w-full'>
 								Get outfit shapes that add volume where you need
 								it
 							</h3>
-							<p className='text-left text-[0.8rem] leading-6'>
+							<p className='text-left text-[0.95rem] leading-6'>
 								Tired of dresses that fit up top but hang like a
 								sack below? Our combinations help you create
 								shape—so your hips don't disappear and your
@@ -702,11 +693,11 @@ const page = () => {
 								alt='wardrobe'
 								className='rounded-lg w-full h-60 object-cover mb-4 p-6 border-1 border-accent'
 							/>
-							<h3 className='font-bold text-[0.85rem] mb-2 text-left w-full'>
+							<h3 className='font-bold text-[0.95rem] mb-2 text-left w-full'>
 								Edit and explore outfit combinations from a
 								curated starter wardrobe
 							</h3>
-							<p className='text-left text-[0.8rem] leading-6'>
+							<p className='text-left text-[0.95rem] leading-6'>
 								No more trial and error. Mix and match tops,
 								dresses, and cuts tailored for your shape so you
 								can stop guessing and start glowing.
@@ -722,11 +713,11 @@ const page = () => {
 								alt='combinations'
 								className='rounded-lg w-full h-60 object-cover mb-4 p-6 border-1 border-accent'
 							/>
-							<h3 className='font-bold text-[0.85rem] mb-2 text-left w-full'>
+							<h3 className='font-bold text-[0.95rem] mb-2 text-left w-full'>
 								See outfits built to balance your body. Not bury
 								it
 							</h3>
-							<p className='text-left text-[0.8rem] leading-6'>
+							<p className='text-left text-[0.95rem] leading-6'>
 								You don't need to hide under boxy layers. You
 								need smarter proportions. These looks are
 								designed to bring balance and beauty to your
@@ -737,8 +728,8 @@ const page = () => {
 				</section>
 
 				{/* Wardrobe Feels Section */}
-				<div className='w-full bg-[#a09080] py-3'>
-					<h2 className='text-center text-primary font-bold text-md md:text-2xl font-inter px-8'>
+				<div className='w-full py-3'>
+					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter px-1'>
 						What It Feels Like When Your Wardrobe Finally Works{' '}
 						<em>for</em> You
 					</h2>
@@ -795,8 +786,8 @@ const page = () => {
 				</section>
 
 				{/* Capsulify is for you if... Section */}
-				<div className='w-full bg-[#a09080] py-3'>
-					<h2 className='text-center text-primary font-bold text-xl md:text-2xl font-inter'>
+				<div className='w-full py-3'>
+					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
 						Capsulify is for YOU if...
 					</h2>
 				</div>
@@ -834,14 +825,14 @@ const page = () => {
 				</section>
 
 				{/* FAQ Section */}
-				<div className='w-full bg-[#a09080] py-3'>
-					<h2 className='text-center text-primary font-bold text-md md:text-2xl'>
+				<div className='w-full py-3'>
+					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
 						FAQs
 					</h2>
 				</div>
 				<section className='w-full'>
 					<div className='w-full py-10'>
-						<div className='max-w-6xl text-accent mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 px-6'>
+						<div className='max-w-6xl text-accent mx-auto grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-12 px-6'>
 							{/* Column 1 */}
 							<FAQColumn
 								faqs={[
@@ -925,7 +916,7 @@ const page = () => {
 				{/* What You'll Get Section */}
 				<section className='w-full bg-primary py-16'>
 					<div className=' flex flex-col items-center'>
-						<h2 className='text-center bg-[#a09080] text-primary w-full py-3 font-bold text-xl md:text-2xl mb-5 font-inter'>
+						<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
 							What You'll Get
 						</h2>
 						<h3 className='text-center text-accent font-bold text-lg md:text-xl mb-2 font-inter flex items-center justify-center gap-2'>
@@ -933,7 +924,9 @@ const page = () => {
 								🎁
 							</span>{' '}
 							Your Lifetime Deal:{' '}
-							<span className='text-[#A08C7D]'>$99 One-Time</span>
+							<span className='text-accent text-[1.1rem] font-bold'>
+								$99 One-Time
+							</span>
 						</h3>
 						<p className='text-center text-accent font-semibold text-sm md:text-lg mb-8 font-inter'>
 							Exclusive Perks for Founding Users
@@ -947,7 +940,7 @@ const page = () => {
 								>
 									👑
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent text-[0.95rem]'>
 									Be a co-creator: help shape features, test
 									updates, and influence design
 								</span>
@@ -960,7 +953,7 @@ const page = () => {
 								>
 									👑
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent font-inter text-[0.95rem]'>
 									Get priority access to new modules (before
 									the public)
 								</span>
@@ -973,7 +966,7 @@ const page = () => {
 								>
 									👑
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent font-inter text-[0.95rem]'>
 									Receive VIP invites to future workshops &
 									styling webinars
 								</span>
@@ -986,7 +979,7 @@ const page = () => {
 								>
 									👑
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent font-inter text-[0.95rem]'>
 									Be featured in our early user showcase
 									(optional)
 								</span>
@@ -999,7 +992,7 @@ const page = () => {
 								>
 									👑
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent font-inter text-[0.95rem]'>
 									Lifetime pricing locked in — this tier will
 									never open again
 								</span>
@@ -1011,7 +1004,7 @@ const page = () => {
 				{/* What You Get With This Lifetime Deal Section */}
 				<section className='w-full bg-primary py-8'>
 					<div className='flex flex-col items-center'>
-						<h2 className='text-center bg-[#a09080] text-primary w-full py-3 font-bold text-xl md:text-xl mb-5 font-inter px-4'>
+						<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
 							What You Get With This Lifetime Deal
 						</h2>
 						<div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mb-8 mt-8 px-4'>
@@ -1080,7 +1073,7 @@ const page = () => {
 							</div>
 							<div className='flex items-start gap-2'>
 								<span className='text-accent font-inter text-sm italic'>
-									<span className='text-[#A08C7D]'>
+									<span className='text-accent font-extrabold text-[0.95rem]'>
 										Coming Soon:
 									</span>{' '}
 									Filter your outfits by weather, climate,
@@ -1093,19 +1086,16 @@ const page = () => {
 						</div>
 						<div className='w-full flex flex-col items-center my-12 px-4'>
 							<h3 className='text-center text-accent font-bold text-xl md:text-2xl mb-2 font-inter flex items-center justify-center gap-2'>
-								<span role='img' aria-label='lock'>
-									🔒
-								</span>{' '}
-								Only 100 Spots. Offer Ends 30th June 2025
+								🔒Only 100 Spots. Offer Ends 30th June 2025
 							</h3>
-							<p className='text-center text-accent text-xs md:text-sm mb-2'>
+							<p className='text-center text-accent text-[0.875rem] mb-2'>
 								This is your{' '}
 								<span className='font-bold'>only chance</span>{' '}
 								to get lifetime access for just{' '}
 								<span className='font-bold'>$99</span> — no
 								monthly fees, no hidden upsells, no gimmicks.
 							</p>
-							<p className='text-center text-accent text-xs md:text-sm'>
+							<p className='text-center text-accent text-[0.875rem]'>
 								You'll get{' '}
 								<span className='font-bold'>
 									1,000+ outfit combinations
@@ -1123,7 +1113,7 @@ const page = () => {
 								>
 									✅
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent font-inter text-[0.95rem]'>
 									Wake up knowing exactly what to wear — and
 									loving how it looks on you
 								</span>
@@ -1136,7 +1126,7 @@ const page = () => {
 								>
 									✅
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent font-inter text-[0.95rem]'>
 									Your own{' '}
 									<span className='font-bold'>
 										editable Fit Guide
@@ -1152,7 +1142,7 @@ const page = () => {
 								>
 									✅
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent font-inter text-[0.95rem]'>
 									<span className='font-bold'>
 										Styling logic built-in
 									</span>{' '}
@@ -1167,7 +1157,7 @@ const page = () => {
 								>
 									✅
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent font-inter text-[0.95rem]'>
 									Access to{' '}
 									<span className='font-bold'>
 										premium add-on upgrades
@@ -1183,7 +1173,7 @@ const page = () => {
 								>
 									✅
 								</span>
-								<span className='text-accent font-inter text-sm'>
+								<span className='text-accent font-inter text-[0.95rem]'>
 									<span className='font-bold'>
 										Zero monthly fees.
 									</span>{' '}
@@ -1196,14 +1186,14 @@ const page = () => {
 
 				{/* Not sure if this is for you? Section */}
 				<section className='w-full pt-8 pb-20'>
-					<h2 className='text-center text-accent font-bold text-xl md:text-2xl font-inter'>
+					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
 						Not sure if this is for you?
 					</h2>
 					<div className='max-w-4xl mx-auto rounded-lg shadow-none md:shadow-none px-6 py-12 mb-4'>
-						<p className='text-accent text-center text-[1rem] mb-2 font-inter w-[80%] md:w-[50%] mx-auto leading-7'>
+						<p className='text-accent text-center text-[0.98rem] mb-2 font-inter w-[80%] md:w-[50%] mx-auto leading-7'>
 							<span className='font-bold'>Try it risk-free.</span>
 							<br />
-							<span className='text-[0.875rem]'>
+							<span className='text-[0.95rem]'>
 								If Capsulify isn't helping you feel confident
 								and stylish within 30 days, we'll refund you —
 								no hard feelings.
@@ -1215,7 +1205,7 @@ const page = () => {
 							<p className='text-accent text-center mb-4 font-semibold'>
 								Limited to the First 100 users!
 							</p>
-							<button className='bg-accent text-primary cursor-pointer font-semibold px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] md:text-base '>
+							<button className='bg-accent text-primary cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[1rem] '>
 								Get instant access
 							</button>
 							<CountdownTimer />
