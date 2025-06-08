@@ -193,7 +193,7 @@ const page = () => {
 						href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='font-fraunces max-sm:text-[0.75rem] text-[0.875rem] cursor-pointer text-primary font-semibold mx-2 max-sm:py-1 transition-all duration-300 hover:shadow-md hover:scale-[1.08] active:scale-[0.98] uppercase border-b-4 border-[#e7bec4] tracking-wide py-1'
+						className='font-fraunces max-sm:text-[0.75rem] text-[0.875rem] cursor-pointer text-primary font-semibold mx-2 max-sm:py-1 transition-all duration-300 hover:shadow-md hover:scale-[1.08] active:scale-[0.98] uppercase border-b-4 border-[#f8c255] tracking-wider py-1'
 					>
 						<em>Get instant access</em>
 					</a>
@@ -218,7 +218,7 @@ const page = () => {
 								href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='bg-[#e7bec4] mx-auto my-6 text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform-all hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase '
+								className='bg-[#f8c255] mx-auto my-6 text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform-all hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase '
 							>
 								<em>Get instant access</em>
 							</a>
@@ -590,8 +590,8 @@ const page = () => {
 				</div>
 
 				{/* Closet That Works Section */}
-				<div className='w-full max-sm:w-[90%] mx-auto my-10 mt-20'>
-					<div className=' py-3'>
+				<div className='shadow-lg rounded-md pb-6 mb-10 max-sm:w-[90%] mx-auto my-10 mt-20'>
+					<div className='w-full py-3'>
 						<h2 className='text-center text-[1.5rem] md:text-3xl text-primary font-extrabold font-fraunces px-4 bg-[#ad4c5c] py-4 rounded-t-md'>
 							<p>✨ Finally! </p>A Closet That Works for
 							<em>Your </em> Body Shape.
@@ -622,7 +622,7 @@ const page = () => {
 								href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='bg-[#ad4c5c] text-primary cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase mt-10'
+								className='bg-[#f8c255] text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase mt-10'
 							>
 								<em>Get instant access</em>
 							</a>
@@ -873,7 +873,7 @@ const page = () => {
 						href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='bg-[#ad4c5c] mx-auto my-6 text-primary cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
+						className='bg-[#f8c255] mx-auto my-6 text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
 					>
 						<em>Get instant access</em>
 					</a>
@@ -1322,9 +1322,9 @@ const page = () => {
 				</div>
 
 				{/* What You'll Get Section */}
-				<section className='w-full bg-[#ad4c5c] text-primary py-10 px-2'>
+				<section className='w-full py-10'>
 					<div className=' flex flex-col items-center'>
-						<h2 className='text-center text-[1.8rem] md:text-4xl font-extrabold font-fraunces mb-2'>
+						<h2 className='w-full text-center text-[1.8rem] md:text-4xl font-extrabold font-fraunces mb-2 bg-[#ad4c5c] text-primary py-6'>
 							What You'll Get
 						</h2>
 						<h3 className='text-center font-bold text-lg md:text-xl mb-2 font-inter flex items-center justify-center gap-2'>
@@ -1375,7 +1375,7 @@ const page = () => {
 							href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 							target='_blank'
 							rel='noopener noreferrer'
-							className='bg-[#e7bec4] text-accent cursor-pointer font-extrabold px-10 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase my-10'
+							className='bg-[#f8c255] text-accent cursor-pointer font-extrabold px-10 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase my-10'
 						>
 							<em>Get instant access</em>
 						</a>
@@ -1392,7 +1392,7 @@ const page = () => {
 							<div className='flex items-start gap-2'>
 								<span
 									aria-hidden='true'
-									className='mr-2 text-xl text-white'
+									className='mr-2 text-xl text-[white]'
 								>
 									✔
 								</span>
@@ -1461,7 +1461,7 @@ const page = () => {
 							</div>
 						</div>
 						<div className='w-full flex flex-col items-center my-12 px-4'>
-							<h3 className='text-center font-bold text-xl md:text-2xl mb-2 font-inter flex items-center justify-center gap-2'>
+							<h3 className='text-center font-bold text-xl md:text-2xl mb-2 font-inter flex items-center justify-center gap-2 border-b-4 py-2 px-2 border-[#f8c255]'>
 								🔒Only 100 Spots. Offer Ends 30th June 2025
 							</h3>
 							<p className='text-center text-[1rem] mb-2'>
@@ -1580,7 +1580,7 @@ const page = () => {
 								href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='bg-[#ad4c5c] text-white cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
+								className='bg-[#f8c255] text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
 							>
 								<em>Get instant access</em>
 							</a>
