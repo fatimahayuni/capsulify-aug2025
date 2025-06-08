@@ -48,7 +48,7 @@ function FAQItem({ question, answer, open, onClick }: FAQItemProps) {
 				aria-expanded={open}
 				type='button'
 			>
-				<span className='flex-1'>{question}</span>
+				<span className='flex-1 font-bold'>{question}</span>
 				<span className='ml-2'>
 					{/* Reverse the arrow logic: down arrow when closed, up arrow when open */}
 					{!open ? (
@@ -175,7 +175,7 @@ const page = () => {
 	return (
 		<div className='min-h-screen bg-primary text-accent font-inter flex flex-col'>
 			{/* Header */}
-			<header className='w-full flex items-center justify-between px-2 md:px-6 py-4 bg-accent text-primary'>
+			<header className='w-full flex items-center justify-between px-2 md:px-6 py-4 bg-[#ad4c5c] text-primary font-fraunces'>
 				<div className='flex items-center gap-1 cursor-pointer hover:bg-accent/20 rounded-lg px-1 md:px-2 py-1 transition-colors flex-1 justify-start'>
 					<Image
 						src='/assets/images/logo/logo-light.svg'
@@ -193,7 +193,7 @@ const page = () => {
 						href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='max-sm:text-[0.75rem] text-[0.875rem] cursor-pointer text-primary font-semibold mx-2 max-sm:py-1 transition-all duration-300 hover:shadow-md hover:scale-[1.08] active:scale-[0.98] uppercase border-b-4 border-[#28a78a] tracking-wide py-1'
+						className='font-fraunces max-sm:text-[0.75rem] text-[0.875rem] cursor-pointer text-primary font-semibold mx-2 max-sm:py-1 transition-all duration-300 hover:shadow-md hover:scale-[1.08] active:scale-[0.98] uppercase border-b-4 border-[#e7bec4] tracking-wide py-1'
 					>
 						<em>Get instant access</em>
 					</a>
@@ -203,22 +203,22 @@ const page = () => {
 			{/* Main Content */}
 			<main className='flex-1 flex flex-col items-center px-0'>
 				{/* Hero Section */}
-				<section className='w-full mx-auto bg-accent text-primary py-10 md:py-20 px-6 md:px-30'>
+				<section className='w-full mx-auto bg-[#ad4c5c] text-primary py-10 md:py-20 px-6 md:px-30'>
 					<div className='flex flex-col md:flex-row items-center justify-center gap-8'>
 						<div className='flex-1 max-w-5xl'>
-							<h1 className='text-3xl md:text-5xl font-extrabold mb-4 tracking-tight leading-12'>
-								Unlock Your Style with AI-Powered Outfit
-								Planning
+							<h1 className='text-[2rem] md:text-5xl font-extrabold mb-4 tracking-tight leading-12 font-fraunces'>
+								Tired of Dressing for a Body Shape Fashion
+								Forgot?
 							</h1>
 							<p className='text-sm md:text-xl text-accent/80 mb-8'>
-								Create personalized outfits, shop with ease, and
-								dress with confidence.
+								Lorem ipsum dolor, sit amet consectetur
+								adipisicing elit.
 							</p>
 							<a
 								href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='bg-[#28a78a] mx-auto my-6 text-primary cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform-all hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
+								className='bg-[#e7bec4] mx-auto my-6 text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform-all hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase '
 							>
 								<em>Get instant access</em>
 							</a>
@@ -228,10 +228,10 @@ const page = () => {
 				{/* Top Section */}
 				<div className='w-full pt-8'>
 					<section className='w-full max-w-6xl mx-auto px-2 pb-8 rounded-md max-sm:w-[90%]'>
-						<h2 className='text-center text-[1.6rem] md:text-3xl text-accent font-extrabold font-inter pb-8 pt-10'>
+						{/* <h2 className='text-center text-[1.6rem] md:text-4xl text-accent font-extrabold font-fraunces pb-8 pt-10'>
 							Tired of Dressing for a Body Shape that Fashion
 							Forgot?
-						</h2>
+						</h2> */}
 						<p className='text-md md:text-lg mb-8 text-accent/80'>
 							If you've ever looked in the mirror and thought:
 						</p>
@@ -239,9 +239,6 @@ const page = () => {
 							{/* Boxy */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.25rem]'>
-									<span role='img' aria-label='thinking'>
-										🤔
-									</span>
 									<span className=''>
 										<em>"Everything looks boxy on me."</em>
 									</span>
@@ -255,9 +252,6 @@ const page = () => {
 							{/* Sleeveless */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.25rem]'>
-									<span role='img' aria-label='thinking'>
-										🤔
-									</span>
 									<span className=''>
 										<em>
 											"I hate how sleeveless tops make me
@@ -275,9 +269,6 @@ const page = () => {
 							{/* Jeans */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.25rem]'>
-									<span role='img' aria-label='thinking'>
-										🤔
-									</span>
 									<span className=''>
 										<em>
 											"My jeans never balance me out."
@@ -294,9 +285,6 @@ const page = () => {
 							{/* Dresses */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.25rem]'>
-									<span role='img' aria-label='thinking'>
-										🤔
-									</span>
 									<span className=''>
 										<em>"Dresses just don't fit right."</em>
 									</span>
@@ -311,9 +299,6 @@ const page = () => {
 							{/* Blazers */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.25rem]'>
-									<span role='img' aria-label='thinking'>
-										🤔
-									</span>
 									<span className=''>
 										<em>
 											"Blazers make me look like a
@@ -330,9 +315,6 @@ const page = () => {
 							{/* Feminine */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.25rem]'>
-									<span role='img' aria-label='thinking'>
-										🤔
-									</span>
 									<span className=''>
 										<em>
 											"I feel like I can never look soft
@@ -355,10 +337,7 @@ const page = () => {
 				{/* You're not alone Section */}
 				<section className='w-full max-w-5xl flex flex-col md:flex-row items-center justify-between gap-8 my-10 px-6'>
 					<div className='flex-1'>
-						<h2 className='text-xl md:text-2xl font-semibold flex items-center justify-center gap-2 mb-3'>
-							<span role='img' aria-label='purple flower'>
-								🫂
-							</span>
+						<h2 className='text-2xl md:text-3xl flex items-center justify-center gap-2 mb-3 font-fraunces font-extrabold'>
 							You're not alone.
 						</h2>
 						<p className='text-[0.95rem] leading-6'>
@@ -375,7 +354,7 @@ const page = () => {
 					<div className='flex-1 flex justify-end items-center'>
 						<div className='overflow-hidden w-full max-w-xs rounded-md'>
 							<Image
-								src='/assets/landing-page/silhouette.png'
+								src='/assets/landing-page/silhouette-nobg.png'
 								alt='Woman on sofa'
 								width={300}
 								height={400}
@@ -386,9 +365,9 @@ const page = () => {
 				</section>
 
 				{/* Founder Story Section */}
-				<div className='w-full max-sm:w-[90%] mx-auto shadow-lg rounded-xl max-w-6xl mt-10'>
-					<section className='w-full max-w-6xl mt-8 mb-16 mx-auto'>
-						<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold mb-4'>
+				<div className='w-full max-sm:w-[90%] mx-auto shadow-lg rounded-md max-w-6xl mt-10'>
+					<section className='w-full max-w-6xl mb-16 mx-auto'>
+						<h2 className='text-center text-[1.5rem] md:text-3xl text-primary font-extrabold font-fraunces mb-4 bg-[#ad4c5c] py-4 rounded-t-md'>
 							From Frustration to Function:
 							<br />
 							Why I Built Capsulify?
@@ -490,8 +469,8 @@ const page = () => {
 				</div>
 
 				{/* Feelings Section */}
-				<div className='w-full mx-auto bg-secondary rounded-md mt-20 py-6 shadow-md max-w-6xl px-4 '>
-					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
+				<div className='w-full max-sm:w-[90%] mx-auto bg-secondary rounded-md mt-20 pb-6 shadow-md max-w-6xl'>
+					<h2 className='text-center text-[1.5rem] md:text-3xl text-primary bg-[#ad4c5c] py-4 font-extrabold font-fraunces rounded-t-md'>
 						You Don't Want More Clothes.
 						<br />
 						You Want <em>These</em> Feelings.
@@ -501,9 +480,6 @@ const page = () => {
 							{/* 1 */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.2rem]'>
-									<span role='img' aria-label='sparkle'>
-										🪞
-									</span>
 									<span className=''>
 										<em className='font-semibold'>
 											"I want to feel soft, feminine, and
@@ -521,9 +497,6 @@ const page = () => {
 							{/* 2 */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.2rem]'>
-									<span role='img' aria-label='shirt'>
-										🪞
-									</span>
 									<span className=''>
 										<em className='font-semibold'>
 											"I want my clothes to work with my
@@ -540,9 +513,6 @@ const page = () => {
 							{/* 3 */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.2rem]'>
-									<span role='img' aria-label='sparkle'>
-										🪞
-									</span>
 									<span className=''>
 										<em className='font-semibold'>
 											"I want to feel confident and
@@ -563,9 +533,6 @@ const page = () => {
 							{/* 4 */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.2rem]'>
-									<span role='img' aria-label='sparkle'>
-										🪞
-									</span>
 									<span className=''>
 										<em className='font-semibold'>
 											"I want compliments that feel
@@ -586,9 +553,6 @@ const page = () => {
 							{/* 5 */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.2rem]'>
-									<span role='img' aria-label='dress'>
-										🪞
-									</span>
 									<span className=''>
 										<em className='font-semibold'>
 											"I want to be able to dress for any
@@ -606,9 +570,6 @@ const page = () => {
 							{/* 6 */}
 							<div>
 								<p className='font-semibold mb-1 flex items-center gap-1 text-[1.2rem]'>
-									<span role='img' aria-label='mirror'>
-										🪞
-									</span>
 									<span className=''>
 										<em className='font-semibold'>
 											"I want to love looking in the
@@ -629,11 +590,11 @@ const page = () => {
 				</div>
 
 				{/* Closet That Works Section */}
-				<div className='my-10 mt-20'>
-					<div className='w-full py-3'>
-						<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold px-4'>
+				<div className='w-full max-sm:w-[90%] mx-auto my-10 mt-20'>
+					<div className=' py-3'>
+						<h2 className='text-center text-[1.5rem] md:text-3xl text-primary font-extrabold font-fraunces px-4 bg-[#ad4c5c] py-4 rounded-t-md'>
 							<p>✨ Finally! </p>A Closet That Works for
-							<em className='text-accent'>Your </em> Body Shape.
+							<em>Your </em> Body Shape.
 						</h2>
 						<p className='text-center text-accent text-md md:text-lg font-semibold pb-3 font-inter mt-4'>
 							1,000+ Outfit Combinations.{' '}
@@ -661,7 +622,7 @@ const page = () => {
 								href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='bg-[#28a78a] text-primary cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase mt-10'
+								className='bg-[#ad4c5c] text-primary cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase mt-10'
 							>
 								<em>Get instant access</em>
 							</a>
@@ -670,8 +631,8 @@ const page = () => {
 				</div>
 
 				{/* Features Grid Section */}
-				<section className='w-full bg-primary pb-10'>
-					<div className='max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-4'>
+				<section className='w-full max-sm:w-[90%] mx-auto bg-primary pb-10'>
+					<div className='max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-18 sm:gap-8 px-4'>
 						{/* Feature 1 */}
 						<div className='flex flex-col items-center text-accent font-inter'>
 							<video
@@ -685,11 +646,11 @@ const page = () => {
 								/>
 								Your browser does not support the video tag.
 							</video>
-							<h3 className='font-bold text-[1.05rem] mb-2 text-left w-full'>
+							<h3 className='font-bold text-[1.2rem] mb-2 w-full text-center'>
 								Learn which sleeves, necklines, and cuts flatter
 								inverted triangle shape
 							</h3>
-							<p className='text-left text-[0.95rem] leading-6'>
+							<p className='text-center text-[0.95rem] leading-6'>
 								Tired of looking top-heavy in every outfit?
 								We'll show you the exact details that soften
 								your shoulders and create harmony without hiding
@@ -709,11 +670,11 @@ const page = () => {
 								/>
 								Your browser does not support the video tag.
 							</video>
-							<h3 className='font-bold text-[1.05rem] mb-2 text-left w-full'>
+							<h3 className='font-bold text-[1.2rem] mb-2 text-center w-full'>
 								Get outfit shapes that add volume where you need
 								it
 							</h3>
-							<p className='text-left text-[0.95rem] leading-6'>
+							<p className='text-center text-[0.95rem] leading-6'>
 								Tired of dresses that fit up top but hang like a
 								sack below? Our combinations help you create
 								shape—so your hips don't disappear and your
@@ -733,11 +694,11 @@ const page = () => {
 								/>
 								Your browser does not support the video tag.
 							</video>
-							<h3 className='font-bold text-[1.05rem] mb-2 text-left w-full'>
+							<h3 className='font-bold text-[1.2rem] mb-2 text-center w-full'>
 								Edit and explore outfit combinations from a
 								curated starter wardrobe
 							</h3>
-							<p className='text-left text-[0.95rem] leading-6'>
+							<p className='text-center text-[0.95rem] leading-6'>
 								No more trial and error. Mix and match tops,
 								dresses, and cuts tailored for your shape so you
 								can stop guessing and start glowing.
@@ -756,11 +717,11 @@ const page = () => {
 								/>
 								Your browser does not support the video tag.
 							</video>
-							<h3 className='font-bold text-[1.05rem] mb-2 text-left w-full'>
+							<h3 className='font-bold text-[1.2rem] mb-2 text-center w-full'>
 								See outfits built to balance your body. Not bury
 								it
 							</h3>
-							<p className='text-left text-[0.95rem] leading-6'>
+							<p className='text-center text-[0.95rem] leading-6'>
 								You don't need to hide under boxy layers. You
 								need smarter proportions. These looks are
 								designed to bring balance and beauty to your
@@ -771,9 +732,9 @@ const page = () => {
 				</section>
 
 				{/* Wardrobe Feels Section */}
-				<div className='w-full mx-auto bg-secondary mt-10 py-6 shadow-md max-w-6xl px-4 mb-15'>
-					<div className='w-full py-3'>
-						<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter px-1'>
+				<div className='w-full max-sm:w-[90%] mx-auto bg-secondary mt-10 pb-6 shadow-md max-w-6xl mb-15'>
+					<div className='w-full'>
+						<h2 className='text-center text-[1.6rem] md:text-3xl text-primary font-extrabold font-fraunces font-inter bg-[#ad4c5c] py-4 rounded-t-md px-2'>
 							What It Feels Like When Your Wardrobe Finally Works{' '}
 							<em>for</em> You
 						</h2>
@@ -782,21 +743,36 @@ const page = () => {
 						<div className='w-full py-10'>
 							<div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4'>
 								<div className='flex items-start'>
-									<span className='mr-2 text-xl'>💃</span>
+									<span
+										aria-hidden='true'
+										className='mr-2 text-xl'
+									>
+										●
+									</span>
 									<span className='text-accent font-inter text-[1rem]'>
 										Wake up knowing exactly what to wear —
 										and loving how it looks on you
 									</span>
 								</div>
 								<div className='flex items-start'>
-									<span className='mr-2 text-xl'>💃</span>
+									<span
+										aria-hidden='true'
+										className='mr-2 text-xl'
+									>
+										●
+									</span>
 									<span className='text-accent font-inter text-[1rem]'>
 										Look completely different every day,
 										using just 30 smart pieces
 									</span>
 								</div>
 								<div className='flex items-start'>
-									<span className='mr-2 text-xl'>💃</span>
+									<span
+										aria-hidden='true'
+										className='mr-2 text-xl'
+									>
+										●
+									</span>
 									<span className='text-accent font-inter text-[1rem]'>
 										Feel elegant on dates, commanding at
 										work, and effortlessly stylish on
@@ -804,7 +780,12 @@ const page = () => {
 									</span>
 								</div>
 								<div className='flex items-start'>
-									<span className='mr-2 text-xl'>💃</span>
+									<span
+										aria-hidden='true'
+										className='mr-2 text-xl'
+									>
+										●
+									</span>
 									<span className='text-accent font-inter text-[1rem]'>
 										Get real compliments — not "you look
 										nice," but{' '}
@@ -814,14 +795,24 @@ const page = () => {
 									</span>
 								</div>
 								<div className='flex items-start'>
-									<span className='mr-2 text-xl'>💃</span>
+									<span
+										aria-hidden='true'
+										className='mr-2 text-xl'
+									>
+										●
+									</span>
 									<span className='text-accent font-inter text-[1rem]'>
 										Save thousands by buying <em>less</em>{' '}
 										but wearing <em>more</em>
 									</span>
 								</div>
 								<div className='flex items-start'>
-									<span className='mr-2 text-xl'>💃</span>
+									<span
+										aria-hidden='true'
+										className='mr-2 text-xl'
+									>
+										●
+									</span>
 									<span className='text-accent font-inter text-[1rem]'>
 										No more panic shopping, style ruts, or
 										outfit regrets. Just confidence,
@@ -834,36 +825,44 @@ const page = () => {
 				</div>
 
 				{/* Capsulify is for you if... Section */}
-				<div className='w-full py-3'>
-					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
+				<div className='w-full max-sm:w-[90%] mx-auto py-3'>
+					<h2 className='text-center text-[1.8rem] md:text-4xl text-accent font-extrabold font-fraunces'>
 						Capsulify is for YOU if...
 					</h2>
 				</div>
 				<section className='w-full bg-primary py-10 flex flex-col items-center'>
 					<div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4'>
 						<div className='flex items-start'>
-							<span className='mr-2 text-md'>😕</span>
+							<span aria-hidden='true' className='mr-2 text-md'>
+								●
+							</span>
 							<span className='text-accent font-inter text-[1rem]'>
 								You have lots of clothes, but feel like you wear
 								the same few things
 							</span>
 						</div>
 						<div className='flex items-start'>
-							<span className='mr-2 text-md'>😣</span>
+							<span aria-hidden='true' className='mr-2 text-md'>
+								●
+							</span>
 							<span className='text-accent font-inter text-[1rem]'>
 								You want to look good on dates, workdays, and
 								weekends effortlessly
 							</span>
 						</div>
 						<div className='flex items-start'>
-							<span className='mr-2 text-md'>😬</span>
+							<span aria-hidden='true' className='mr-2 text-md'>
+								●
+							</span>
 							<span className='text-accent font-inter text-[1rem]'>
 								You're not a fashionista, but you still want to
 								dress well for <em>your</em> shape
 							</span>
 						</div>
 						<div className='flex items-start'>
-							<span className='mr-2 text-md'>💸</span>
+							<span aria-hidden='true' className='mr-2 text-md'>
+								●
+							</span>
 							<span className='text-accent font-inter text-[1rem]'>
 								You don't want to pay $200+ for a stylist every
 								season
@@ -874,501 +873,499 @@ const page = () => {
 						href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='bg-[#28a78a] mx-auto my-6 text-primary cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
+						className='bg-[#ad4c5c] mx-auto my-6 text-primary cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
 					>
 						<em>Get instant access</em>
 					</a>
 				</section>
 
 				{/* FAQ Section */}
-				<div className='w-full py-3'>
-					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
-						FAQs
-					</h2>
-				</div>
-				<section className='w-full'>
-					<div className='w-full py-10'>
-						<div className='max-w-6xl text-accent mx-auto grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-12 px-6'>
-							{/* Column 1 */}
-							<FAQColumn
-								faqs={[
-									{
-										q: `I don't want to look like I'm using a robot to dress myself.`,
-										a: (
-											<span>
-												Nor should you.
-												<br />
-												Capsulify isn't a rigid formula
-												— it's a stylist-in-your-pocket
-												that works with{' '}
-												<strong>your</strong> rules.
-												<br />
-												<br />
-												Hate sleeveless tops? We'll
-												never suggest them.
-												<br />
-												Love showing legs but not arms?
-												We'll factor that in.
-												<br />
-												This is <em>your</em> taste,
-												your body, your life — not ours.
-											</span>
-										),
-									},
-									{
-										q: `Don't you do for other body shapes?`,
-										a: (
-											<span>
-												<strong>
-													Not yet — but we will.
-												</strong>{' '}
-												Right now, Capsulify is
-												optimized for{' '}
-												<strong>
-													inverted triangle women
-												</strong>{' '}
-												(broader shoulders, narrower
-												hips). That's the shape our
-												engine currently supports with
-												curated cuts, outfit rules, and
-												proportions that actually work.
-												<br />
-												<br />
-												But we're not stopping there.
-												<br />
-												<br />
-												Our goal is to support{' '}
-												<strong>
-													all major body shapes
-												</strong>{' '}
-												— including pear, rectangle,
-												hourglass, and apple — with the
-												same level of detail and care.
-												We're rolling them out one at a
-												time to ensure{' '}
-												<em>real accuracy</em>, not
-												generic templates.
-												<br />
-												<br />
-												If your body shape isn't
-												supported yet:
-												<ul
-													style={{
-														marginTop: 8,
-														marginBottom: 8,
-													}}
-												>
-													<li>
-														You can still explore
-														the free version
-													</li>
-													<li>
-														Or join the waitlist to
-														be notified when yours
-														launches
-													</li>
-													<li>
-														Or better yet — sign up
-														to help us test your
-														shape early
-													</li>
-												</ul>
-												We're building this with real
-												women in mind — one shape at a
-												time.
-											</span>
-										),
-									},
-									{
-										q: `What if I don't know my style yet?`,
-										a: (
-											<span>
-												That's actually the best time to
-												use Capsulify.
-												<br />
-												<br />
-												You don't need a defined
-												personal style to start — in
-												fact, Capsulify helps you{' '}
-												<strong>discover it</strong> by
-												showing you which outfit
-												combinations you naturally
-												gravitate toward.
-												<br />
-												<br />
-												You'll start with just a few
-												preferences (minimal, feminine,
-												elegant, etc.), and as you mix
-												and match outfits from your own
-												wardrobe, you'll start to see
-												patterns — <em>that</em> is your
-												emerging style.
-												<br />
-												<br />
-												Think of it as learning your
-												style by wearing it, not
-												guessing it.
-											</span>
-										),
-									},
-									{
-										q: `What if I don't know my body shape?`,
-										a: (
-											<span>
-												You're not alone — most women
-												aren't 100% sure.
-												<br />
-												<br />
-												Here's a simple way to figure it
-												out right now:
-												<br />
-												<strong>
-													Stand in front of a mirror
-													and look at your shoulder
-													line and hip line.
-												</strong>
-												<ul
-													style={{
-														marginTop: 8,
-														marginBottom: 8,
-													}}
-												>
-													<li>
-														If your shoulders are
-														noticeably wider than
-														your hips, you're likely
-														an{' '}
-														<strong>
-															inverted triangle
-														</strong>
-														.
-													</li>
-													<li>
-														If your hips are wider
-														than your shoulders, you
-														may be a{' '}
-														<strong>pear</strong>.
-													</li>
-													<li>
-														If they're about the
-														same and you have a
-														defined waist, you might
-														be an{' '}
-														<strong>
-															hourglass
-														</strong>
-														.
-													</li>
-													<li>
-														If your waist isn't very
-														defined, you could be a{' '}
-														<strong>
-															rectangle or apple
-														</strong>
-														.
-													</li>
-												</ul>
-												We're currently focusing on
-												inverted triangle shapes — but
-												we're also building a
-												camera-based tool to help
-												determine your shape visually,
-												without guesswork.
-												<br />
-												<br />
-												And don't worry: you can always
-												update your shape later inside
-												the app. Just pick the closest
-												match and start — perfection
-												isn't required to see results.
-											</span>
-										),
-									},
-									{
-										q: `I hate uploading clothes. This sounds like work.`,
-										a: (
-											<span>
-												Totally fair. That's why we made
-												it fast.
-												<br />
-												You can:
-												<ul
-													style={{
-														marginTop: 8,
-														marginBottom: 8,
-													}}
-												>
-													<li>
-														Choose from visual
-														templates
-													</li>
-													<li>Auto-tag items</li>
-													<li>
-														Or just start with 10–15
-														core pieces and still
-														get dozens of looks. 30
-														mins and you're done.
-													</li>
-												</ul>
-												You don't need to upload your
-												whole closet on Day 1.
-											</span>
-										),
-									},
-								]}
-								columnKey='col1'
-							/>
-							{/* Column 2 */}
-							<FAQColumn
-								faqs={[
-									{
-										q: `Do I need to upload my entire closet?`,
-										a: (
-											<span>
-												Nope — definitely not.
-												<br />
-												<br />
-												You can start with just a few
-												pieces:
-												<br />
-												<strong>
-													2–4 tops, 2 bottoms, a pair
-													of shoes — and you're good
-													to go.
-												</strong>
-												<br />
-												Capsulify will already start
-												generating outfit ideas based on
-												those.
-												<br />
-												<br />
-												The more you add, the smarter
-												and more personalized the outfit
-												suggestions become. But there's
-												no need to upload your entire
-												wardrobe on Day 1.
-												<br />
-												<br />
-												Start small. Build as you go. We
-												designed it that way on purpose
-												— to be useful even when your
-												closet is still half-loaded.
-											</span>
-										),
-									},
-									{
-										q: `Do I have to have 30 pieces?`,
-										a: (
-											<span>
-												Not at all.
-												<br />
-												<br />
-												30 pieces is just a{' '}
-												<strong>
-													starting framework
-												</strong>
-												, not a requirement.
-												<br />
-												You can begin with as few as
-												6–10 items and still see useful
-												outfit combinations. Some women
-												start with even less, especially
-												if they're building their
-												capsule from scratch.
-												<br />
-												<br />
-												Capsulify is designed to work
-												with <em>
-													whatever you have
-												</em>{' '}
-												— whether that's a full closet
-												or a handful of go-to staples.
-												You can add more pieces over
-												time as your wardrobe (or
-												confidence) grows.
-												<br />
-												<br />
-												No pressure. No minimum. Just
-												smarter styling from wherever
-												you're starting.
-											</span>
-										),
-									},
-									{
-										q: `Is this for people in hot climates? Where are the boots and winter jackets?`,
-										a: (
-											<span>
-												Yes — Capsulify is currently
-												built for{' '}
-												<strong>
-													warm and tropical climates
-												</strong>
-												, like Singapore, Malaysia, and
-												Southeast Asia.
-												<br />
-												<br />
-												That means you'll mostly see
-												outfit combinations using light
-												fabrics, breathable materials,
-												and pieces suited for heat and
-												humidity. We intentionally left
-												out bulky coats and winter
-												layers — because most of our
-												early users don't need them day
-												to day.
-												<br />
-												<br />
-												<strong>
-													That said, a cold-weather
-													capsule is coming.
-												</strong>
-												<br />
-												If you live in a four-season
-												country or need a packing list
-												for winter travel, stay tuned —
-												we're building modules that will
-												handle layering, boots, and
-												seasonal swaps soon.
-												<br />
-												<br />
-												For now, think of this as your
-												year-round summer wardrobe
-												planner — optimized for real
-												heat, not just aesthetic
-												sun-drenched Instagram shots.
-											</span>
-										),
-									},
-									{
-										q: `Will the app suggest clothes I don't own?`,
-										a: (
-											<span>
-												Yes — but only if they're pieces
-												that{' '}
-												<strong>
-													flatter your body shape
-												</strong>{' '}
-												and fit your style preferences.
-												<br />
-												<br />
-												Capsulify's job isn't just to
-												work with what you have — it's
-												also to show you{' '}
-												<strong>
-													what you're missing
-												</strong>
-												. If there's a key piece that
-												would work beautifully for your
-												shape and you don't own it yet,
-												we'll suggest it.
-												<br />
-												<br />
-												We believe in helping you shop
-												smarter, not more.
-												<br />
-												If a certain skirt cut or
-												neckline consistently flatters
-												your shape, you <em>
-													should
-												</em>{' '}
-												own one — and we'll tell you
-												why.
-												<br />
-												<br />
-												The goal is to fill your
-												wardrobe with the{' '}
-												<strong>right pieces</strong>,
-												not just more pieces.
-											</span>
-										),
-									},
-								]}
-								columnKey='col2'
-							/>
-						</div>
+				<div className='shadow-lg rounded-md pb-6 mb-10 max-sm:w-[90%] mx-auto'>
+					<div className=' pb-3'>
+						<h2 className='text-center text-[1.5rem] md:text-3xl text-primary font-extrabold font-fraunces bg-[#ad4c5c] py-4 rounded-t-md'>
+							FAQs
+						</h2>
 					</div>
-				</section>
+					<section className='w-full'>
+						<div className='w-full py-10'>
+							<div className='max-w-6xl text-accent mx-auto grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-12 px-6'>
+								{/* Column 1 */}
+								<FAQColumn
+									faqs={[
+										{
+											q: `I don't want to look like I'm using a robot to dress myself.`,
+											a: (
+												<span>
+													Nor should you.
+													<br />
+													Capsulify isn't a rigid
+													formula — it's a
+													stylist-in-your-pocket that
+													works with{' '}
+													<strong>your</strong> rules.
+													<br />
+													<br />
+													Hate sleeveless tops? We'll
+													never suggest them.
+													<br />
+													Love showing legs but not
+													arms? We'll factor that in.
+													<br />
+													This is <em>your</em> taste,
+													your body, your life — not
+													ours.
+												</span>
+											),
+										},
+										{
+											q: `Don't you do for other body shapes?`,
+											a: (
+												<span>
+													<strong>
+														Not yet — but we will.
+													</strong>{' '}
+													Right now, Capsulify is
+													optimized for{' '}
+													<strong>
+														inverted triangle women
+													</strong>{' '}
+													(broader shoulders, narrower
+													hips). That's the shape our
+													engine currently supports
+													with curated cuts, outfit
+													rules, and proportions that
+													actually work.
+													<br />
+													<br />
+													But we're not stopping
+													there.
+													<br />
+													<br />
+													Our goal is to support{' '}
+													<strong>
+														all major body shapes
+													</strong>{' '}
+													— including pear, rectangle,
+													hourglass, and apple — with
+													the same level of detail and
+													care. We're rolling them out
+													one at a time to ensure{' '}
+													<em>real accuracy</em>, not
+													generic templates.
+													<br />
+													<br />
+													If your body shape isn't
+													supported yet:
+													<ul
+														style={{
+															marginTop: 8,
+															marginBottom: 8,
+														}}
+													>
+														<li>
+															You can still
+															explore the free
+															version
+														</li>
+														<li>
+															Or join the waitlist
+															to be notified when
+															yours launches
+														</li>
+														<li>
+															Or better yet — sign
+															up to help us test
+															your shape early
+														</li>
+													</ul>
+													We're building this with
+													real women in mind — one
+													shape at a time.
+												</span>
+											),
+										},
+										{
+											q: `What if I don't know my style yet?`,
+											a: (
+												<span>
+													That's actually the best
+													time to use Capsulify.
+													<br />
+													<br />
+													You don't need a defined
+													personal style to start — in
+													fact, Capsulify helps you{' '}
+													<strong>
+														discover it
+													</strong>{' '}
+													by showing you which outfit
+													combinations you naturally
+													gravitate toward.
+													<br />
+													<br />
+													You'll start with just a few
+													preferences (minimal,
+													feminine, elegant, etc.),
+													and as you mix and match
+													outfits from your own
+													wardrobe, you'll start to
+													see patterns — <em>
+														that
+													</em>{' '}
+													is your emerging style.
+													<br />
+													<br />
+													Think of it as learning your
+													style by wearing it, not
+													guessing it.
+												</span>
+											),
+										},
+										{
+											q: `What if I don't know my body shape?`,
+											a: (
+												<span>
+													You're not alone — most
+													women aren't 100% sure.
+													<br />
+													<br />
+													Here's a simple way to
+													figure it out right now:
+													<br />
+													<strong>
+														Stand in front of a
+														mirror and look at your
+														shoulder line and hip
+														line.
+													</strong>
+													<ul
+														style={{
+															marginTop: 8,
+															marginBottom: 8,
+														}}
+													>
+														<li>
+															If your shoulders
+															are noticeably wider
+															than your hips,
+															you're likely an{' '}
+															<strong>
+																inverted
+																triangle
+															</strong>
+															.
+														</li>
+														<li>
+															If your hips are
+															wider than your
+															shoulders, you may
+															be a{' '}
+															<strong>
+																pear
+															</strong>
+															.
+														</li>
+														<li>
+															If they're about the
+															same and you have a
+															defined waist, you
+															might be an{' '}
+															<strong>
+																hourglass
+															</strong>
+															.
+														</li>
+														<li>
+															If your waist isn't
+															very defined, you
+															could be a{' '}
+															<strong>
+																rectangle or
+																apple
+															</strong>
+															.
+														</li>
+													</ul>
+													We're currently focusing on
+													inverted triangle shapes —
+													but we're also building a
+													camera-based tool to help
+													determine your shape
+													visually, without guesswork.
+													<br />
+													<br />
+													And don't worry: you can
+													always update your shape
+													later inside the app. Just
+													pick the closest match and
+													start — perfection isn't
+													required to see results.
+												</span>
+											),
+										},
+										{
+											q: `I hate uploading clothes. This sounds like work.`,
+											a: (
+												<span>
+													Totally fair. That's why we
+													made it fast.
+													<br />
+													You can:
+													<ul
+														style={{
+															marginTop: 8,
+															marginBottom: 8,
+														}}
+													>
+														<li>
+															Choose from visual
+															templates
+														</li>
+														<li>Auto-tag items</li>
+														<li>
+															Or just start with
+															10–15 core pieces
+															and still get dozens
+															of looks. 30 mins
+															and you're done.
+														</li>
+													</ul>
+													You don't need to upload
+													your whole closet on Day 1.
+												</span>
+											),
+										},
+									]}
+									columnKey='col1'
+								/>
+								{/* Column 2 */}
+								<FAQColumn
+									faqs={[
+										{
+											q: `Do I need to upload my entire closet?`,
+											a: (
+												<span>
+													Nope — definitely not.
+													<br />
+													<br />
+													You can start with just a
+													few pieces:
+													<br />
+													<strong>
+														2–4 tops, 2 bottoms, a
+														pair of shoes — and
+														you're good to go.
+													</strong>
+													<br />
+													Capsulify will already start
+													generating outfit ideas
+													based on those.
+													<br />
+													<br />
+													The more you add, the
+													smarter and more
+													personalized the outfit
+													suggestions become. But
+													there's no need to upload
+													your entire wardrobe on Day
+													1.
+													<br />
+													<br />
+													Start small. Build as you
+													go. We designed it that way
+													on purpose — to be useful
+													even when your closet is
+													still half-loaded.
+												</span>
+											),
+										},
+										{
+											q: `Do I have to have 30 pieces?`,
+											a: (
+												<span>
+													Not at all.
+													<br />
+													<br />
+													30 pieces is just a{' '}
+													<strong>
+														starting framework
+													</strong>
+													, not a requirement.
+													<br />
+													You can begin with as few as
+													6–10 items and still see
+													useful outfit combinations.
+													Some women start with even
+													less, especially if they're
+													building their capsule from
+													scratch.
+													<br />
+													<br />
+													Capsulify is designed to
+													work with{' '}
+													<em>whatever you have</em> —
+													whether that's a full closet
+													or a handful of go-to
+													staples. You can add more
+													pieces over time as your
+													wardrobe (or confidence)
+													grows.
+													<br />
+													<br />
+													No pressure. No minimum.
+													Just smarter styling from
+													wherever you're starting.
+												</span>
+											),
+										},
+										{
+											q: `Is this for people in hot climates? Where are the boots and winter jackets?`,
+											a: (
+												<span>
+													Yes — Capsulify is currently
+													built for{' '}
+													<strong>
+														warm and tropical
+														climates
+													</strong>
+													, like Singapore, Malaysia,
+													and Southeast Asia.
+													<br />
+													<br />
+													That means you'll mostly see
+													outfit combinations using
+													light fabrics, breathable
+													materials, and pieces suited
+													for heat and humidity. We
+													intentionally left out bulky
+													coats and winter layers —
+													because most of our early
+													users don't need them day to
+													day.
+													<br />
+													<br />
+													<strong>
+														That said, a
+														cold-weather capsule is
+														coming.
+													</strong>
+													<br />
+													If you live in a four-season
+													country or need a packing
+													list for winter travel, stay
+													tuned — we're building
+													modules that will handle
+													layering, boots, and
+													seasonal swaps soon.
+													<br />
+													<br />
+													For now, think of this as
+													your year-round summer
+													wardrobe planner — optimized
+													for real heat, not just
+													aesthetic sun-drenched
+													Instagram shots.
+												</span>
+											),
+										},
+										{
+											q: `Will the app suggest clothes I don't own?`,
+											a: (
+												<span>
+													Yes — but only if they're
+													pieces that{' '}
+													<strong>
+														flatter your body shape
+													</strong>{' '}
+													and fit your style
+													preferences.
+													<br />
+													<br />
+													Capsulify's job isn't just
+													to work with what you have —
+													it's also to show you{' '}
+													<strong>
+														what you're missing
+													</strong>
+													. If there's a key piece
+													that would work beautifully
+													for your shape and you don't
+													own it yet, we'll suggest
+													it.
+													<br />
+													<br />
+													We believe in helping you
+													shop smarter, not more.
+													<br />
+													If a certain skirt cut or
+													neckline consistently
+													flatters your shape, you{' '}
+													<em>should</em> own one —
+													and we'll tell you why.
+													<br />
+													<br />
+													The goal is to fill your
+													wardrobe with the{' '}
+													<strong>
+														right pieces
+													</strong>
+													, not just more pieces.
+												</span>
+											),
+										},
+									]}
+									columnKey='col2'
+								/>
+							</div>
+						</div>
+					</section>
+				</div>
 
 				{/* What You'll Get Section */}
-				<section className='w-full bg-primary py-10'>
+				<section className='w-full bg-[#ad4c5c] text-primary py-10 px-2'>
 					<div className=' flex flex-col items-center'>
-						<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
+						<h2 className='text-center text-[1.8rem] md:text-4xl font-extrabold font-fraunces mb-2'>
 							What You'll Get
 						</h2>
-						<h3 className='text-center text-accent font-bold text-lg md:text-xl mb-2 font-inter flex items-center justify-center gap-2'>
-							<span role='img' aria-label='gift'>
+						<h3 className='text-center font-bold text-lg md:text-xl mb-2 font-inter flex items-center justify-center gap-2'>
+							<span aria-hidden='true' className='mr-2 text-xl'>
 								🎁
 							</span>{' '}
 							Your Lifetime Deal:{' '}
-							<span className='text-accent text-[1.1rem] font-bold'>
+							<span className=' text-[1.1rem] font-bold'>
 								$99 One-Time
 							</span>
 						</h3>
-						<p className='text-center text-accent font-semibold text-sm md:text-lg mb-8 font-inter'>
+						<p className='text-center font-semibold text-sm md:text-lg mb-8 font-inter'>
 							Exclusive Perks for Founding Users
 						</p>
 						<div className='max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full px-4'>
 							<div className='flex items-start gap-2'>
-								<span
-									className='text-xl'
-									role='img'
-									aria-label='crown'
-								>
-									👑
-								</span>
-								<span className='text-accent text-[1rem]'>
+								<span className=' text-[1.1rem]'>
 									Be a co-creator: help shape features, test
 									updates, and influence design
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
-								<span
-									className='text-xl'
-									role='img'
-									aria-label='crown'
-								>
-									👑
-								</span>
-								<span className='text-accent font-inter text-[1rem]'>
+								<span className=' font-inter text-[1.1rem]'>
 									Get priority access to new modules (before
 									the public)
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
-								<span
-									className='text-xl'
-									role='img'
-									aria-label='crown'
-								>
-									👑
-								</span>
-								<span className='text-accent font-inter text-[1rem]'>
+								<span className=' font-inter text-[1.1rem]'>
 									Receive VIP invites to future workshops &
 									styling webinars
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
-								<span
-									className='text-xl'
-									role='img'
-									aria-label='crown'
-								>
-									👑
-								</span>
-								<span className='text-accent font-inter text-[1rem]'>
+								<span className=' font-inter text-[1.1rem]'>
 									Be featured in our early user showcase
 									(optional)
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
-								<span
-									className='text-xl'
-									role='img'
-									aria-label='crown'
-								>
-									👑
-								</span>
-								<span className='text-accent font-inter text-[0.95rem]'>
+								<span className=' font-inter text-[1.1rem]'>
 									Lifetime pricing locked in — this tier will
 									never open again
 								</span>
@@ -1378,7 +1375,7 @@ const page = () => {
 							href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 							target='_blank'
 							rel='noopener noreferrer'
-							className='bg-[#28a78a] text-primary cursor-pointer font-extrabold px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase my-10'
+							className='bg-[#e7bec4] text-accent cursor-pointer font-extrabold px-10 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase my-10'
 						>
 							<em>Get instant access</em>
 						</a>
@@ -1386,78 +1383,73 @@ const page = () => {
 				</section>
 
 				{/* What You Get With This Lifetime Deal Section */}
-				<section className='w-full bg-accent text-primary py-8'>
+				<section className='w-full bg-[#ad4c5c] text-white py-8'>
 					<div className='flex flex-col items-center'>
-						<h2 className='text-center text-[1.5rem] md:text-3xl text-primary font-extrabold font-inter'>
+						<h2 className='text-center text-[1.8rem] md:text-4xl text-primary font-extrabold font-fraunces px-2'>
 							What You Get With This Lifetime Deal
 						</h2>
 						<div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mb-8 mt-8 px-4'>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-purple-700'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-white'
 								>
-									✔️
+									✔
 								</span>
-								<span className='text-primary font-inter text-sm'>
+								<span className=' font-inter text-sm'>
 									Build Your Own Capsule Closet (tag by
 									category, color, occasion)
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-purple-700'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-white'
 								>
-									✔️
+									✔
 								</span>
-								<span className='text-primary font-inter text-[1rem]'>
+								<span className=' font-inter text-[1rem]'>
 									Personalized Fit Guide for Your Body Shape
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-purple-700'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-white'
 								>
-									✔️
+									✔
 								</span>
-								<span className='text-primary font-inter text-[1rem]'>
+								<span className=' font-inter text-[1rem]'>
 									1,000+ Outfits Generated Based on Lifestyle
 									& Weather
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-purple-700'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-white'
 								>
-									✔️
+									✔
 								</span>
-								<span className='text-primary font-inter text-[1rem]'>
+								<span className=' font-inter text-[1rem]'>
 									Outfit Suggestions by Occasion, Time of Day,
 									Climate
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-purple-700'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-white'
 								>
-									✔️
+									✔
 								</span>
-								<span className='text-primary font-inter text-[1rem]'>
+								<span className=' font-inter text-[1rem]'>
 									Works on Mobile – no app install needed
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
-								<span className='text-primary font-inter text-[1rem] italic'>
-									<span className='text-primary font-extrabold text-[1rem]'>
+								<span className=' font-inter text-[1rem] italic'>
+									<span className=' font-extrabold text-[1rem]'>
 										Coming Soon:
 									</span>{' '}
 									Filter your outfits by weather, climate,
@@ -1469,17 +1461,17 @@ const page = () => {
 							</div>
 						</div>
 						<div className='w-full flex flex-col items-center my-12 px-4'>
-							<h3 className='text-center text-primary font-bold text-xl md:text-2xl mb-2 font-inter flex items-center justify-center gap-2'>
+							<h3 className='text-center font-bold text-xl md:text-2xl mb-2 font-inter flex items-center justify-center gap-2'>
 								🔒Only 100 Spots. Offer Ends 30th June 2025
 							</h3>
-							<p className='text-center text-primary text-[1rem] mb-2'>
+							<p className='text-center text-[1rem] mb-2'>
 								This is your{' '}
 								<span className='font-bold'>only chance</span>{' '}
 								to get lifetime access for just{' '}
 								<span className='font-bold'>$99</span> — no
 								monthly fees, no hidden upsells, no gimmicks.
 							</p>
-							<p className='text-center text-primary text-[1rem]'>
+							<p className='text-center text-[1rem]'>
 								You'll get{' '}
 								<span className='font-bold'>
 									1,000+ outfit combinations
@@ -1491,9 +1483,8 @@ const page = () => {
 						<div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full mt-4 px-4'>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-green-600'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-green-600'
 								>
 									✅
 								</span>
@@ -1504,9 +1495,8 @@ const page = () => {
 							</div>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-green-600'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-green-600'
 								>
 									✅
 								</span>
@@ -1520,9 +1510,8 @@ const page = () => {
 							</div>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-green-600'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-green-600'
 								>
 									✅
 								</span>
@@ -1535,9 +1524,8 @@ const page = () => {
 							</div>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-green-600'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-green-600'
 								>
 									✅
 								</span>
@@ -1551,9 +1539,8 @@ const page = () => {
 							</div>
 							<div className='flex items-start gap-2'>
 								<span
-									className='text-xl text-green-600'
-									role='img'
-									aria-label='check'
+									aria-hidden='true'
+									className='mr-2 text-xl text-green-600'
 								>
 									✅
 								</span>
@@ -1570,7 +1557,7 @@ const page = () => {
 
 				{/* Not sure if this is for you? Section */}
 				<section className='w-full pt-8 pb-20'>
-					<h2 className='text-center text-[1.5rem] md:text-3xl text-accent font-extrabold font-inter'>
+					<h2 className='text-center text-[1.8rem] md:text-4xl text-accent font-extrabold font-fraunces px-2'>
 						Not sure if this is for you?
 					</h2>
 					<div className='max-w-4xl mx-auto rounded-lg shadow-none md:shadow-none px-6 py-12 mb-4'>
@@ -1593,7 +1580,7 @@ const page = () => {
 								href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='bg-[#28a78a] text-primary cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
+								className='bg-[#ad4c5c] text-white cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
 							>
 								<em>Get instant access</em>
 							</a>

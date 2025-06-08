@@ -1,11 +1,16 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Fraunces } from 'next/font/google'
 import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
 import ThemeIconUpdater from './themeUpdater'
 
 const inter = Inter({
 	variable: '--font-inter',
+	subsets: ['latin'],
+})
+
+const fraunces = Fraunces({
+	variable: '--font-fraunces',
 	subsets: ['latin'],
 })
 

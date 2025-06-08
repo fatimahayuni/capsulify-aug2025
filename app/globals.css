@@ -31,7 +31,7 @@
 	--accent-color: #4a3427;
 	--primary-color: #f9f2ec;
 	--secondary-color: #eee7e1;
-	--accent-color-2: #a88f81;
+	--landing-page: #994351;
 	font-family: 'Inter', sans-serif;
 }
 
@@ -42,6 +42,11 @@
 .scrollbar-hide {
 	-ms-overflow-style: none; /* IE and Edge */
 	scrollbar-width: none; /* Firefox */
+}
+
+.font-fraunces {
+	font-family: 'Fraunces', serif;
+	letter-spacing: 0.02em;
 }
 
 .bg-primary {
