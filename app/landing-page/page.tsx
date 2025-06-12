@@ -1688,10 +1688,16 @@ const page = () => {
 							capsulifyapp@gmail.com
 						</span>
 					</div>
-					<div className='flex flex-col items-center mb-2 md:mb-0'>
+					<div className='flex flex-col items-center mb-2 md:mb-0 gap-1'>
 						<span className='text-accent font-inter text-xs italic'>
 							© 2025 Capsulify. All rights reserved.
 						</span>
+						<a
+							href='/privacy-policy'
+							className='text-accent font-inter text-xs hover:underline font-semibold mt-2'
+						>
+							Privacy Policy
+						</a>
 					</div>
 					<div className='flex flex-col items-center md:items-end'>
 						<span
