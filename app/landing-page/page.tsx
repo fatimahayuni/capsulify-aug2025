@@ -171,6 +171,91 @@ function CountdownTimer() {
 	)
 }
 
+// aditisd30@gmail.com
+// eBook Section logic
+function EbookSection() {
+	const [email, setEmail] = useState('')
+	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState('')
+	const [success, setSuccess] = useState(false)
+
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		setLoading(true)
+		setError('')
+		setSuccess(false)
+		try {
+			const res = await fetch('/api/subscriber', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ email }),
+			})
+			const data = await res.json()
+			if (!res.ok) {
+				throw new Error(data.error || 'Failed to subscribe')
+			}
+			setSuccess(true)
+			// Trigger eBook download
+			const link = document.createElement('a')
+			link.href = '/assets/ebook/capsulify-ebook.pdf'
+			link.download = 'capsulify-ebook.pdf'
+			document.body.appendChild(link)
+			link.click()
+			document.body.removeChild(link)
+		} catch (err: any) {
+			setError(err.message || 'Something went wrong.')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	return (
+		<div className='w-[90%] max-w-6xl mx-auto px-2 pb-8 rounded-md max-sm:w-[90%] mt-10'>
+			<h2 className='text-center text-[1.6rem] md:text-4xl text-accent font-extrabold font-fraunces pb-8 pt-10'>
+				Get instant access to the full eBook
+			</h2>
+			<div className='flex justify-center my-6'>
+				<Image
+					src='/assets/images/ebookcover.jpeg'
+					alt='eBook Cover'
+					width={320}
+					height={420}
+					className='w-80 h-auto rounded-sm shadow-lg bg-white object-contain max-w-full'
+				/>
+			</div>
+			<p className='text-center text-accent/80 mb-6 text-[1rem] md:text-lg font-inter'>
+				Enter your email to get a free sample
+			</p>
+			<form
+				onSubmit={handleSubmit}
+				className='w-[60%] mx-auto flex flex-col sm:flex-row gap-3 items-center justify-center'
+			>
+				<input
+					type='email'
+					required
+					placeholder='Enter your e-mail address'
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
+					className='flex-1 px-4 py-3 rounded-l-md border border-accent/30 focus:outline-none text-accent bg-[#efe9e4] text-[1rem] min-w-[300px] max-sm:rounded-r-md'
+				/>
+				<button
+					type='submit'
+					disabled={loading}
+					className=' bg-[#f8c255] text-accent font-bold px-6 py-3 rounded-r-md rounded-l-none transition-all duration-200 hover:bg-[#f0d297] shadow-md text-[1rem] capitalize font-fraunces italic cursor-pointer max-sm:rounded-l-md disabled:opacity-60'
+				>
+					{loading ? 'Processing...' : 'Download eBook Now'}
+				</button>
+			</form>
+			{error && <p className='text-red-600 text-center mt-2'>{error}</p>}
+			{success && (
+				<p className='text-green-600 text-center mt-2'>
+					Success! Your download should begin shortly.
+				</p>
+			)}
+		</div>
+	)
+}
+
 const page = () => {
 	return (
 		<div className='min-h-screen bg-primary text-accent font-inter flex flex-col'>
@@ -210,10 +295,6 @@ const page = () => {
 								Tired of Dressing for a Body Shape Fashion
 								Forgot?
 							</h1>
-							<p className='text-sm md:text-xl text-accent/80 mb-8'>
-								Lorem ipsum dolor, sit amet consectetur
-								adipisicing elit.
-							</p>
 							<a
 								href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 								target='_blank'
@@ -375,12 +456,12 @@ const page = () => {
 						<div className='flex flex-col md:flex-row justify-between items-center p-4 md:p-8 gap-8 md:gap-12 px-8'>
 							{/* Image */}
 							<div className='flex-1 flex justify-center items-start'>
-								<div className='rounded-xl overflow-hidden shadow-lg w-full max-w-xs md:max-w-sm'>
+								<div className='rounded-md overflow-hidden shadow-lg w-full max-w-xs md:max-w-sm'>
 									<Image
-										src='/assets/inverted-triangle/black_blazer.png'
+										src='/assets/landing-page/founder-img.jpg'
 										alt='Ayuni and team'
-										width={400}
-										height={600}
+										width={300}
+										height={500}
 										className='w-full h-auto object-cover'
 									/>
 								</div>
@@ -589,14 +670,17 @@ const page = () => {
 					</section>
 				</div>
 
+				{/* eBook Section */}
+				<EbookSection />
+
 				{/* Closet That Works Section */}
-				<div className='shadow-lg rounded-md pb-6 mb-10 max-sm:w-[90%] mx-auto my-10 mt-20'>
-					<div className='w-full py-3'>
+				<div className='shadow-lg rounded-md pb-6 mb-10 w-[91%] max-sm:w-[90%] mx-auto my-10 mt-20'>
+					<div className='w-full py-3 mx-auto'>
 						<h2 className='text-center text-[1.5rem] md:text-3xl text-primary font-extrabold font-fraunces px-4 bg-[#ad4c5c] py-4 rounded-t-md'>
 							<p>✨ Finally! </p>A Closet That Works for
 							<em>Your </em> Body Shape.
 						</h2>
-						<p className='text-center text-accent text-md md:text-lg font-semibold pb-3 font-inter mt-4'>
+						<p className='text-center text-accent text-md md:text-lg font-semibold pb-3 mt-4'>
 							1,000+ Outfit Combinations.{' '}
 							<span className='font-bold'>Just 30 Pieces.</span>
 						</p>
@@ -605,7 +689,7 @@ const page = () => {
 					{/* Outfit Generator Demo Section */}
 					<section className='w-full bg-primary py-6'>
 						<div className='max-w-5xl mx-auto flex flex-col items-center px-4'>
-							<p className='text-accent text-center mb-8 font-inter font-medium'>
+							<p className='text-accent text-center mb-8 font-medium'>
 								Watch how Capsulify builds a 30-piece Capsule!
 							</p>
 							<video
@@ -622,9 +706,9 @@ const page = () => {
 								href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 								target='_blank'
 								rel='noopener noreferrer'
-								className='bg-[#f8c255] text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase mt-10'
+								className='bg-[#f8c255] text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase mt-10 font-fraunces italic'
 							>
-								<em>Get instant access</em>
+								Use Capsulify Now
 							</a>
 						</div>
 					</section>
@@ -873,9 +957,9 @@ const page = () => {
 						href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='bg-[#f8c255] mx-auto my-6 text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase'
+						className='bg-[#f8c255] mx-auto my-6 text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase font-fraunces italic'
 					>
-						<em>Get instant access</em>
+						Play with Capsulify Now
 					</a>
 				</section>
 
@@ -1342,32 +1426,32 @@ const page = () => {
 						<div className='max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full px-4'>
 							<div className='flex items-start gap-2'>
 								<span className=' text-[1.1rem]'>
-									Be a co-creator: help shape features, test
+									● Be a co-creator: help shape features, test
 									updates, and influence design
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
 								<span className=' font-inter text-[1.1rem]'>
-									Get priority access to new modules (before
+									● Get priority access to new modules (before
 									the public)
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
 								<span className=' font-inter text-[1.1rem]'>
-									Receive VIP invites to future workshops &
+									● Receive VIP invites to future workshops &
 									styling webinars
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
 								<span className=' font-inter text-[1.1rem]'>
-									Be featured in our early user showcase
+									● Be featured in our early user showcase
 									(optional)
 								</span>
 							</div>
 							<div className='flex items-start gap-2'>
 								<span className=' font-inter text-[1.1rem]'>
-									Lifetime pricing locked in — this tier will
-									never open again
+									● Lifetime pricing locked in — this tier
+									will never open again
 								</span>
 							</div>
 						</div>
@@ -1484,9 +1568,9 @@ const page = () => {
 							<div className='flex items-start gap-2'>
 								<span
 									aria-hidden='true'
-									className='mr-2 text-xl text-green-600'
+									className='mr-2 text-xl'
 								>
-									✅
+									✔
 								</span>
 								<span className='text-primary font-inter text-[1rem]'>
 									Wake up knowing exactly what to wear — and
@@ -1496,9 +1580,9 @@ const page = () => {
 							<div className='flex items-start gap-2'>
 								<span
 									aria-hidden='true'
-									className='mr-2 text-xl text-green-600'
+									className='mr-2 text-xl'
 								>
-									✅
+									✔
 								</span>
 								<span className='text-primary font-inter text-[1rem]'>
 									Your own{' '}
@@ -1511,9 +1595,9 @@ const page = () => {
 							<div className='flex items-start gap-2'>
 								<span
 									aria-hidden='true'
-									className='mr-2 text-xl text-green-600'
+									className='mr-2 text-xl'
 								>
-									✅
+									✔
 								</span>
 								<span className='text-primary font-inter text-[1rem]'>
 									<span className='font-bold'>
@@ -1525,9 +1609,9 @@ const page = () => {
 							<div className='flex items-start gap-2'>
 								<span
 									aria-hidden='true'
-									className='mr-2 text-xl text-green-600'
+									className='mr-2 text-xl'
 								>
-									✅
+									✔
 								</span>
 								<span className='text-primary font-inter text-[1rem]'>
 									Access to{' '}
@@ -1540,9 +1624,9 @@ const page = () => {
 							<div className='flex items-start gap-2'>
 								<span
 									aria-hidden='true'
-									className='mr-2 text-xl text-green-600'
+									className='mr-2 text-xl'
 								>
-									✅
+									✔
 								</span>
 								<span className='text-primary font-inter text-[1rem]'>
 									<span className='font-bold'>
