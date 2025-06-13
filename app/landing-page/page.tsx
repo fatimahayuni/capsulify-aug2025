@@ -175,6 +175,7 @@ function CountdownTimer() {
 // eBook Section logic
 function EbookSection() {
 	const [email, setEmail] = useState('')
+	const [name, setName] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState('')
 	const [success, setSuccess] = useState(false)
@@ -188,20 +189,13 @@ function EbookSection() {
 			const res = await fetch('/api/subscriber', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ email }),
+				body: JSON.stringify({ email, name }),
 			})
 			const data = await res.json()
 			if (!res.ok) {
 				throw new Error(data.error || 'Failed to subscribe')
 			}
 			setSuccess(true)
-			// Trigger eBook download
-			const link = document.createElement('a')
-			link.href = '/assets/ebook/capsulify-ebook.pdf'
-			link.download = 'capsulify-ebook.pdf'
-			document.body.appendChild(link)
-			link.click()
-			document.body.removeChild(link)
 		} catch (err: any) {
 			setError(err.message || 'Something went wrong.')
 		} finally {
@@ -223,33 +217,41 @@ function EbookSection() {
 					className='w-80 h-auto rounded-sm shadow-lg bg-white object-contain max-w-full'
 				/>
 			</div>
-			<p className='text-center text-accent/80 mb-6 text-[1rem] md:text-lg font-inter'>
-				Enter your email to get a free sample
-			</p>
+
 			<form
 				onSubmit={handleSubmit}
-				className='w-[60%] mx-auto flex flex-col sm:flex-row gap-3 items-center justify-center'
+				className='w-[95%] lg:w-[60%] mx-auto flex flex-col gap-3 items-center justify-center'
 			>
-				<input
-					type='email'
-					required
-					placeholder='Enter your e-mail address'
-					value={email}
-					onChange={(e) => setEmail(e.target.value)}
-					className='flex-1 px-4 py-3 rounded-l-md border border-accent/30 focus:outline-none text-accent bg-[#efe9e4] text-[1rem] min-w-[300px] max-sm:rounded-r-md'
-				/>
+				<div className='w-full md:w-[60%] flex flex-col gap-3'>
+					<input
+						type='text'
+						required
+						placeholder='Enter your name'
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+						className='flex-1 px-4 py-3 rounded-md border border-accent/30 focus:outline-none text-accent bg-[#efe9e4] text-[1rem] min-w-[200px]'
+					/>
+					<input
+						type='email'
+						required
+						placeholder='Enter your e-mail address'
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+						className='flex-1 px-4 py-3 rounded-md border border-accent/30 focus:outline-none text-accent bg-[#efe9e4] text-[1rem] min-w-[200px]'
+					/>
+				</div>
 				<button
 					type='submit'
 					disabled={loading}
-					className=' bg-[#f8c255] text-accent font-bold px-6 py-3 rounded-r-md rounded-l-none transition-all duration-200 hover:bg-[#f0d297] shadow-md text-[1rem] capitalize font-fraunces italic cursor-pointer max-sm:rounded-l-md disabled:opacity-60'
+					className='w-full md:w-[60%] bg-[#f8c255] text-accent font-bold px-6 py-3 rounded-md transition-all duration-200 hover:bg-[#f0d297] shadow-md text-[1rem] capitalize font-fraunces italic cursor-pointer disabled:opacity-60'
 				>
 					{loading ? 'Processing...' : 'Download eBook Now'}
 				</button>
 			</form>
-			{error && <p className='text-red-600 text-center mt-2'>{error}</p>}
+			{error && <p className='text-red-600 text-center mt-4'>{error}</p>}
 			{success && (
-				<p className='text-green-600 text-center mt-2'>
-					Success! Your download should begin shortly.
+				<p className='text-green-600 text-center mt-4'>
+					Check your email to download the ebook!
 				</p>
 			)}
 		</div>
@@ -952,12 +954,21 @@ const page = () => {
 								season
 							</span>
 						</div>
+						<div className='flex items-start'>
+							<span aria-hidden='true' className='mr-2 text-md'>
+								●
+							</span>
+							<span className='text-accent font-inter text-[1rem]'>
+								You want to know which cuts actually work on
+								your body.
+							</span>
+						</div>
 					</div>
 					<a
 						href='https://buy.stripe.com/eVq4gA0F70331UqgGafMA02'
 						target='_blank'
 						rel='noopener noreferrer'
-						className='bg-[#f8c255] mx-auto my-6 text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase font-fraunces italic'
+						className='bg-[#f8c255] mx-auto my-10 text-accent cursor-pointer font-extrabold tracking-wide px-8 py-3 rounded-xl mb-8 transition-all duration-300 transform hover:bg-accent/20 hover:scale-105 hover:shadow-lg text-[0.875rem] uppercase font-fraunces italic'
 					>
 						Play with Capsulify Now
 					</a>
