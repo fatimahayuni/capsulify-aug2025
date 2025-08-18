@@ -1,5 +1,8 @@
 import { getAllClothingVariants } from '@/app/lib/actions/clothingItems.actions'
-import { getOutfits, getUserClotheItems } from '@/app/(app-routes)/outfits/actions'
+import {
+	getOutfits,
+	getUserClotheItems,
+} from '@/app/(app-routes)/outfits/actions'
 import { Outfit } from '@/app/(app-routes)/outfits/types'
 import { UserClothingVariantData } from './database/userdata'
 import { ClothingVariantData } from './database/clothing'
@@ -9,7 +12,7 @@ class CacheManager {
 	private readonly DB_NAME = 'CapsulifyCache'
 	private readonly DB_VERSION = 1
 	private readonly STORE_NAME = 'cacheStore'
-	
+
 	private readonly USERFIT_KEY_PREFIX = 'userFit'
 	private readonly USERFIT_KEY = 'userFit_v2'
 	private readonly USEROUTFITS_KEY = 'userOutfits'
@@ -23,6 +26,14 @@ class CacheManager {
 	}
 
 	private initializeDB(): void {
+		// Check if IndexedDB is available in the browser environment
+		if (typeof window === 'undefined' || typeof indexedDB === 'undefined') {
+			this.dbPromise = Promise.reject(
+				new Error('IndexedDB is not available in this environment')
+			)
+			return
+		}
+
 		this.dbPromise = new Promise((resolve, reject) => {
 			const request = indexedDB.open(this.DB_NAME, this.DB_VERSION)
 
@@ -37,7 +48,7 @@ class CacheManager {
 
 			request.onupgradeneeded = (event) => {
 				const db = (event.target as IDBOpenDBRequest).result
-				
+
 				// Create object store if it doesn't exist
 				if (!db.objectStoreNames.contains(this.STORE_NAME)) {
 					db.createObjectStore(this.STORE_NAME, { keyPath: 'key' })
@@ -58,7 +69,7 @@ class CacheManager {
 			const db = await this.getDB()
 			const transaction = db.transaction([this.STORE_NAME], 'readwrite')
 			const store = transaction.objectStore(this.STORE_NAME)
-			
+
 			await new Promise<void>((resolve, reject) => {
 				const request = store.put({ key, value: JSON.stringify(value) })
 				request.onsuccess = () => resolve()
@@ -75,7 +86,7 @@ class CacheManager {
 			const db = await this.getDB()
 			const transaction = db.transaction([this.STORE_NAME], 'readonly')
 			const store = transaction.objectStore(this.STORE_NAME)
-			
+
 			return new Promise<string | null>((resolve, reject) => {
 				const request = store.get(key)
 				request.onsuccess = () => {
@@ -95,7 +106,7 @@ class CacheManager {
 			const db = await this.getDB()
 			const transaction = db.transaction([this.STORE_NAME], 'readwrite')
 			const store = transaction.objectStore(this.STORE_NAME)
-			
+
 			await new Promise<void>((resolve, reject) => {
 				const request = store.delete(key)
 				request.onsuccess = () => resolve()
@@ -111,7 +122,7 @@ class CacheManager {
 			const db = await this.getDB()
 			const transaction = db.transaction([this.STORE_NAME], 'readonly')
 			const store = transaction.objectStore(this.STORE_NAME)
-			
+
 			return new Promise<string[]>((resolve, reject) => {
 				const request = store.getAllKeys()
 				request.onsuccess = () => {
@@ -128,10 +139,10 @@ class CacheManager {
 	async cleanupOldVersions(prefix: string, newKey: string): Promise<void> {
 		try {
 			const allKeys = await this.getAllKeys()
-			const keysToRemove = allKeys.filter(key => 
-				key.startsWith(prefix) && key !== newKey
+			const keysToRemove = allKeys.filter(
+				(key) => key.startsWith(prefix) && key !== newKey
 			)
-			
+
 			for (const key of keysToRemove) {
 				await this.removeItem(key)
 			}
@@ -167,10 +178,7 @@ class CacheManager {
 			try {
 				await this.setItem(this.USEROUTFITS_KEY, data)
 			} catch (error) {
-				console.error(
-					'Error storing outfits data in IndexedDB:',
-					error
-				)
+				console.error('Error storing outfits data in IndexedDB:', error)
 			}
 		}
 
@@ -180,7 +188,10 @@ class CacheManager {
 	async getUserClothingItems(): Promise<UserClothingVariantData[] | null> {
 		// Check if clothing items exist in IndexedDB first
 		try {
-			await this.cleanupOldVersions(this.USERFIT_KEY_PREFIX, this.USERFIT_KEY)
+			await this.cleanupOldVersions(
+				this.USERFIT_KEY_PREFIX,
+				this.USERFIT_KEY
+			)
 
 			const storedItems = await this.getItem(this.USERFIT_KEY)
 			if (storedItems) {
@@ -193,7 +204,7 @@ class CacheManager {
 
 		// If no cached data or cache is corrupted, fetch from server
 		const items = await getUserClotheItems()
-		
+
 		if (items) {
 			// Store the fetched data in IndexedDB
 			try {
@@ -212,9 +223,14 @@ class CacheManager {
 	async getClothingVariants(): Promise<ClothingVariantData[]> {
 		// Check if clothing variants exist in IndexedDB first
 		try {
-			await this.cleanupOldVersions(this.CLOTHING_VARIANTS_KEY_PREFIX, this.CLOTHING_VARIANTS_KEY)
+			await this.cleanupOldVersions(
+				this.CLOTHING_VARIANTS_KEY_PREFIX,
+				this.CLOTHING_VARIANTS_KEY
+			)
 
-			const storedVariants = await this.getItem(this.CLOTHING_VARIANTS_KEY)
+			const storedVariants = await this.getItem(
+				this.CLOTHING_VARIANTS_KEY
+			)
 			if (storedVariants) {
 				return JSON.parse(storedVariants)
 			}
@@ -225,7 +241,7 @@ class CacheManager {
 
 		// If no cached data or cache is corrupted, fetch from server
 		const variants = await getAllClothingVariants()
-		
+
 		// Store the grouped data in IndexedDB
 		try {
 			await this.setItem(this.CLOTHING_VARIANTS_KEY, variants)
@@ -236,12 +252,12 @@ class CacheManager {
 			)
 		}
 
-		return variants;
+		return variants
 	}
 
 	// Preload all essential data for the app.
 	async preloadEssentialData(): Promise<void> {
-		try {		
+		try {
 			await this.getClothingVariants()
 			await this.getUserClothingItems()
 		} catch (error) {
@@ -250,7 +266,7 @@ class CacheManager {
 	}
 
 	// Clears the fit cache.
-    // This should be called if the users fit is modified in any way.
+	// This should be called if the users fit is modified in any way.
 	async clearUserFitCache(): Promise<void> {
 		try {
 			await this.removeItem(this.USERFIT_KEY)
@@ -260,7 +276,7 @@ class CacheManager {
 	}
 
 	// Clears the outfits cache
-    // This should be called if the users fit or capsule items are modified.
+	// This should be called if the users fit or capsule items are modified.
 	async clearUserOutfitsCache(): Promise<void> {
 		try {
 			await this.removeItem(this.USEROUTFITS_KEY)
@@ -283,9 +299,9 @@ class CacheManager {
 		await Promise.all([
 			this.clearUserFitCache(),
 			this.clearUserOutfitsCache(),
-			this.clearClothingVariantsCache()
+			this.clearClothingVariantsCache(),
 		])
 	}
 }
 
-export default CacheManager.getInstance() 
+export default CacheManager.getInstance()

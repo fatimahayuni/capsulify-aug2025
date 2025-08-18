@@ -1,5 +1,5 @@
 import React from 'react'
-import { PERSONAL_STYLE } from '../constants'
+import { PERSONAL_STYLE } from '../../constants'
 
 export default function PersonalStyle({
 	personalStyle,

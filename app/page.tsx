@@ -1,56 +1,60 @@
-"use client";
-import { SignedOut, SignInButton, SignUpButton, useAuth, useUser } from "@clerk/nextjs";
-import { redirect, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { getUserByClerkId, createUser } from "@/app/lib/actions/user.actions";
-import { BODY_TYPE_ID } from "./constants";
+'use client'
+import {
+	SignedOut,
+	SignInButton,
+	SignUpButton,
+	useAuth,
+	useUser,
+} from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { getUserByClerkId, createUser } from '@/app/lib/actions/user.actions'
 
 export default function Home() {
-  const router = useRouter();
-  const { isSignedIn: isClerkSignedIn, userId: clerkId } = useAuth();
-  const { user: clerkUser } = useUser();
+	const router = useRouter()
+	const { isSignedIn: isClerkSignedIn, userId: clerkId } = useAuth()
+	const { user: clerkUser } = useUser()
 
-  useEffect(() => {
-    if (isClerkSignedIn) {
-      const checkOnboarded = async () => {
+	useEffect(() => {
+		if (isClerkSignedIn) {
+			const checkOnboarded = async () => {
+				try {
+					const user = await getUserByClerkId(clerkId!)
 
-        try {
-          const user = await getUserByClerkId(clerkId!);
+					if (!user) {
+						// User was not found in the database, create them with clerk data.
+						try {
+							if (!clerkUser) {
+								console.error('Clerk user data not available')
+								return
+							}
 
-          if (!user) {
-            // User was not found in the database, create them with clerk data.
-            try {
-              if (!clerkUser) {
-                console.error("Clerk user data not available");
-                return;
-              }
+							await createUser({
+								name: `${clerkUser.firstName} ${clerkUser.lastName || ''}`,
+								username: clerkUser.username || '',
+								email: clerkUser.emailAddresses[0].emailAddress,
+								clerkId: clerkId!,
+							})
 
-              await createUser({
-                name: `${clerkUser.firstName} ${clerkUser.lastName || ''}`,
-                username: clerkUser.username || '',
-                email: clerkUser.emailAddresses[0].emailAddress,
-                clerkId: clerkId!,
-              });
+							router.push('/onboarding')
+						} catch (error) {
+							console.error('Error creating user:', error)
+						}
+						return
+					}
 
-              router.push("/onboarding");
-            } catch (error) {
-              console.error("Error creating user:", error);
-            }
-            return;
-          }
-
-          if (user.onboarded === false) {
-            router.push("/onboarding");
-          } else {
-            router.push("/inventory");
-          }
-        } catch (error) {
-          console.error("Error in user check:", error);
-        }
-      };
-      checkOnboarded();
-    }
-  }, [isClerkSignedIn, router, clerkId, clerkUser]);
+					if (user.onboarded === false) {
+						router.push('/onboarding')
+					} else {
+						router.push('/inventory')
+					}
+				} catch (error) {
+					console.error('Error in user check:', error)
+				}
+			}
+			checkOnboarded()
+		}
+	}, [isClerkSignedIn, router, clerkId, clerkUser])
 
 	return (
 		<div className='home-container'>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { HEIGHT } from '../constants'
+import { HEIGHT } from '../../constants'
 
 export default function SelectHeight({ height, setHeight, handleNext }: any) {
 	const handleChange = (value: string) => {

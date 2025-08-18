@@ -1,5 +1,5 @@
 import React from 'react'
-import { MONTHLY_OCCASIONS } from '../constants'
+import { MONTHLY_OCCASIONS } from '../../constants'
 
 type Occasions = {
 	[key: string]: number

@@ -1,6 +1,6 @@
 import React from 'react'
-import { getBodyTypeDescription } from '../constants/utils'
-import { BODY_TYPE_IMAGES } from '../constants'
+import { getBodyTypeDescription } from '../../constants/utils'
+import { BODY_TYPE_IMAGES } from '../../constants'
 
 export default function ShowBodyTypeResults({ bodyType, handleNext }: any) {
 	const { description, recommendations, benefits } =

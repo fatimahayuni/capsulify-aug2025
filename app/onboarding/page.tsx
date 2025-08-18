@@ -3,28 +3,25 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getBodyTypeDescription, getOutfits } from '../constants/utils'
-import {
-	updateUserBodyType,
-	saveOnboardingData,
-} from '../lib/actions/user.actions'
+import { saveOnboardingData } from '../lib/actions/user.actions'
 import { useAuth, useUser } from '@clerk/nextjs'
-import SelectBodyType from './SelectBodyType'
-import SelectHeight from './SelectHeight'
-import FavoriteParts from './FavoriteParts'
-import LeastFavoriteParts from './LeastFavoriteParts'
-import PersonalStyle from './PersonalStyle'
-import ShowBodyTypeResults from './ShowBodyTypeResults'
-import ShowOutfits from './ShowOutfits'
-import UserInfo from './UserInfo'
-import MonthlyOccasions from './MonthlyOccasions'
-import GoalFrustration from './GoalFrustration'
+import SelectBodyType from './components/SelectBodyType'
+import SelectHeight from './components/SelectHeight'
+import FavoriteParts from './components/FavoriteParts'
+import LeastFavoriteParts from './components/LeastFavoriteParts'
+import PersonalStyle from './components/PersonalStyle'
+import ShowBodyTypeResults from './components/ShowBodyTypeResults'
+import ShowOutfits from './components/ShowOutfits'
+import UserInfo from './components/UserInfo'
+import MonthlyOccasions from './components/MonthlyOccasions'
+import GoalFrustration from './components/GoalFrustration'
 import { OnboardingData } from '../types'
-import { 
-	BODY_TYPE_ID, 
-	AGE_GROUP_ID, 
-	HEIGHT_GROUP_ID, 
-	BODY_PARTS_ID, 
-	PERSONAL_STYLE_ID 
+import {
+	BODY_TYPE_ID,
+	AGE_GROUP_ID,
+	HEIGHT_GROUP_ID,
+	BODY_PARTS_ID,
+	PERSONAL_STYLE_ID,
 } from '../constants'
 import CacheManager from '../lib/CacheManager'
 
@@ -108,8 +105,12 @@ const convertToOnboardingData = (data: OnboardingUIState): OnboardingData => {
 		location: data.location,
 		bodyTypeId: getBodyTypeIdByName(data.bodyType),
 		heightId: getHeightIdByName(data.height),
-		favoritePartIds: data.favoriteParts.map((part: string) => getBodyPartIdByName(part)),
-		leastFavoritePartIds: data.leastFavoriteParts.map((part: string) => getBodyPartIdByName(part)),
+		favoritePartIds: data.favoriteParts.map((part: string) =>
+			getBodyPartIdByName(part)
+		),
+		leastFavoritePartIds: data.leastFavoriteParts.map((part: string) =>
+			getBodyPartIdByName(part)
+		),
 		personalStyleId: getPersonalStyleIdByName(data.personalStyle),
 		occasions: data.occasions,
 		goal: data.goal,
@@ -203,10 +204,7 @@ export default function OnboardingPage() {
 	}
 	const handleSubmit = async () => {
 		const convertedData = convertToOnboardingData(onboardingData)
-		await saveOnboardingData(
-			convertedData,
-			clerkId as string
-		)
+		await saveOnboardingData(convertedData, clerkId as string)
 
 		// Clear the fit and outfits cache.
 		await CacheManager.clearUserFitCache()

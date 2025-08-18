@@ -1,5 +1,5 @@
 import React from 'react'
-import { BODY_TYPES } from '../constants'
+import { BODY_TYPES } from '../../constants'
 
 export default function SelectBodyType({
 	bodyType,

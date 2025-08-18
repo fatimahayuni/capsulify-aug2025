@@ -3,17 +3,148 @@ import React, { useEffect, useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import Navbar from '@/app/components/Navbar'
 import { FaHeart } from 'react-icons/fa'
+import CacheManager from '@/app/lib/CacheManager'
+import {
+	getUserOutfitFavouriteKeys,
+	OutfitFavourite,
+} from '@/app/lib/database/outfit'
+import OutfitCard from '../outfits/components/OutfitCard'
+import { Outfit } from '../outfits/types'
 
 export default function HomePage() {
 	// get username from clerk
 	const { user } = useUser()
 	const [username, setUsername] = useState<string | null>(null)
+	const [favoriteKeys, setFavoriteKeys] = useState<Set<string>>(new Set())
+	const [outfits, setOutfits] = useState<Outfit[]>([])
+	const [favoriteOutfits, setFavoriteOutfits] = useState<Outfit[]>([])
+	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
-		if (user) {
-			setUsername(user.username)
+		const fetchFavorites = async () => {
+			setIsLoading(true)
+			try {
+				const [allOutfits, favKeys] = await Promise.all([
+					CacheManager.getUserOutfits(),
+					getUserOutfitFavouriteKeys(),
+				])
+				setOutfits(allOutfits || [])
+				const favKeySet = new Set(favKeys)
+				setFavoriteKeys(favKeySet)
+				if (allOutfits && favKeys) {
+					const favs = allOutfits.filter((outfit: Outfit) => {
+						const outfitFav: OutfitFavourite = {
+							top_variant_id: null,
+							bottom_variant_id: null,
+							dress_variant_id: null,
+							layer_variant_id: null,
+							bag_variant_id: null,
+							shoe_variant_id: null,
+						}
+						outfit.items.forEach((item) => {
+							switch (item.category_id) {
+								case 1:
+									outfitFav.top_variant_id =
+										item.clothing_variant_id
+									break
+								case 2:
+									outfitFav.bottom_variant_id =
+										item.clothing_variant_id
+									break
+								case 3:
+									outfitFav.dress_variant_id =
+										item.clothing_variant_id
+									break
+								case 4:
+									outfitFav.layer_variant_id =
+										item.clothing_variant_id
+									break
+								case 5:
+									outfitFav.bag_variant_id =
+										item.clothing_variant_id
+									break
+								case 6:
+									outfitFav.shoe_variant_id =
+										item.clothing_variant_id
+									break
+							}
+						})
+						const key = [
+							outfitFav.top_variant_id ?? 0,
+							outfitFav.bottom_variant_id ?? 0,
+							outfitFav.dress_variant_id ?? 0,
+							outfitFav.layer_variant_id ?? 0,
+							outfitFav.bag_variant_id ?? 0,
+							outfitFav.shoe_variant_id ?? 0,
+						].join('-')
+						return favKeySet.has(key)
+					})
+					setFavoriteOutfits(favs)
+				}
+			} finally {
+				setIsLoading(false)
+			}
 		}
-	}, [user])
+		fetchFavorites()
+	}, [])
+
+	const handleFavoriteChange = (outfitKey: string, isFavorite: boolean) => {
+		setFavoriteKeys((prev) => {
+			const newSet = new Set(prev)
+			if (isFavorite) {
+				newSet.add(outfitKey)
+			} else {
+				newSet.delete(outfitKey)
+			}
+			return newSet
+		})
+		setFavoriteOutfits(
+			outfits.filter((outfit: Outfit) => {
+				const outfitFav: OutfitFavourite = {
+					top_variant_id: null,
+					bottom_variant_id: null,
+					dress_variant_id: null,
+					layer_variant_id: null,
+					bag_variant_id: null,
+					shoe_variant_id: null,
+				}
+				outfit.items.forEach((item) => {
+					switch (item.category_id) {
+						case 1:
+							outfitFav.top_variant_id = item.clothing_variant_id
+							break
+						case 2:
+							outfitFav.bottom_variant_id =
+								item.clothing_variant_id
+							break
+						case 3:
+							outfitFav.dress_variant_id =
+								item.clothing_variant_id
+							break
+						case 4:
+							outfitFav.layer_variant_id =
+								item.clothing_variant_id
+							break
+						case 5:
+							outfitFav.bag_variant_id = item.clothing_variant_id
+							break
+						case 6:
+							outfitFav.shoe_variant_id = item.clothing_variant_id
+							break
+					}
+				})
+				const key = [
+					outfitFav.top_variant_id ?? 0,
+					outfitFav.bottom_variant_id ?? 0,
+					outfitFav.dress_variant_id ?? 0,
+					outfitFav.layer_variant_id ?? 0,
+					outfitFav.bag_variant_id ?? 0,
+					outfitFav.shoe_variant_id ?? 0,
+				].join('-')
+				return favoriteKeys.has(key)
+			})
+		)
+	}
 
 	return (
 		<div className='bg-primary flex flex-col relative'>
@@ -44,6 +175,31 @@ export default function HomePage() {
 						Your Latest Favorites
 					</p>
 				</div>
+				{/* Favorite Outfits Section */}
+				{isLoading ? (
+					<div className='flex justify-center items-center py-8'>
+						Loading favorites...
+					</div>
+				) : favoriteOutfits.length === 0 ? (
+					<div className='text-accent text-center py-8'>
+						No favorite outfits yet.
+					</div>
+				) : (
+					<div className='flex flex-col gap-8 w-full px-4 max-sm:px-4 mt-6'>
+						<div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 w-full max-w-[1600px] mx-auto'>
+							{favoriteOutfits.map((outfit, idx) => (
+								<div key={idx} className='flex justify-center'>
+									<OutfitCard
+										outfit={outfit}
+										favoriteKeys={favoriteKeys}
+										onFavoriteChange={handleFavoriteChange}
+									/>
+								</div>
+							))}
+						</div>
+						<div className='h-[4rem] w-full'></div>
+					</div>
+				)}
 			</main>
 		</div>
 	)

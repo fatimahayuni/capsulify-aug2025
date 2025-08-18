@@ -9,6 +9,7 @@ import { NextRequest } from 'next/server'
 export async function POST(req: NextRequest) {
 	try {
 		const evt = await verifyWebhook(req)
+		console.log('Webhook received:', evt)
 
 		// Do something with payload
 		// For this guide, log payload to console
@@ -21,7 +22,7 @@ export async function POST(req: NextRequest) {
 
 		if (eventType === 'user.created') {
 			console.log('New user created:', id)
-			
+
 			const { first_name, last_name, username, email_addresses } =
 				evt.data
 			const user = await createUser({

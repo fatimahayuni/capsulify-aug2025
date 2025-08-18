@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { AGE_GROUPS } from '../constants'
+import { AGE_GROUPS } from '../../constants'
 
 export default function UserInfo({
 	ageGroup,
