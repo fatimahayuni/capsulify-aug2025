@@ -15,6 +15,9 @@ export default function Home() {
 	const { isSignedIn: isClerkSignedIn, userId: clerkId } = useAuth()
 	const { user: clerkUser } = useUser()
 
+	 // 👇 Add this right here
+	 console.log("ENV TEST:", process.env.NEXT_PUBLIC_TEST_HELLO);
+
 	useEffect(() => {
 		if (isClerkSignedIn) {
 			const checkOnboarded = async () => {
