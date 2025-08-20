@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     // If image has alpha channel, prefer PNG with palette; else JPEG for better size
     const hasAlpha = Boolean(meta.hasAlpha);
 
-    let processed: Buffer;
+    let processed: Buffer | undefined;
     if (hasAlpha) {
       // PNG path
       processed = await sharp(inputBuf)
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
       if (processed.byteLength > TARGET_MAX_BYTES) {
         const colorSteps = [96, 64, 48, 32, 24, 16, 8];
         for (const colors of colorSteps) {
-          const q = await sharp(processed)
+          const q: Buffer = await sharp(processed!)
             .png({
               compressionLevel: 9,
               adaptiveFiltering: true,
@@ -104,7 +104,23 @@ export async function POST(req: NextRequest) {
           break;
         }
       }
-      processed = processed ?? (last as Buffer);
+      // Ensure processed is always assigned
+      if (!processed && last) {
+        processed = last;
+      }
+      // Fallback: if still not assigned, use the first quality attempt
+      if (!processed) {
+        processed = await sharp(inputBuf)
+          .rotate()
+          .resize({
+            width: MAX_DIM,
+            height: MAX_DIM,
+            fit: "inside",
+            withoutEnlargement: true,
+          })
+          .jpeg({ quality: 50, mozjpeg: true })
+          .toBuffer();
+      }
     }
 
     const bytes = new Uint8Array(processed);

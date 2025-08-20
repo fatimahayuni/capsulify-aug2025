@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getUserId } from "@/app/lib/database/getUserId";
-import { createClient } from "@/app/lib/supabase/client";
+import { supabase } from "@/app/lib/supabase/client";
 
 export const runtime = "nodejs";
 
@@ -15,8 +15,6 @@ export async function POST(req: NextRequest) {
     if (!outfitKey) {
       return NextResponse.json({ error: "Missing outfitKey" }, { status: 400 });
     }
-
-    const supabase = createClient();
 
     const { error } = await supabase
       .from("user_saved_uploaded_outfits")
@@ -56,8 +54,6 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ error: "Missing outfitKey" }, { status: 400 });
     }
 
-    const supabase = createClient();
-
     const { error } = await supabase
       .from("user_saved_uploaded_outfits")
       .delete()
@@ -88,8 +84,6 @@ export async function GET(req: NextRequest) {
     if (!userId) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
-
-    const supabase = createClient();
 
     const { data, error } = await supabase
       .from("user_saved_uploaded_outfits")

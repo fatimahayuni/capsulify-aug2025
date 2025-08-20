@@ -53,14 +53,19 @@ export default function HomePage() {
           ),
         ]);
 
+        console.log("Debug - allOutfits:", allOutfits);
+        console.log("Debug - favKeys:", favKeys);
+        console.log("Debug - uploadedOutfitsData:", uploadedOutfitsData);
+        console.log("Debug - savedUploadedKeysData:", savedUploadedKeysData);
+
         setOutfits(allOutfits || []);
         const favKeySet = new Set(favKeys);
         setFavoriteKeys(favKeySet);
 
         // Set uploaded outfits data
         const uploadedOutfits = uploadedOutfitsData.outfits || [];
-        const savedUploadedKeySet = new Set(
-          savedUploadedKeysData.outfitKeys || []
+        const savedUploadedKeySet = new Set<string>(
+          (savedUploadedKeysData.outfitKeys || []) as string[]
         );
         setSavedUploadedKeys(savedUploadedKeySet);
 
@@ -116,6 +121,9 @@ export default function HomePage() {
             return savedUploadedKeySet.has(outfitKey);
           }
         );
+        console.log("Debug - uploadedOutfits:", uploadedOutfits);
+        console.log("Debug - savedUploadedKeySet:", savedUploadedKeySet);
+        console.log("Debug - savedUploaded:", savedUploaded);
         setSavedUploadedOutfits(savedUploaded);
       } finally {
         setIsLoading(false);
